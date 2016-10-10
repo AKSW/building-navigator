@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Building Navigator</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css">
+    <style type="text/css">
+		:root {
+			--header-height: 100px;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+		}	
+		.header {
+			height: var(--header-height);
+		}
+    	.leaflet-container {
+    		position: absolute;
+    		height: calc(100% - var(--header-height));
+    		margin: 0;
+    		width: 100%;
+		}
+    </style>
+</head>
+
+<body>
+    <div class="container" id="react"></div>
+
+    <script src="main.min.js"></script>
+</body>
+</html>

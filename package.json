@@ -1,0 +1,26 @@
+{
+  "name": "Bootstrap",
+  "version": "1.0.0",
+  "description": "No description yet",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/",
+    "start": "gulp"
+  },
+  "author": "Georges Alkhouri, Simeon Ackermann",
+  "license": "",
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "material-ui": "^0.14.4",
+    "raw-loader": "^0.5.1",
+    "rdfstore": "~0.9.17",
+    "react": "^0.14.8",
+    "react-bootstrap": "^0.29.4",
+    "react-dom": "^0.14.0",
+    "react-router": "~2.8.1",
+    "redux": "~3.6.0",
+    "react-redux": "~4.4.5",
+    "leaflet": "~0.7.7",
+    "react-leaflet": "~0.12.3"
+  }
+}
