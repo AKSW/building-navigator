@@ -1,5 +1,9 @@
 /*eslint-disable no-console */
 
+/*
+ * Contains functionality to get places from the data source (Store.js) using SPARQL.
+ */
+
 export default class Places {
     constructor(store) {
         this.locations = [];

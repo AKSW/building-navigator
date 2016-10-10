@@ -5,7 +5,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 const getElementDetails = () => {
-    return <p>I'm your element</p>;
+    return <p>Im your element</p>;
 };
 
 const SidebarContainer = ({selectedElement}) => {
@@ -13,7 +13,7 @@ const SidebarContainer = ({selectedElement}) => {
     console.log('selectedElement:', selectedElement);
     return (
         <aside id="sidebar">
-            I'm your sidebar ;)
+            Im your sidebar ;)
             <div>
                 {ElementDetails}
             </div>

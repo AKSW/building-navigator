@@ -1,5 +1,9 @@
 /*eslint-disable no-console */
 
+/*
+ * Contains an adapter to connect rdfstore-js to our application.
+ */
+
 import RDFStore from 'rdfstore';
 
 const db = require('raw!../assets/le-online-places-new.ttl');

@@ -1,6 +1,10 @@
 /*eslint-disable no-console */
 /*eslint no-unused-vars: 0*/
 
+/*
+ * Adapter to connect leaflet to our application.
+ */
+
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Map, Marker, Popup, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
@@ -12,7 +16,7 @@ const MapContainer = ({config, onChangeMapView, onClickMarker}) => {
 
     return (
         <div onClick={() => onChangeMapView()}>
-            I'm the map container...
+            Im the map container...
             {/*<VisibleMarkers markers={[]} onClickMarker={onClickMarker} />*/}
             <Map center={position} zoom={config.zoom} zoomControl={false}>
                 <TileLayer
