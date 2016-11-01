@@ -1,26 +1,73 @@
 {
   "name": "Bootstrap",
-  "version": "1.0.0",
   "description": "No description yet",
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/",
-    "start": "gulp"
+    "start": "gulp",
+    "test": "jest",
+    "test:watch": "npm test -- --watch"
   },
-  "author": "Georges Alkhouri, Simeon Ackermann",
+  "author": "Simeon Ackermann",
   "license": "",
   "dependencies": {
     "immutable": "^3.8.1",
-    "material-ui": "^0.14.4",
+    "material-ui": "^0.15.4",
     "raw-loader": "^0.5.1",
-    "rdfstore": "~0.9.17",
-    "react": "^0.14.8",
-    "react-bootstrap": "^0.29.4",
-    "react-dom": "^0.14.0",
+    "rdfstore": "^0.9.15",
+    "react": "^15.0.0",
+    "react-bootstrap": "0.28.3",
     "react-router": "~2.8.1",
+    "react-tap-event-plugin": "^1.0.0",
     "redux": "~3.6.0",
-    "react-redux": "~4.4.5",
-    "leaflet": "~0.7.7",
-    "react-leaflet": "~0.12.3"
+    "react-dom": "^15.0.0",
+    "react-redux": "^4.4.5",
+    "leaflet": "^0.7.7",
+    "react-leaflet": "^0.12.3",
+    "redux-thunk": "^2.1.0",
+    "redux-logger": "^2.6.1"
+  },
+  "devDependencies": {    
+    "babel-core": "^6.9.0",
+    "babel-eslint": "^6.0.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-jest": "~16.0.0",
+    "jest": "~16.0.1",
+    "eslint": "^3.0.0",
+    "eslint-loader": "^1.3.0",
+    "eslint-plugin-react": "^6.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-git": "^1.11.3",
+    "gulp-util": "^3.0.7",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
+    "webpack-node-externals": "^1.3.3"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ttl"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "bower_components",
+      "shared"
+    ],
+    "moduleNameMapper": {
+      "^.+\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
+      "^.+\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
+    }
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "es2015"
+    ]
   }
 }

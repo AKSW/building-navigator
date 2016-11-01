@@ -1,0 +1,1 @@
+const baseUri = 'http://example.org/';

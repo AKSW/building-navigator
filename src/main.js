@@ -1,57 +1,33 @@
+/*eslint-disable no-console */
 /*eslint no-unused-vars: 0*/
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import {Router, Route, browserHistory, hashHistory} from 'react-router';
-import buildingNavigator from './reducers';
-import App from './components/App';
+import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import mainReducer from './reducers';
+import api from './middleware/api';
 
-//import getRoutes from './routes';
+import getRoutes from './routes';
 
-let store = createStore(buildingNavigator);
-
-const NoMatch = React.createClass({
-    render() {
-        return (
-            <div>
-                <h1>404 - Not found.</h1>
-            </div>
-        );
-    }
-});
-
-/*ReactDOM
-    .render(
-        <Router history={browserHistory}>
-            <Route path="/" component={App}>
-                <Route path="*" component={NoMatch}/>
-            </Route>
-        </Router>,
-        document.getElementById('react'));
-*/
-
-/*const Routes = (
-    <Router history={hashHistory}>
-    {getRoutes()}
-  </Router>
+const logger = createLogger();
+const store = createStore(
+    mainReducer,
+    undefined, // @TODO add intial values here...
+    applyMiddleware(thunk, api, logger) // loger mus be the last middleware
 );
 
 ReactDOM.render(
-  <Provider store={store} key="provider">
-    {Routes}
-  </Provider>,
-  document.getElementById('react')
-);*/
-
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={browserHistory}>
-        <Route path="/" component={App}>
-            <Route path="*" component={NoMatch}/>
-        </Route>
-    </Router>
-  </Provider>,
+    <MuiThemeProvider>
+        <Provider store={store}>
+            <Router history={hashHistory}>
+                {getRoutes()}
+            </Router>
+        </Provider>
+    </MuiThemeProvider>,
   document.getElementById('react')
 );

@@ -1,21 +1,16 @@
 import React from 'react';
 import {Route} from 'react-router';
-import App from './components/App';
-
-const NotFound = React.createClass({
-    render() {
-        return (
-            <div>
-                <h1>404 - Not found.</h1>
-            </div>
-        );
-    }
-});
+import NoMatch from './components/404';
+import App from './containers/App';
+import PlaceDetailsContainer from './containers/PlaceDetailsContainer';
 
 export default () => {
     return (
-        <Route path="/" component={App}>
-            <Route path="*" component={NotFound}/>
-        </Route>
+        <div>
+            <Route path="/" component={App}>
+                <Route path="/place/:place" component={PlaceDetailsContainer} />
+            </Route>
+            <Route path="*" component={NoMatch} />
+        </div>
     );
 };

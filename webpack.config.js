@@ -9,13 +9,21 @@ module.exports = {
     devtool: 'inline-source-map',
     debug: true,
     context: path.resolve(__dirname),
-    entry: './src/main.js',
+    entry: './src/main.js',    
     output: {
         path: PATHS.dist,
-        filename: 'main.min.js',
+        publicPath: '/',
+        filename: '/main.min.js',
     },
     resolve: {
         root: path.resolve(__dirname),
+    },
+    devServer: {
+        historyApiFallback: true,
+        index: '/dist/'
+    },
+    historyApiFallback: {
+        index: '/dist/',
     },
     node: {
         fs: 'empty'
@@ -26,14 +34,14 @@ module.exports = {
     module: {
         preLoaders: [
             {
-                test: /\.jsx?$/,
+                test: /\.js?$/,
                 exclude: /node_modules/,
                 loader: 'eslint-loader'
             },
         ],
         loaders: [
          {
-           test: /.jsx?$/,
+           test: /\.js?$/,
            loader: 'babel-loader',
            exclude: /node_modules/,
            query: {
