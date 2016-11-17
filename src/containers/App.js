@@ -1,3 +1,7 @@
+/**
+ * @file Main container of the App, renders main parts and start init of the RDFStore
+ * @author Simeon Ackermann
+ */
 /*eslint no-unused-vars: 0*/
 /*eslint-disable no-console */
 
@@ -11,14 +15,6 @@ import SidebarContainer from './SidebarContainer';
 import MapContainer from './MapContainer';
 import {setupStore, requestPlaces} from '../actions';
 
-/**
-Main container of the App, renders main parts and start init of the RDFStore
-@method App
-@param params {Object}
-@param children {Object}
-@param rdfstoreCnct {Boolean}
-@return {String}
- */
 const App = ({params, children, error, rdfstoreCnct}) => { //rdfstore, initStore
     return (
         <div>
@@ -61,8 +57,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+    // start setting up store
     dispatch(setupStore()).then(
         response => {
+            // request places first time
             dispatch(requestPlaces());
         }
     );

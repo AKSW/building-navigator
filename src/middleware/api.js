@@ -2,7 +2,7 @@
 /*eslint no-unused-vars: 0*/
 
 import RDFStore from 'rdfstore';
-import {RDFfile, RDFfileFrmat, baseUri} from '../Constants';
+import {RDFfile, RDFfileFrmat, baseUri, prefixes} from '../Constants';
 
 let rdfstoreConn = null;
 
@@ -59,11 +59,7 @@ placeName: {
 }
 */
 
-const getQuery = (state) => {
-    const prefixes = `
-PREFIX lePlace:<http://le-online.de/place/>
-PREFIX leNs:<http://le-online.de/ontology/place/ns#>
-`;
+const requestPlacesQuery = (stateFilter) => {
     const andFilterArr = [];
     const orFilterArr = [];
     const searchFilterArr = [];
@@ -76,35 +72,35 @@ PREFIX leNs:<http://le-online.de/ontology/place/ns#>
         {s: '?uri', p: 'leNs:toilets-toiletForDisabledPeopleAvailable', o: '?toiletForDisabledPeopleAvailable'},
         {s: '?uri', p: 'leNs:lat', o: '?lat'},
         {s: '?uri', p: 'leNs:lng', o: '?lng'},
-        {s: '?uri', p: 'leNs:note', o: '?note'},
-        {s: '?uri', p: 'leNs:category', o: '?category'},
+        //{s: '?uri', p: 'leNs:note', o: '?note'},
+        //{s: '?uri', p: 'leNs:category', o: '?category'},
     ];
 
     const qVarsStr = qVarsArr.map((q) => {
         return `${q.s} ${q.p} ${q.o} .`;
     }).join('\n');
 
-    Object.keys(state.filter).forEach((key) => {
-        if (state.filter[key].active === true) {
-            if (state.filter[key].type === 'checkbox') {
-                andFilterArr.push(`regex(?${key}, "${state.filter[key].value}")`);
+    Object.keys(stateFilter).forEach((key) => {
+        if (stateFilter[key].active === true) {
+            if (stateFilter[key].type === 'checkbox') {
+                andFilterArr.push(`regex(?${key}, "${stateFilter[key].value}")`);
             }
-            if (state.filter[key].type === 'select') {
-                Object.keys(state.filter[key].value).forEach((selKey) => {
-                    andFilterArr.push(`regex(?${key}, "${state.filter[key].value[selKey]}")`);
+            if (stateFilter[key].type === 'select') {
+                Object.keys(stateFilter[key].value).forEach((selKey) => {
+                    andFilterArr.push(`regex(?${key}, "${stateFilter[key].value[selKey]}")`);
                 });
             }
         }
     });
 
-    if (state.filter.search.value !== '') {
-        andFilterArr.push(`regex(?name, ".*${state.filter.search.value}.*", "i")`);
+    if (stateFilter.search.value !== '') {
+        andFilterArr.push(`regex(?name, ".*${stateFilter.search.value}.*", "i")`);
     }
 
-    let filter = ``;
+    let filter = '';
     filter += orFilterArr.length > 0 ? `(${orFilterArr.join(' || ')})` : '';
     if (orFilterArr.length > 0 && andFilterArr.length > 0) {
-        filter += ` && `;
+        filter += ' && ';
     }
     filter += andFilterArr.length > 0 ? `(${andFilterArr.join(' && ')})` : '';
     filter = filter !== '' ? `FILTER(${filter})` : '';
@@ -120,7 +116,45 @@ SELECT * FROM NAMED <${baseUri}> WHERE {
     return query;
 };
 
+const requestPlaceDetailsQuery = (placeUri) => {
+    const uri = `<${placeUri}>`;
+    const qVarsArr = [
+        //{s: uri, p: '?p', o: '?uri'},
+        {s: uri, p: 'leNs:note', o: '?note'},
+        {s: uri, p: 'leNs:category', o: '?category'},
+    ];
+
+    const qVarsStr = qVarsArr.map((q) => {
+        return `${q.s} ${q.p} ${q.o} .`;
+    }).join('\n');
+
+    const query = `${prefixes}
+SELECT * FROM NAMED <${baseUri}> WHERE {
+    GRAPH ?g {
+        ${qVarsStr}
+    }
+}
+`;
+
+    return query;
+};
+
 const getPlaces = (query) => {
+    return new Promise(
+        function(resolve, reject) {
+            execRDFStore(query).then(
+                response => {
+                    resolve(response);
+                },
+                error => {
+                    reject(error);
+                }
+            );
+        }
+    );
+};
+
+const getPlaceDetails = (query) => {
     return new Promise(
         function(resolve, reject) {
             execRDFStore(query).then(
@@ -163,13 +197,36 @@ export default store => next => action => {
         );
     case 'REQUEST_PLACES':
         //const startTime = new Date().getTime();
-        const query = getQuery(store.getState());
+        const query = requestPlacesQuery(store.getState().filter);
+        /** @todo we dont need the query in state, only on error */
         next({type: requestType, payload: query});
         return getPlaces(query).then(
             response => {
                 //const endTime = new Date().getTime();
                 //console.log(`REQUEST_PLACE needed: ${(endTime - startTime)} Miliseconds`);
                 const data = {type: successType, payload: response};
+                next(data);
+            },
+            error => {
+                next({type: failureType, payload: error.toString()});
+                console.error(error);
+                throw new Error(error);
+            }
+        );
+    case 'REQUEST_PLACE_DETAILS':
+        const placeDetailsQuery = requestPlaceDetailsQuery(callApi.payload);
+        next({type: requestType, payload: placeDetailsQuery});
+        return getPlaceDetails(placeDetailsQuery).then(
+            response => {
+                if (response.length !== 1) {
+                    const error = 'Response of request place details should be an array of 1';
+                    next({type: failureType, payload: error});
+                    throw new Error(error);
+                }
+                const data = {type: successType, payload: {
+                    uri: callApi.payload,
+                    data: response[0]
+                }};
                 next(data);
             },
             error => {

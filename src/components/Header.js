@@ -36,9 +36,11 @@ const Header = (params) => {
         </Nav>
     );*/
     return (
-        <h2>
-            <a href="#">BVL Navigator - Barriefreie Gebäude suchen und filtern</a>
-        </h2>
+        <header>
+            <h2>
+                <a href="#">BVL Navigator - Barrierefreie Gebäude suchen und filtern</a>
+            </h2>
+        </header>
     );
 };
 

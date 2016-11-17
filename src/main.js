@@ -8,6 +8,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {Router, Route, browserHistory, hashHistory} from 'react-router';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
+//import a11y from 'react-a11y';
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 //import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -19,6 +20,10 @@ import {setupStore, requestPlaces} from './actions';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 //injectTapEventPlugin();
+
+// warn about accessiblity issues
+// TODO only in DEV mode, throws react TypeError: ReactDOM.findDOMNode is not a function...
+//a11y(React);
 
 const logger = createLogger();
 const store = createStore(
@@ -34,10 +39,10 @@ ReactDOM.render(
                 onUpdate={
                     function() {
                         //console.log('Update Router...', this.state);
-                        const el = document.getElementById('getFocus');
+                        /*const el = document.getElementById('getFocus');
                         if (el !== null) {
                             el.focus();
-                        }
+                        }*/
                     }
                 }
             >

@@ -1,6 +1,7 @@
 /**
-  * Component for the place details sidebar
-  */
+ * @file HTML component for the search and filter form
+ * @author Simeon Ackermann
+ */
 /*eslint no-unused-vars: 0*/
 /*eslint-disable no-console */
 
@@ -29,8 +30,13 @@ const FormControlCheckbox = ({onChange, filter, id, label}) => {
     );
 };
 
-const Search = (params) => {
-    const {places, filter, onSubmit, onChange} = params;
+const Search = ({
+    places,
+    filter,
+    onSubmit,
+    onChange,
+    doRequest
+}) => {
 
     const optionsHtml = filter.category.options.map((option, key) => {
         return (
@@ -48,7 +54,7 @@ const Search = (params) => {
                     Suche
                 </Col>
                 <Col sm={8}>
-                    <FormControl type="search" title="Suche" aria-label="Suche"
+                    <FormControl type="search" title="Suche" aria-label="Suche nach Namen"
                         //autoFocus
                         value={filter.search.value}
                         onChange={e => onChange(
@@ -115,12 +121,12 @@ const Search = (params) => {
                 </Col>
             </FormGroup>
 
-            {/*<FormGroup>
+            <FormGroup>
                 <Col smOffset={2} sm={10}>
                     <Button type="submit">
                         Suche starten
                     </Button>
-                    <br /><br />
+                    {/*<br /><br />
                     <p>
                         <small>
                         {places.length === 0 &&
@@ -134,9 +140,9 @@ const Search = (params) => {
                         }
                         &nbsp;für diese Suche
                         </small>
-                    </p>
+                    </p>*/}
                 </Col>
-            </FormGroup>*/}
+            </FormGroup>
             </Form>
         </div>
     );

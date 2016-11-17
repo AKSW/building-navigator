@@ -37,6 +37,20 @@ export const requestPlaces = () => {
     };
 };
 
+export const PLACE_DETAILS_REQUEST = 'PLACE_DETAILS_REQUEST';
+export const PLACE_DETAILS_RECEIVE = 'PLACE_DETAILS_RECEIVE';
+export const PLACE_DETAILS_FAILURE = 'PLACE_DETAILS_FAILURE';
+
+export const requestPlaceDetails = (placeUri) => {
+    return {
+        [CALL_API]: {
+            type: 'REQUEST_PLACE_DETAILS',
+            types: [PLACE_DETAILS_REQUEST, PLACE_DETAILS_RECEIVE, PLACE_DETAILS_FAILURE],
+            payload: placeUri
+        }
+    };
+};
+
 /*export const addPlaces = (places) => {
     console.log('ADD_PLACES', places);
     return {

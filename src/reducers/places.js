@@ -2,6 +2,7 @@
 
 const initialPlacesState = {
     doRequest: false,
+    doDetailsRequest: false,
     places: [],
     selectedPlace: {}
 };
@@ -19,16 +20,34 @@ const places = (state = initialPlacesState, action) => {
             doRequest: true,
         });
     case 'PLACES_RECEIVE':
-        const plcs = action.payload.map((plc) => {
-            return Object.assign({}, initialPlaceState, plc);
-        });
         return Object.assign({}, state, {
             doRequest: false,
-            places: plcs
+            places: action.payload.map((plc) => {
+                return Object.assign({}, initialPlaceState, plc);
+            })
         });
     case 'PLACES_FAILURE':
         return Object.assign({}, state, {
             doRequest: false,
+            error: action.payload
+        });
+    case 'PLACE_DETAILS_REQUEST':
+        return Object.assign({}, state, {
+            doDetailsRequest: true,
+        });
+    case 'PLACE_DETAILS_RECEIVE':
+        return Object.assign({}, state, {
+            doDetailsRequest: false,
+            places: state.places.map((place) => {
+                if (place.uri.value !== action.payload.uri) {
+                    return place;
+                }
+                return Object.assign({}, place, action.payload.data);
+            })
+        });
+    case 'PLACE_DETAILS_FAILURE':
+        return Object.assign({}, state, {
+            doDetailsRequest: false,
             error: action.payload
         });
     case 'SELECTED_PLACE':

@@ -8,7 +8,12 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 
 import Results from '../components/Results';
-import {setMapCoord, setSelectedPlace, toggleDetails} from '../actions';
+import {
+    setMapCoord,
+    setSelectedPlace,
+    toggleDetails,
+    requestPlaceDetails
+} from '../actions';
 
 const mapStateToProps = (state, ownProps) => {
     let activeFilter = 0;
@@ -38,7 +43,9 @@ const mapStateToProps = (state, ownProps) => {
         places: state.places.places,
         placesAccessAttr,
         filter: state.filter,
-        activeFilter
+        activeFilter,
+        doRequest: state.places.doRequest,
+        doDetailsRequest: state.places.doDetailsRequest
     };
 };
 
@@ -53,8 +60,13 @@ const mapDispatchToProps = (dispatch) => {
         },
         onClickDetails: (place) => {
         },
-        toggleDetails: (e, place) => {
-            dispatch(toggleDetails(place.uri.value));
+        toggleDetails: (e, node) => {
+            if (!node.place._UI.showDetails &&
+                !node.place.hasOwnProperty('note')
+            ) {
+                dispatch(requestPlaceDetails(node.place.uri.value));
+            }
+            dispatch(toggleDetails(node.place.uri.value));
             e.preventDefault();
         }
     };

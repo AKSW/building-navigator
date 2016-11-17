@@ -16,10 +16,11 @@ const ResultsEntry = ({
     placesAccessAttr,
     placesLength,
     onClickResult,
-    toggleDetails
+    toggleDetails,
+    doDetailsRequest
 }) => {
-
-    let ariaLabel = `${place.name.value}`;
+    let toggleDetailsNode = null;
+    let ariaLabel = `${idx} von ${placesLength}. ${place.name.value}`;
     if (placesAccessAttr > activeFilter) {
         if (activeFilter > 0) {
             ariaLabel += (placesAccessAttr - activeFilter) === 1 ?
@@ -65,7 +66,26 @@ const ResultsEntry = ({
                     }
                 </li>
             </ul>
-            {place._UI.showDetails &&
+            <div>
+                <address>
+                    Adresse: {place.address.value}
+                </address>
+            </div>
+            <p>
+                <small>
+                    <button
+                        aria-label="Ergebnisdetails"
+                        aria-expanded={place._UI.showDetails}
+                        onClick={e => toggleDetails(e, toggleDetailsNode)}
+                        ref={node => {
+                            toggleDetailsNode = {node, place};
+                        }}
+                    >
+                        Details <Glyphicon glyph="chevron-down" />
+                    </button>
+                </small>
+            </p>
+            {place._UI.showDetails && !doDetailsRequest &&
                 <div>
                     <p>
                         Kategorie: {place.category.value}
@@ -75,24 +95,12 @@ const ResultsEntry = ({
                     </p>
                 </div>
             }
-            <div>
-                <address>
-                    {place.address.value}
-                </address>
-            </div>
             <p>
                 <small>
-                    <a href="#" role="button"
-                        onClick={e => toggleDetails(e, place)}
-                        aria-label="Ergebnisdetails"
-                        aria-expanded="false"
-                    >
-                        Details <Glyphicon glyph="chevron-down" />
-                    </a>&nbsp;
                     <a href="#map/{place.name.value}"
                         onClick={e => onClickResult(place)}
                     >
-                        Auf Karte anzeigen
+                        Ort auf Karte zeigen
                     </a>
                 </small>
             </p>

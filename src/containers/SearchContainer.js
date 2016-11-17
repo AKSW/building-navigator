@@ -46,8 +46,8 @@ const mapDispatchToProps = (dispatch) => {
             //dispatch(requestPlaces());
         },
         onSubmit: (e, filter) => {
-            dispatch(requestPlaces());
             e.preventDefault();
+            dispatch(requestPlaces());
             hashHistory.push('/results');
         },
     };
