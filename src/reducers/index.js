@@ -3,6 +3,7 @@
 
 //import {List, Map} from 'immutable';
 import {combineReducers} from 'redux';
+
 import filter from './filter';
 import places from './places';
 
@@ -23,23 +24,13 @@ const rdfstore = (state = initialRdfstoreState, action) => {
     case 'STORE_FAILURE':
         return Object.assign({}, state, {
             connected: false,
-            error: '...'
+            error: action.payload
         });
 
     default:
         return state;
     }
 };
-
-/*const selectedPlace = (state = {}, action) => {
-    switch (action.type) {
-    case 'SELECTED_PLACE':
-        //console.log('SELECTED_PLACES', state, action);
-        return action.payload;
-    default:
-        return state;
-    }
-};*/
 
 const initialMapConfig = {
     lat: 51.3412,
@@ -56,29 +47,21 @@ const mapConfig = (state = initialMapConfig, action) => {
             lng: action.payload.lng === null ? state.lng : action.payload.lng,
             zoom: action.payload.zoom === null ? state.zoom : action.payload.zoom
         });
+    case 'MAP_COORD':
+        return Object.assign({}, state, {
+            lat: action.payload.lat,
+            lng: action.payload.lng
+        });
     default:
         return state;
     }
 };
 
-/*const sparql = (state = null, action) => {
-    switch (action.type) {
-    case 'SPARQL_REQUEST':
-        console.log('REDUCER: SPARQL_REQUEST, state:', state, ' action:', action);
-        //return Object.assign({}, state, {palyload});
-        return action.payload;
-    default:
-        return state;
-    }
-};*/
-
 const buildingNavigator = combineReducers({
     filter,
     rdfstore,
     places,
-    //selectedPlace,
     map: mapConfig,
-    //sparql
 });
 
 export default buildingNavigator;

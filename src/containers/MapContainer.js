@@ -7,31 +7,48 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {hashHistory} from 'react-router';
+
 import Map from '../components/Map';
-import {requestPlaces} from '../actions';
+import {requestPlaces, setSelectedPlace} from '../actions';
+
+const mayPopupSelectedPlace = (map, selectedPlace) => {
+    const layerEls = map._layers;
+    if (selectedPlace.hasOwnProperty('uri')) {
+        Object.keys(layerEls).forEach((key) => {
+            if (layerEls[key].hasOwnProperty('_popup') &&
+                layerEls[key].options['data-name'] === selectedPlace.name.value)
+            {
+                layerEls[key].openPopup();
+            }
+        });
+    }
+};
 
 const mapStateToProps = (state, ownProps) => {
     return {
         requestPlaces: state.places.doRequest,
         places: state.places.places,
+        selectedPlace: state.places.selectedPlace,
         mapConfig: state.map,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePlaces: () => {
-            dispatch(requestPlaces());
+        onLoadMap: (e, selectedPlace) => {
+            const map = e.target._map;
+            mayPopupSelectedPlace(map, selectedPlace);
         },
         onClickMarker: (e, place) => {
+            dispatch(setSelectedPlace(place));
         },
         onClickShowDetails: (place) => {
-            console.log('Place-Details: ', place);
-            console.log('Goto: ', `/place/${place.name.value}`);
+            dispatch(setSelectedPlace(place));
             hashHistory.push(`/place/${place.name.value}`);
-            //hashHistory.goBack();
         },
-        onZoomend: () => {
+        onZoomend: (e) => {
+            //console.log('TODO: get and set data (e.g. boundingBox) from Map/Leaflet, e:', e);
+            //dispatch(setMapZoom({zoom: e.target._zoom}));
         }
     };
 };

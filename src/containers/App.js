@@ -4,7 +4,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {browserHistory, hashHistory} from 'react-router';
+
 import Header from '../components/Header';
+import Alert from '../components/Alert';
 import SidebarContainer from './SidebarContainer';
 import MapContainer from './MapContainer';
 import {setupStore, requestPlaces} from '../actions';
@@ -17,28 +19,44 @@ Main container of the App, renders main parts and start init of the RDFStore
 @param rdfstoreCnct {Boolean}
 @return {String}
  */
-const App = ({params, children, rdfstoreCnct}) => { //rdfstore, initStore
+const App = ({params, children, error, rdfstoreCnct}) => { //rdfstore, initStore
     return (
         <div>
-            {!rdfstoreCnct &&
+            {error &&
+                <Alert error={error} />
+            }
+            {!error && !rdfstoreCnct &&
                 <div>Init RDFStore...</div>
             }
-            {rdfstoreCnct &&
+            {!error && rdfstoreCnct &&
                 <div>
                     <Header />
-                    <SidebarContainer />
+                    {/*<SidebarContainer />*/}
                     {/* render route, e.g. /place/:place as sidebarPlaceDetails */}
-                    {children}
-                    <MapContainer />
+                    <div role="main" id="content">
+                        {children}
+                    </div>
+                    {/*<MapContainer />*/}
                 </div>
             }
         </div>
     );
 };
 
+const getError = (state) => {
+    if (state.rdfstore.error !== undefined) {
+        return state.rdfstore.error;
+    }
+    if (state.places.error !== undefined) {
+        return state.places.error;
+    }
+    return null;
+};
+
 const mapStateToProps = (state, ownProps) => {
     return {
-        rdfstoreCnct: state.rdfstore.connected
+        rdfstoreCnct: state.rdfstore.connected,
+        error: getError(state)
     };
 };
 
@@ -46,9 +64,6 @@ const mapDispatchToProps = (dispatch) => {
     dispatch(setupStore()).then(
         response => {
             dispatch(requestPlaces());
-        },
-        error => {
-            //console.log('error...');
         }
     );
     return {

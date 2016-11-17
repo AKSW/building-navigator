@@ -10,7 +10,9 @@ const setupRDFStore = () => {
     return new Promise(
         function(resolve, reject) {
             RDFStore.create((err, store) => {
-                if (err) { reject(err); }
+                if (err) {
+                    reject(err);
+                }
                 store.load(RDFfileFrmat, RDFfile, baseUri,
                     (err0, triples) => {
                         if (err0) { reject(err0); }
@@ -35,52 +37,90 @@ const execRDFStore = (query) => {
     );
 };
 
-const getPlaces = (state) => {
-    let query = `
+/*
+getGraph() {
+        if (this.store === null) {
+            throw new Error('Store is null');
+        }
+        return this.store.graph('http://example.org/', (err1, graph) => {
+            if (err1) { throw err1; }
+            this.graph = graph;
+            //const peopleGraph = graph.filter(store.rdf.filters.type(store.rdf.resolve('foaf:Person')));
+            return this.graph;
+        });
+    }
+*/
+
+/*
+placeName: {
+    var: '?name',
+    label: 'Name',
+    ...
+}
+*/
+
+const getQuery = (state) => {
+    const prefixes = `
 PREFIX lePlace:<http://le-online.de/place/>
 PREFIX leNs:<http://le-online.de/ontology/place/ns#>
-SELECT ?uri ?name ?lat ?lng
-FROM NAMED <${baseUri}> { GRAPH ?g {
-    `;
-
-    const p1 = [
+`;
+    const andFilterArr = [];
+    const orFilterArr = [];
+    const searchFilterArr = [];
+    const qVarsArr = [
         {s: '?uri', p: 'leNs:placeName', o: '?name'},
+        {s: '?uri', p: 'leNs:address', o: '?address'},
+        {s: '?uri', p: 'leNs:lift-available', o: '?liftAvailable'},
+        {s: '?uri', p: 'leNs:lift-liftWithWheelChairSupportAvailable', o: '?liftWithWheelChairSupportAvailable'},
+        {s: '?uri', p: 'leNs:parkingLot-lotsForDisabledPeopleAvailable', o: '?parkingLotsForDisabledPeopleAvailable'},
+        {s: '?uri', p: 'leNs:toilets-toiletForDisabledPeopleAvailable', o: '?toiletForDisabledPeopleAvailable'},
         {s: '?uri', p: 'leNs:lat', o: '?lat'},
-        {s: '?uri', p: 'leNs:lng', o: '?lng'}
+        {s: '?uri', p: 'leNs:lng', o: '?lng'},
+        {s: '?uri', p: 'leNs:note', o: '?note'},
+        {s: '?uri', p: 'leNs:category', o: '?category'},
     ];
 
-    const f1 = [];
+    const qVarsStr = qVarsArr.map((q) => {
+        return `${q.s} ${q.p} ${q.o} .`;
+    }).join('\n');
+
     Object.keys(state.filter).forEach((key) => {
         if (state.filter[key].active === true) {
-            f1.push(
-                {
-                    s: '?uri',
-                    p: `leNs:${key}`,
-                    o: `"${state.filter[key].value}"^^<http://www.w3.org/2001/XMLSchema#string>`
-                }
-            );
+            if (state.filter[key].type === 'checkbox') {
+                andFilterArr.push(`regex(?${key}, "${state.filter[key].value}")`);
+            }
+            if (state.filter[key].type === 'select') {
+                Object.keys(state.filter[key].value).forEach((selKey) => {
+                    andFilterArr.push(`regex(?${key}, "${state.filter[key].value[selKey]}")`);
+                });
+            }
         }
     });
 
-    let qs = ``;
-    p1.forEach((element, index) => {
-        qs = `${qs}${element.s} ${element.p} ${element.o} .
-        `;
-    });
-    f1.forEach((element, index) => {
-        qs = `${qs}${element.s} ${element.p} ${element.o} .
-        `;
-    });
+    if (state.filter.search.value !== '') {
+        andFilterArr.push(`regex(?name, ".*${state.filter.search.value}.*", "i")`);
+    }
 
-    query = `${query}
-    ${qs}
-} } LIMIT 10
-    `;
+    let filter = ``;
+    filter += orFilterArr.length > 0 ? `(${orFilterArr.join(' || ')})` : '';
+    if (orFilterArr.length > 0 && andFilterArr.length > 0) {
+        filter += ` && `;
+    }
+    filter += andFilterArr.length > 0 ? `(${andFilterArr.join(' && ')})` : '';
+    filter = filter !== '' ? `FILTER(${filter})` : '';
 
-    //console.log(query);
-    //leNs:lift-available ?liftAvailable
-    //FILTER regex(?liftAvailable, "yes")
+    const query = `${prefixes}
+SELECT * FROM NAMED <${baseUri}> WHERE {
+    GRAPH ?g {
+        ${qVarsStr}
+    }
+    ${filter}
+} LIMIT 10
+`;
+    return query;
+};
 
+const getPlaces = (query) => {
     return new Promise(
         function(resolve, reject) {
             execRDFStore(query).then(
@@ -95,28 +135,6 @@ FROM NAMED <${baseUri}> { GRAPH ?g {
     );
 };
 
-
-/*const api = ({getState}) => {
-    console.log('Init Store here?');
-    return (next) => (action) => {
-        console.log('will dispatch', action);
-
-        //action.payload = action.payload + " - har";
-
-        // Call the next dispatch method in the middleware chain.
-        const returnValue = next(action);
-
-        console.log('state after dispatch', getState());
-
-        // This will likely be the action itself, unless
-        // a middleware further in chain changed it.
-        return returnValue;
-    };
-};
-
-export default api;
-*/
-
 export const CALL_API = Symbol('Call API');
 
 export default store => next => action => {
@@ -129,31 +147,35 @@ export default store => next => action => {
     // @TODO test correct types
     const [requestType, successType, failureType] = types;
 
-    // set request
-    next({type: requestType});
-
-    //console.log('will dispatch', callApi);
-
     switch (callApi.type) {
     case 'REQUEST_STORE':
-        rdfstoreConn = 1;
+        next({type: requestType});
         return setupRDFStore().then(
             response => {
                 rdfstoreConn = response;
                 next({type: successType});
             },
-            error => console.error(error)
+            error => {
+                next({type: failureType, payload: error.toString()});
+                console.error(error);
+                throw new Error(error);
+            }
         );
     case 'REQUEST_PLACES':
-        return getPlaces(store.getState()).then(
+        //const startTime = new Date().getTime();
+        const query = getQuery(store.getState());
+        next({type: requestType, payload: query});
+        return getPlaces(query).then(
             response => {
-                //console.log('PLACES:', response);
+                //const endTime = new Date().getTime();
+                //console.log(`REQUEST_PLACE needed: ${(endTime - startTime)} Miliseconds`);
                 const data = {type: successType, payload: response};
                 next(data);
-                //console.log('state after dispatch', store.getState());
             },
             error => {
+                next({type: failureType, payload: error.toString()});
                 console.error(error);
+                throw new Error(error);
             }
         );
     default:

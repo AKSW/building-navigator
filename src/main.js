@@ -8,11 +8,17 @@ import {createStore, applyMiddleware} from 'redux';
 import {Router, Route, browserHistory, hashHistory} from 'react-router';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+//import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+//import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import mainReducer from './reducers';
 import api from './middleware/api';
-
 import getRoutes from './routes';
+import {setupStore, requestPlaces} from './actions';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+//injectTapEventPlugin();
 
 const logger = createLogger();
 const store = createStore(
@@ -22,12 +28,22 @@ const store = createStore(
 );
 
 ReactDOM.render(
-    <MuiThemeProvider>
+    //<MuiThemeProvider>
         <Provider store={store}>
-            <Router history={hashHistory}>
+            <Router history={hashHistory}
+                onUpdate={
+                    function() {
+                        //console.log('Update Router...', this.state);
+                        const el = document.getElementById('getFocus');
+                        if (el !== null) {
+                            el.focus();
+                        }
+                    }
+                }
+            >
                 {getRoutes()}
             </Router>
-        </Provider>
-    </MuiThemeProvider>,
+        </Provider>,
+    //</MuiThemeProvider>,
   document.getElementById('react')
 );

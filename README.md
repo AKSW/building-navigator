@@ -6,6 +6,12 @@ Interactive map with accessible information about places in Leipzig.
 
 Promises: http://caniuse.com/#feat=promises
 
+## Accessibility
+
+Callbacks instead Promise
+
+https://facebook.github.io/react-native/docs/accessibility.html
+
 ## Architecture and software details
 
 ![](./assets/architecture.png)

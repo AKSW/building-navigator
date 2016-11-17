@@ -2,11 +2,12 @@
 
 import {CALL_API} from '../middleware/api';
 
-export const setFilter = (key, payload) => {
+export const setFilter = (key, payload = {active: true, value: undefined}) => {
     return {
         type: 'SET_FILTER',
         key,
-        payload
+        active: payload.active,
+        value: typeof payload.value === 'undefined' ? undefined : payload.value
     };
 };
 
@@ -36,13 +37,13 @@ export const requestPlaces = () => {
     };
 };
 
-export const addPlaces = (places) => {
+/*export const addPlaces = (places) => {
     console.log('ADD_PLACES', places);
     return {
         type: 'ADD_PLACES',
         payload: places
     };
-};
+};*/
 
 /*export const changedMapView = () => {
     console.log('Changed Map view action...');
@@ -58,17 +59,35 @@ export const addPlaces = (places) => {
     };
 };*/
 
-export const selectedPlace = (place) => {
+/**
+ Show or hide the details of a place in results list by its URI
+ @param {String} placeUri URI of the place
+ @returns {Object} Result object
+*/
+export const toggleDetails = (placeUri) => {
+    return {
+        type: 'TOGGLE_DETAILS',
+        payload: placeUri
+    };
+};
+
+export const setSelectedPlace = (place) => {
     return {
         type: 'SELECTED_PLACE',
         payload: place
     };
 };
 
-//export const setMapZoom = ({lat, lng, zoom}) => {
 export const setMapZoom = ({zoom}) => {
     return {
         type: 'MAP_CONFIG',
         payload: {lat: null, lng: null, zoom}
+    };
+};
+
+export const setMapCoord = ({lat, lng}) => {
+    return {
+        type: 'MAP_COORD',
+        payload: {lat, lng}
     };
 };

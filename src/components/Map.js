@@ -11,7 +11,9 @@ import Markers from './Markers';
 
 const Map = (props) => {
     console.log('Map-Props:', props);
-    const position = [props.mapConfig.lat, props.mapConfig.lng];
+    const {mapConfig, places, selectedPlace, requestPlaces,
+        onLoadMap, onClickMarker, onZoomend, onClickShowDetails} = props;
+    const position = [mapConfig.lat, mapConfig.lng];
 
     /*return (
         <div>
@@ -24,25 +26,28 @@ const Map = (props) => {
     );*/
 
     return (
-        <div>
-            <OSMap center={position} zoom={props.mapConfig.zoom} zoomControl={false} onZoomend={props.onZoomend}>
+        <div id="mapContainer">
+            <OSMap center={position} zoom={mapConfig.zoom} zoomControl={false}
+                onZoomend={onZoomend}
+            >
                 <TileLayer
+                    onLoad={e => onLoadMap(e, selectedPlace)}
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
                 />
                 <ZoomControl position="topright"/>
                 <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
-                {props.places.length > 0 &&
-                    <Markers places={props.places}
-                        onClickMarker={props.onClickMarker}
-                        onClickShowDetails={props.onClickShowDetails}
+                {places.length > 0 &&
+                    <Markers places={places}
+                        onClickMarker={onClickMarker}
+                        onClickShowDetails={onClickShowDetails}
                     />
                 }
             </OSMap>
-            {props.requestPlaces &&
+            {requestPlaces &&
                 <span>...loading places</span>
             }
-            {!props.requestPlaces && props.places.length === 0 &&
+            {!requestPlaces && places.length === 0 &&
                 <span>No places found!</span>
             }
         </div>
@@ -53,8 +58,7 @@ Map.propTypes = {
     mapConfig: PropTypes.object,
     requestPlaces: PropTypes.bool,
     places: PropTypes.array,
-    onZoomend: PropTypes.func,
-    updatePlaces: PropTypes.func
+    onZoomend: PropTypes.func
 };
 
 export default Map;

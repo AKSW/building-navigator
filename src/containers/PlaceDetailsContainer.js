@@ -13,12 +13,19 @@ const mapStateToProps = (state, ownProps) => {
     //console.log('PlaceDetails-State: ', state);
     //console.log('PlaceDetails-ownProps: ', ownProps);
     return {
-        place: ownProps.params.place
+        //place: ownProps.params.place,
+        place: state.places.selectedPlace,
+        idx: 1,
+        expanded: true,
+        //hasHistory: ownProps.params.place === undefined ? false: true
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        onClickResult: () => {
+        }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceDetails);
