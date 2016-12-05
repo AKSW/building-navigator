@@ -8,16 +8,38 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {browserHistory, hashHistory} from 'react-router';
+import {Grid} from 'react-bootstrap';
 
-import Header from '../components/Header';
 import Alert from '../components/Alert';
-import SidebarContainer from './SidebarContainer';
-import MapContainer from './MapContainer';
-import {setupStore, requestPlaces} from '../actions';
+import MapContainer from '../containers/MapContainer';
+import Sidebar from '../components/Sidebar';
+import WelcomeMessage from '../components/WelcomeMessage';
+import {
+    setupStore,
+    requestPlaces,
+    toggleWelcomeMsg,
+    toggleSidebar
+} from '../actions';
 
-const App = ({params, children, error, rdfstoreCnct}) => { //rdfstore, initStore
+const App = ({
+    children,
+    showWelcome,
+    //isMapChild,
+    error,
+    rdfstoreCnct,
+    sidebarIsVisible,
+    onToggleSidebar,
+    onHideWelcomeMsg
+}) => {
+    //children = !isMapChild ? (children) : null;
+
     return (
         <div>
+
+            {showWelcome &&
+                <WelcomeMessage onHide={onHideWelcomeMsg} />
+            }
+
             {error &&
                 <Alert error={error} />
             }
@@ -25,14 +47,16 @@ const App = ({params, children, error, rdfstoreCnct}) => { //rdfstore, initStore
                 <div>Init RDFStore...</div>
             }
             {!error && rdfstoreCnct &&
-                <div>
-                    <Header />
-                    {/*<SidebarContainer />*/}
-                    {/* render route, e.g. /place/:place as sidebarPlaceDetails */}
-                    <div role="main" id="content">
-                        {children}
-                    </div>
-                    {/*<MapContainer />*/}
+                <div role="main" id="content">
+                    <Grid fluid={true}>
+                        <Sidebar
+                            sidebarIsVisible={sidebarIsVisible}
+                            onToggleSidebar={onToggleSidebar}
+                        >
+                            {children}
+                        </Sidebar>
+                    </Grid>
+                    {<MapContainer tabIndex="-1" aria-hidden="true" />}
                 </div>
             }
         </div>
@@ -40,9 +64,9 @@ const App = ({params, children, error, rdfstoreCnct}) => { //rdfstore, initStore
 };
 
 const getError = (state) => {
-    if (state.rdfstore.error !== undefined) {
+    /*if (state.rdfstore.error !== undefined) {
         return state.rdfstore.error;
-    }
+    }*/
     if (state.places.error !== undefined) {
         return state.places.error;
     }
@@ -50,21 +74,34 @@ const getError = (state) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+    //console.log('ownProps:', ownProps);
     return {
-        rdfstoreCnct: state.rdfstore.connected,
+        showWelcome: state.main.showWelcomeMessage,
+        sidebarIsVisible: state.main.sidebarIsVisible,
+        children: ownProps.children,
+        //isMapChild: ownProps.location.pathname.match(/^\/map/),
+        //rdfstoreCnct: state.rdfstore.connected,
+        rdfstoreCnct: true,
         error: getError(state)
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     // start setting up store
-    dispatch(setupStore()).then(
+    /*dispatch(setupStore()).then(
         response => {
             // request places first time
             dispatch(requestPlaces());
         }
-    );
+    );*/
+    //dispatch(requestPlaces());
     return {
+        onHideWelcomeMsg: () => {
+            dispatch(toggleWelcomeMsg());
+        },
+        onToggleSidebar: () => {
+            dispatch(toggleSidebar());
+        }
     };
 };
 

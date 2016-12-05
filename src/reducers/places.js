@@ -4,12 +4,14 @@ const initialPlacesState = {
     doRequest: false,
     doDetailsRequest: false,
     places: [],
-    selectedPlace: {}
+    selectedPlace: {},
+    selectedPlaceId: undefined,
 };
 
 const initialPlaceState = {
     _UI: {
         showDetails: false,
+        receivedDetails: false
     }
 };
 
@@ -31,6 +33,20 @@ const places = (state = initialPlacesState, action) => {
             doRequest: false,
             error: action.payload
         });
+    case 'PLACE_REQUEST':
+        return Object.assign({}, state, {
+            doRequest: true,
+        });
+    case 'PLACE_RECEIVE':
+        return Object.assign({}, state, {
+            doRequest: false,
+            selectedPlace: action.payload.place
+        });
+    case 'PLACE_FAILURE':
+        return Object.assign({}, state, {
+            doRequest: false,
+            error: action.payload
+        });
     case 'PLACE_DETAILS_REQUEST':
         return Object.assign({}, state, {
             doDetailsRequest: true,
@@ -42,7 +58,9 @@ const places = (state = initialPlacesState, action) => {
                 if (place.uri.value !== action.payload.uri) {
                     return place;
                 }
-                return Object.assign({}, place, action.payload.data);
+                const rcPlc = action.payload.data;
+                rcPlc._UI = {receivedDetails: true};
+                return Object.assign({}, place, rcPlc);
             })
         });
     case 'PLACE_DETAILS_FAILURE':
@@ -54,15 +72,20 @@ const places = (state = initialPlacesState, action) => {
         return Object.assign({}, state, {
             selectedPlace: action.payload
         });
+    case 'SELECTED_PLACE_ID':
+        return Object.assign({}, state, {
+            selectedPlaceId: action.payload
+        });
     case 'TOGGLE_DETAILS':
         return Object.assign({}, state, {
             places: state.places.map((place) => {
                 if (place.uri.value !== action.payload) {
                     return place;
                 }
-                return Object.assign({}, place, {
-                    _UI: {showDetails: !place._UI.showDetails}
-                });
+                //place._UI.showDetails = !place._UI.showDetails
+                const newUI = place._UI;
+                newUI.showDetails = !place._UI.showDetails;
+                return Object.assign({}, place, newUI);
             })
         });
     default:

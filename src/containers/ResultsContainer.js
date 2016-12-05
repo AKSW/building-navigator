@@ -9,35 +9,38 @@ import {connect} from 'react-redux';
 
 import Results from '../components/Results';
 import {
-    setMapCoord,
+    updateMapCenter,
+    setMapZoom,
     setSelectedPlace,
     toggleDetails,
-    requestPlaceDetails
+    requestPlaceDetails,
+    updateSelectedPlaceId
 } from '../actions';
+import {mapMaxZoom} from './MapContainer';
 
 const mapStateToProps = (state, ownProps) => {
     let activeFilter = 0;
-    let placesAccessAttr = [];
+    const placesAccessAttr = [];
 
-    placesAccessAttr = state.places.places.map((place) => {
+    /*placesAccessAttr = state.places.places.map((place) => {
         let placeAccessAttr = 0;
-        Object.keys(state.filter).forEach((key) => {
+        for (const key in state.filter) {
             if (place.hasOwnProperty(key) &&
                 place[key].value === 'yes'
             ) {
                 placeAccessAttr++;
             }
-        });
+        }
         return placeAccessAttr;
-    });
+    });*/
 
-    Object.keys(state.filter).forEach((key) => {
+    for (const key in state.filter) {
         if (key !== 'search' &&
             state.filter[key].active
         ) {
             activeFilter++;
         }
-    });
+    }
 
     return {
         places: state.places.places,
@@ -50,24 +53,32 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+    /** @todo may request places (if state.places is emtpy */
     return {
-        onClickResult: (place) => {
-            dispatch(setSelectedPlace(place));
-            dispatch(setMapCoord({
+        onClickResult: (e, place) => {
+            e.preventDefault();
+        },
+        onClickShowOnMap: (e, place) => {
+            dispatch(updateMapCenter({
                 lat: parseFloat(place.lat.value),
                 lng: parseFloat(place.lng.value)
             }));
-        },
-        onClickDetails: (place) => {
-        },
-        toggleDetails: (e, node) => {
-            if (!node.place._UI.showDetails &&
-                !node.place.hasOwnProperty('note')
-            ) {
-                dispatch(requestPlaceDetails(node.place.uri.value));
-            }
-            dispatch(toggleDetails(node.place.uri.value));
+            dispatch(setMapZoom({zoom: mapMaxZoom()}));
+            dispatch(updateSelectedPlaceId(place.id.value));
+            dispatch(setSelectedPlace(place));
             e.preventDefault();
+        },
+        toggleDetails: (place) => {
+            if (!place._UI.receivedDetails
+            ) {
+                dispatch(requestPlaceDetails(place.uri.value)).then(
+                    response => {
+                        dispatch(toggleDetails(place.uri.value));
+                    }
+                );
+            } else {
+                dispatch(toggleDetails(place.uri.value));
+            }
         }
     };
 };

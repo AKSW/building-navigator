@@ -4,42 +4,41 @@
 import React from 'react';
 import {connect} from 'react-redux';
 //import {Link} from 'react-router';
-//import {Nav, NavItem} from 'react-bootstrap';
-//import {LinkContainer} from 'react-router-bootstrap';
+import {Nav, NavItem} from 'react-bootstrap';
+import {LinkContainer} from 'react-router-bootstrap';
 
 const Header = (params) => {
-    /*const {places} = params;
+    const {places} = params;
     return (
-        <Nav bsStyle="tabs" activeKey={1} role="navigation">
-            <LinkContainer to={'/search'}>
-                <NavItem eventKey={1} aria-label="Suchen & filtern">Suche & Filter</NavItem>
-            </LinkContainer>
-            {places.length === 0 &&
-                <li>
-                    <a href="#">keine Ergebnisse</a>
-                </li>
-            }
-            {places.length > 0 &&
-                <LinkContainer to={'/results'}>
-                    <NavItem eventKey={2} aria-label="Ergebnisse">
-                    {places.length}&nbsp;
-                    Ergebnis
-                    {places.length === 0 || places.length > 1 &&
-                        "se"
-                    }
-                    </NavItem>
+        <header className="header">
+            <h2>Gebäude Navigator</h2>
+            {/*<Nav bsStyle="tabs" activeKey={1} role="navigation">
+                <LinkContainer to={'/search'}>
+                    <NavItem eventKey={1} aria-label="Suchen & filtern">Suche & Filter</NavItem>
                 </LinkContainer>
-            }
-            <LinkContainer to={'/map'} aria-hidden="true">
-                <NavItem eventKey={3} aria-label="Karte">Karte</NavItem>
-            </LinkContainer>
-        </Nav>
-    );*/
-    return (
-        <header>
-            <h2>
-                <a href="#">BVL Navigator - Barrierefreie Gebäude suchen und filtern</a>
-            </h2>
+                <LinkContainer to={'/results'}>
+                    <NavItem eventKey={2} aria-label="Ergebnisse">Ergebnisse</NavItem>
+                </LinkContainer>
+                {places.length === 0 &&
+                    <li>
+                        <a href="#">keine Ergebnisse</a>
+                    </li>
+                }
+                {places.length > 0 &&
+                    <LinkContainer to={'/results'}>
+                        <NavItem eventKey={2} aria-label="Ergebnisse">
+                        {places.length}&nbsp;
+                        Ergebnis
+                        {places.length === 0 || places.length > 1 &&
+                            "se"
+                        }
+                        </NavItem>
+                    </LinkContainer>
+                }
+                <LinkContainer to={'/map'} aria-hidden="true">
+                    <NavItem eventKey={3} aria-label="Karte">Karte</NavItem>
+                </LinkContainer>
+            </Nav>*/}
         </header>
     );
 };

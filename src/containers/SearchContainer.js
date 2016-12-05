@@ -16,7 +16,7 @@ import {setFilter, requestPlaces} from '../actions';
 const mapStateToProps = (state, ownProps) => {
     return {
         filter: state.filter,
-        //places: state.places.places
+        doRequest: state.places.doRequest,
     };
 };
 
@@ -25,30 +25,49 @@ const mapDispatchToProps = (dispatch) => {
         onChange: (filterKey, active, node) => {
             const el = ReactDOM.findDOMNode(node);
 
-            if (filterKey === 'category') {
-                const values = [].filter.call(el.options, function(o) {
+            //console.log('onChange: ', node, filterKey, el, active);
+
+                /*const values = [].filter.call(el.options, function(o) {
                     return o.selected;
                 }).map(function(o) {
                     return o.value;
-                });
-                if (values.indexOf('all') === 0) {
-                    dispatch(setFilter(filterKey, {active: false, value: []}));
-                } else {
-                    dispatch(setFilter(filterKey, {active: true, value: values}));
-                }
+                });*/
+
+            if (filterKey === 'evatorAll') {
+                dispatch(setFilter('elevatorCabineIsAvailable', {active: false}));
+                dispatch(setFilter('elevatorIsWheelchairAccessible', {active: false}));
+            }
+            else if (filterKey === 'elevatorCabineIsAvailable') {
+                dispatch(setFilter('elevatorCabineIsAvailable', {active: true}));
+                dispatch(setFilter('elevatorIsWheelchairAccessible', {active: false}));
+            }
+            else if (filterKey === 'elevatorIsWheelchairAccessible') {
+                dispatch(setFilter('elevatorCabineIsAvailable', {active: false}));
+                dispatch(setFilter('elevatorIsWheelchairAccessible', {active: true}));
+            }
+
+            if (filterKey === 'search') {
+                active = el.value === '' ? false : true;
+                dispatch(setFilter(filterKey, {active, value: el.value}));
+            }
+
+
+            /*if (filterKey === 'category') {
+                dispatch(setFilter(filterKey, {active: true, value: el.value}));
             } else if (filterKey === 'search') {
-                const value = ReactDOM.findDOMNode(node).value;
-                active = value === '' ? false : true;
-                dispatch(setFilter(filterKey, {active, value}));
+                active = el.value === '' ? false : true;
+                dispatch(setFilter(filterKey, {active, value: el.value}));
             } else {
                 dispatch(setFilter(filterKey, {active}));
-            }
-            //dispatch(requestPlaces());
+            }*/
         },
         onSubmit: (e, filter) => {
             e.preventDefault();
-            dispatch(requestPlaces());
-            hashHistory.push('/results');
+            dispatch(requestPlaces()).then(
+                response => {
+                    hashHistory.push('/results');
+                }
+            );
         },
     };
 };

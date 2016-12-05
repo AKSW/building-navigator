@@ -10,6 +10,7 @@ module.exports = {
     debug: true,
     context: path.resolve(__dirname),
     entry: './src/main.js',    
+    //entry: ['whatwg-fetch', './src/main.js'],
     output: {
         path: PATHS.dist,
         publicPath: '/',

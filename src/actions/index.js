@@ -2,6 +2,33 @@
 
 import {CALL_API} from '../middleware/api';
 
+export const toggleSidebar = () => {
+    return {
+        type: 'TOGGLE_SIDEBAR'
+    };
+};
+
+
+export const toggleWelcomeMsg = () => {
+    return {
+        type: 'TOGGLE_WELCOME_MSG'
+    };
+};
+
+/*export const updateCurHistoryRoute = (key) => {
+    return {
+        type: 'CUR_HISTORY_ROUTE',
+        key,
+    };
+};
+
+export const updatePrevHistoryRoute = (key) => {
+    return {
+        type: 'PREV_HISTORY_ROUTE',
+        key,
+    };
+};*/
+
 export const setFilter = (key, payload = {active: true, value: undefined}) => {
     return {
         type: 'SET_FILTER',
@@ -37,6 +64,20 @@ export const requestPlaces = () => {
     };
 };
 
+export const PLACE_REQUEST = 'PLACE_REQUEST';
+export const PLACE_RECEIVE = 'PLACE_RECEIVE';
+export const PLACE_FAILURE = 'PLACE_FAILURE';
+
+export const requestPlaceById = (id) => {
+    return {
+        [CALL_API]: {
+            type: 'REQUEST_PLACE_BY_ID',
+            types: [PLACE_REQUEST, PLACE_RECEIVE, PLACE_FAILURE],
+            payload: id
+        }
+    };
+};
+
 export const PLACE_DETAILS_REQUEST = 'PLACE_DETAILS_REQUEST';
 export const PLACE_DETAILS_RECEIVE = 'PLACE_DETAILS_RECEIVE';
 export const PLACE_DETAILS_FAILURE = 'PLACE_DETAILS_FAILURE';
@@ -50,28 +91,6 @@ export const requestPlaceDetails = (placeUri) => {
         }
     };
 };
-
-/*export const addPlaces = (places) => {
-    console.log('ADD_PLACES', places);
-    return {
-        type: 'ADD_PLACES',
-        payload: places
-    };
-};*/
-
-/*export const changedMapView = () => {
-    console.log('Changed Map view action...');
-    return {
-        type: 'ANYTHING'
-    };
-};*/
-
-/*export const getPlace = (id) => {
-    return {
-        type: 'GET_PLACE',
-        payload: id
-    };
-};*/
 
 /**
  Show or hide the details of a place in results list by its URI
@@ -92,16 +111,37 @@ export const setSelectedPlace = (place) => {
     };
 };
 
-export const setMapZoom = ({zoom}) => {
+export const updateSelectedPlaceId = (placeId) => {
     return {
-        type: 'MAP_CONFIG',
-        payload: {lat: null, lng: null, zoom}
+        type: 'SELECTED_PLACE_ID',
+        payload: placeId
     };
 };
 
-export const setMapCoord = ({lat, lng}) => {
+export const updateMapConfig = ({center, zoom, bounds}) => {
     return {
-        type: 'MAP_COORD',
+        type: 'MAP_CONFIG',
+        payload: {center, zoom, bounds}
+    };
+};
+
+export const setMapZoom = ({zoom}) => {
+    return {
+        type: 'MAP_ZOOM',
+        payload: {zoom}
+    };
+};
+
+export const updateMapCenter = ({lat, lng}) => {
+    return {
+        type: 'MAP_CENTER',
         payload: {lat, lng}
+    };
+};
+
+export const updateMapBounds = ({_northEast, _southWest}) => {
+    return {
+        type: 'MAP_BOUNDS',
+        payload: {_northEast, _southWest}
     };
 };

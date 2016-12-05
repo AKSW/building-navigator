@@ -6,29 +6,39 @@
  */
 
 import React, {PropTypes} from 'react';
+import {Link} from 'react-router';
+import {Button, Glyphicon} from 'react-bootstrap';
 import {Map as OSMap, Marker, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
+
 import Markers from './Markers';
 
-const Map = (props) => {
-    console.log('Map-Props:', props);
-    const {mapConfig, places, selectedPlace, requestPlaces,
-        onLoadMap, onClickMarker, onZoomend, onClickShowDetails} = props;
-    const position = [mapConfig.lat, mapConfig.lng];
-
-    /*return (
-        <div>
-            I'm the map container...
-            <Markers places={props.places}
-                onClickMarker={props.onClickMarker}
-                onClickShowDetails={props.onClickShowDetails}
-            />
-        </div>
-    );*/
+const Map = ({
+    prevHistoryRoute,
+    mapConfig,
+    markers,
+    selectedPlace,
+    selectedPlaceId,
+    requestPlaces,
+    onLoadMap,
+    onClickMarker,
+    onClickGroupMarker,
+    onZoomend,
+    onDragend,
+    onClickShowDetails
+}) => {
+    const center = [mapConfig.center.lat, mapConfig.center.lng];
+    let mapRef = null;
 
     return (
-        <div id="mapContainer">
-            <OSMap center={position} zoom={mapConfig.zoom} zoomControl={false}
-                onZoomend={onZoomend}
+        <div id="mapContainer" tabIndex="-1">
+            <OSMap
+                id="OSMap"
+                center={center}
+                zoom={mapConfig.zoom}
+                zoomControl={false}
+                onZoomend={e => onZoomend(mapRef)}
+                onDragend={e => onDragend(mapRef)}
+                ref={node => (mapRef = node)}
             >
                 <TileLayer
                     onLoad={e => onLoadMap(e, selectedPlace)}
@@ -37,9 +47,12 @@ const Map = (props) => {
                 />
                 <ZoomControl position="topright"/>
                 <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
-                {places.length > 0 &&
-                    <Markers places={places}
+                {markers.length > 0 &&
+                    <Markers
+                        markers={markers}
+                        selectedPlaceId={selectedPlaceId}
                         onClickMarker={onClickMarker}
+                        onClickGroupMarker={onClickGroupMarker}
                         onClickShowDetails={onClickShowDetails}
                     />
                 }
@@ -47,7 +60,7 @@ const Map = (props) => {
             {requestPlaces &&
                 <span>...loading places</span>
             }
-            {!requestPlaces && places.length === 0 &&
+            {!requestPlaces && markers.length === 0 &&
                 <span>No places found!</span>
             }
         </div>

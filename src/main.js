@@ -15,7 +15,7 @@ import createLogger from 'redux-logger';
 import mainReducer from './reducers';
 import api from './middleware/api';
 import getRoutes from './routes';
-import {setupStore, requestPlaces} from './actions';
+//import {updatePrevHistoryRoute, updateCurHistoryRoute} from './actions';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -29,22 +29,32 @@ const logger = createLogger();
 const store = createStore(
     mainReducer,
     undefined, // @TODO add intial values here...
-    applyMiddleware(thunk, api, logger) // loger mus be the last middleware
+    applyMiddleware(thunk, api, logger) // logger mus be the last middleware
 );
+
+/* // gets current route
+let curHistoryRoute = '/';
+const unlisten = hashHistory.listen(function (location) {
+    curHistoryRoute = location.pathname;
+});
+store.dispatch(updateCurHistoryRoute(curHistoryRoute));*/
 
 ReactDOM.render(
     //<MuiThemeProvider>
         <Provider store={store}>
             <Router history={hashHistory}
-                onUpdate={
-                    function() {
-                        //console.log('Update Router...', this.state);
-                        /*const el = document.getElementById('getFocus');
-                        if (el !== null) {
+                onUpdate={() => {
+                    /* // updates current/prev route
+                    const state = store.getState();
+                    store.dispatch(updatePrevHistoryRoute(state.main.curHistoryRoute));
+                    store.dispatch(updateCurHistoryRoute(curHistoryRoute));*/
+                    const el = document.getElementById('getFocus');
+                    if (el !== null) {
+                        window.setTimeout(() => {
                             el.focus();
-                        }*/
+                        }, 100);
                     }
-                }
+                }}
             >
                 {getRoutes()}
             </Router>

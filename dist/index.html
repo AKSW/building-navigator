@@ -6,33 +6,92 @@
     <title>The Building Navigator</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style type="text/css">
+        * {
+          box-sizing: border-box;
+        }
 		:root {
 			--header-height: 50px;
 		}
+        html, body {
+          height: 100%;
+        }
 		body {
 			margin: 0;
 			padding: 0;
-		}	
+		}
+        #react {
+            width: 100%;
+            height: 100%;
+        }
 		.header {
 			height: var(--header-height);
 		}
+        .header h2 {
+            margin: 0;
+        }
     	.leaflet-container {
     		position: absolute;
-    		height: calc(100% - var(--header-height));
+    		height: 100%;
     		margin: 0;
     		width: 100%;
 		}
         #mapContainer {
-            position: relative;
-            height: 100vh;
+            position: absolute;
+            /*height: calc(100% - var(--header-height));*/
+            height: 100%;
             width: 100%;
+            top: 0px;
+            left: 0px;
+        }
+        .sidebar {
+            position: absolute;
+            /*height: calc(100% - var(--header-height));*/
+            max-height: 100%;
+            background: white;
+            z-index: 9999;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            border-bottom-right-radius: 4px;
+
+        }
+        .btn-hide-sidebar {
+            z-index: 9998;
+            margin-top: 14px;
+            padding: 0;
+        }
+        .btn-hide-sidebar button {
+            margin-left: -5px;
+            padding: 10px 8px;
+        }
+        .btn-hide-sidebar .glyphicon {
+            color: gray;
+        }
+        .btn-show-sidebar {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            z-index: 9998;
+            margin-top: 14px;
+            margin-left: -15px;
+            padding: 0;
+        }
+        .btn-show-sidebar button {
+            margin-left: -5px;
+            padding: 10px 8px;
+        }
+        .btn-show-sidebar .glyphicon {
+            color: gray;
         }
     </style>
 </head>
 
 <body>
-    <div class="container" id="react"></div>
+    <div id="react"></div>
 
     <script src="main.min.js"></script>
 </body>

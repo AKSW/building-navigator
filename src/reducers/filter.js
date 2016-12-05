@@ -1,30 +1,52 @@
 /*eslint-disable no-console */
 
-/*
-@TODO filter ontology
-base hasFilter filter1
-filter1 type ... (checkbox)
-filter1 label xyz
-filter1 active bool
-filter1 value xyz
-...
-*/
-
 export const filterSettings = {
     'search': {
-        p: 'search',
         active: false,
         value: '',
-        type: 'text'
+        filter: 'regex(?title, ".*%s.*", "i")'
     },
-    /* @ TODO better structure, e.g.:
-    'liftAvailable': {
-        p: 'lift-available',
-        o: '"yes"^^<http://www.w3.org/2001/XMLSchema#string>',
+    // 'accessibleLift' {
+    //     filter: 'regex(?elevatorCabineIsAvailable, "ja") && \
+    //         ?elevatorCabineWidth > "110" && \
+    //         ?elevatorDoorWidth > "70"';
+    // },
+    /*'elevator': {
         active: false,
-        type: 'checkbox'
+        value: {
+            'elevatorCabineIsAvailable': {
+                active: false,
+                value: 'ja',
+                filter: '?elevatorCabineIsAvailable = "%s"'
+            },
+            'elevatorIsWheelchairAccessible': {
+                active: false,
+                value: 'ja',
+                filter: '?elevatorIsWheelchairAccessible = "%s"'
+            }
+        },
     },*/
-    'liftAvailable': {
+    'elevatorCabineIsAvailable': {
+        active: false,
+        value: 'ja',
+        filter: '?elevatorCabineIsAvailable = "%s"'
+    },
+    'elevatorIsWheelchairAccessible': {
+        active: false,
+        value: 'ja',
+        filter: '?elevatorIsWheelchairAccessible = "%s"'
+    },
+    'toiletIsAvailable': {
+        active: false,
+        value: '',
+        filter: ''
+    },
+    'toiletIsWheelchairAccessible': {
+        active: false,
+        value: '',
+        filter: ''
+    },
+    /*'liftAvailable': {
         p: 'lift-available',
         active: false,
         type: 'checkbox',
@@ -63,7 +85,7 @@ export const filterSettings = {
             {value: 'Kultur', text: 'Kultur'},
         ],
         value: []
-    },
+    },*/
 };
 
 const filter = (state = filterSettings, action) => {
