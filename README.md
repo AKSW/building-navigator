@@ -4,8 +4,8 @@ Interactive map with accessible information about places in Leipzig.
 
 ## Note
 
-- Requires Virtuoso 7 with > SPARQL 1.1
-- Allow Cross-Origin requests in Virtuoso
+- Requires Virtuoso 7.X with > SPARQL 1.1, running on localhost (or change url in `./src/middleware/store.js`)
+- Allow Cross-Origin requests in Virtuoso, see https://virtuoso.openlinksw.com/dataspace/doc/dav/wiki/Main/VirtTipsAndTricksCORsEnableSPARQLURLs
 
 ## Compatibility
 
