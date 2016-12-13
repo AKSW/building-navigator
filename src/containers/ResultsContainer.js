@@ -6,17 +6,28 @@
 
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {hashHistory} from 'react-router';
 
 import Results from '../components/Results';
 import {
     updateMapCenter,
-    setMapZoom,
+    updateMapZoom,
     setSelectedPlace,
     toggleDetails,
     requestPlaceDetails,
     updateSelectedPlaceId
 } from '../actions';
 import {mapMaxZoom} from './MapContainer';
+
+const showOnMap = (dispatch, place) => {
+    dispatch(updateMapCenter({
+        lat: parseFloat(place.lat.value),
+        lng: parseFloat(place.lng.value)
+    }));
+    dispatch(updateMapZoom({zoom: mapMaxZoom()}));
+    dispatch(updateSelectedPlaceId(place.id.value));
+    dispatch(setSelectedPlace(place));
+};
 
 const mapStateToProps = (state, ownProps) => {
     let activeFilter = 0;
@@ -36,6 +47,7 @@ const mapStateToProps = (state, ownProps) => {
 
     for (const key in state.filter) {
         if (key !== 'search' &&
+            key !== 'district' &&
             state.filter[key].active
         ) {
             activeFilter++;
@@ -48,7 +60,8 @@ const mapStateToProps = (state, ownProps) => {
         filter: state.filter,
         activeFilter,
         doRequest: state.places.doRequest,
-        doDetailsRequest: state.places.doDetailsRequest
+        doDetailsRequest: state.places.doDetailsRequest,
+        submittedSearch: state.main.searchSubmitted
     };
 };
 
@@ -56,16 +69,11 @@ const mapDispatchToProps = (dispatch) => {
     /** @todo may request places (if state.places is emtpy */
     return {
         onClickResult: (e, place) => {
+            showOnMap(dispatch, place);
             e.preventDefault();
         },
         onClickShowOnMap: (e, place) => {
-            dispatch(updateMapCenter({
-                lat: parseFloat(place.lat.value),
-                lng: parseFloat(place.lng.value)
-            }));
-            dispatch(setMapZoom({zoom: mapMaxZoom()}));
-            dispatch(updateSelectedPlaceId(place.id.value));
-            dispatch(setSelectedPlace(place));
+            showOnMap(dispatch, place);
             e.preventDefault();
         },
         toggleDetails: (place) => {
@@ -79,6 +87,9 @@ const mapDispatchToProps = (dispatch) => {
             } else {
                 dispatch(toggleDetails(place.uri.value));
             }
+        },
+        gotoSearch: () => {
+            hashHistory.push('/search');
         }
     };
 };

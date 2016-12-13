@@ -7,32 +7,71 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Row, Col, Button, Glyphicon} from 'react-bootstrap';
+import Swipeable from 'react-swipeable';
 
-const Sidebar = ({children, sidebarIsVisible, onToggleSidebar}) => {
+const sidebarStyle = {
+    position: 'absolute',
+    height: '100%',
+    top: '0px',
+    background: '#f7f7f7',
+    zIndex: '9999',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    padding: '7px 20px 7px 15px',
+    borderBottom: '1px solid #ccc',
+    borderRight: '1px solid #ccc',
+    borderBottomRightRadius: '4px',
+    hideSidebar: {
+        position: 'absolute',
+        zIndex: '9998',
+        marginTop: '7px',
+        padding: '0',
+
+    },
+    showSidebar: {
+        position: 'relative',
+        display: 'inline-block',
+        width: 'auto',
+        zIndex: '9998',
+        marginTop: '7px',
+        marginLeft: '-5px',
+        padding: '0',
+    },
+    button: {
+        marginLeft: '-5px',
+        padding: '10px 8px',
+    }
+};
+
+const Sidebar = ({
+    children,
+    sidebarIsVisible,
+    onToggleSidebar,
+    updateSidebarRoute
+}) => {
     return (
         <div>
+            {updateSidebarRoute(children.props.route.path)}
             {sidebarIsVisible &&
-                <Row>
-                    <Col xs={11} md={3} className="sidebar">
-                        {/* render route, e.g. /place/:place as sidebarPlaceDetails */}
+                <Swipeable onSwipedLeft={onToggleSidebar}>
+                    <div className="sidebar" id="sidebar" style={sidebarStyle}>
+                        {/* render route, e.g. /search or /results */}
                         {children}
-                    </Col>
-                    <Col xs={1} md={1} xsOffset={11} mdOffset={3} className="btn-hide-sidebar">
+                    </div>
+                    <div className="btn-hide-sidebar" style={sidebarStyle.hideSidebar}>
                         <Button
-                            bsStyle="default"
-                            bsSize="large"
+                            bsClass="btn btn-lg btn-default pull-right"
                             aria-label="Ergebnisliste ausblenden"
                             title="Ergebnisliste ausblenden"
                             onClick={onToggleSidebar}
-                            tabIndex="-1"
                         >
-                            <Glyphicon glyph="triangle-left" aria-hidden="true" />
+                            <i className="fa fa-angle-double-left" aria-hidden={true}></i>
                         </Button>
-                    </Col>
-                </Row>
+                    </div>
+                </Swipeable>
             }
             {!sidebarIsVisible &&
-                <div className="btn-show-sidebar">
+                <div className="btn-show-sidebar" style={sidebarStyle.showSidebar}>
                     <Button
                         bsStyle="default"
                         bsSize="large"
@@ -41,7 +80,7 @@ const Sidebar = ({children, sidebarIsVisible, onToggleSidebar}) => {
                         onClick={onToggleSidebar}
                         tabIndex="-1"
                     >
-                        <Glyphicon glyph="triangle-right" aria-hidden="true" />
+                        <i className="fa fa-angle-double-right" aria-hidden={true}></i>
                     </Button>
                 </div>
             }

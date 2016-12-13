@@ -21,11 +21,7 @@ const Place = ({
     haveSearchResults,
     idx,
     onClickShowOnMap,
-    setFocusTo
 }) => {
-    if (!doRequest && place.id !== undefined) {
-        setFocusTo(`place-cap-${place.id.value}`);
-    }
     return (
         <div>
             <Row>

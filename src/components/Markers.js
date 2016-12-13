@@ -58,7 +58,7 @@ const Markers = ({
                         </p>
                         <p>
                             <a href={`#/place/${place.id.value}`}
-                                onClick={() => onClickShowDetails(place)}>
+                                onClick={e => onClickShowDetails(e, place)}>
                                     Details
                             </a>
                         </p>

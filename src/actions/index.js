@@ -2,12 +2,19 @@
 
 import {CALL_API} from '../middleware/api';
 
+export const updateMainState = (key, value) => {
+    return {
+        type: 'UPDATE_MAIN_STATE',
+        key,
+        value
+    };
+};
+
 export const toggleSidebar = () => {
     return {
         type: 'TOGGLE_SIDEBAR'
     };
 };
-
 
 export const toggleWelcomeMsg = () => {
     return {
@@ -125,7 +132,7 @@ export const updateMapConfig = ({center, zoom, bounds}) => {
     };
 };
 
-export const setMapZoom = ({zoom}) => {
+export const updateMapZoom = ({zoom}) => {
     return {
         type: 'MAP_ZOOM',
         payload: {zoom}
@@ -140,6 +147,7 @@ export const updateMapCenter = ({lat, lng}) => {
 };
 
 export const updateMapBounds = ({_northEast, _southWest}) => {
+    /** @todo do we need to updateBounds? */
     return {
         type: 'MAP_BOUNDS',
         payload: {_northEast, _southWest}

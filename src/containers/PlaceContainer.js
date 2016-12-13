@@ -24,15 +24,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     dispatch(requestPlaceById(ownProps.params.place));
     return {
         onClickShowOnMap: () => {
-        },
-        setFocusTo: (elId) => {
-            window.setTimeout(() => {
-                const el = document.getElementById(elId);
-                console.log('elId: ', elId, ' el', el);
-                if (el !== null) {
-                    el.focus();
-                }
-            }, 100);
         }
     };
 };

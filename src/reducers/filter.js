@@ -1,7 +1,56 @@
 /*eslint-disable no-console */
 
+/*
+export const accessibilityFilters = {
+  return [
+    'elevator', 'toilet', ...
+  ];
+};
+*/
+
 export const filterSettings = {
-    'search': {
+    district: {
+        active: true,
+        value: [
+            {
+                value: 'center',
+                active: true,
+                lat: 51.3412,
+                lng: 12.3747,
+                label: 'Leipzig - Zentrum'
+            },
+            {
+                value: 'north',
+                active: false,
+                lat: 51.364498,
+                lng: 12.367856,
+                label: 'Leipzig - Nord'
+            },
+            {
+                value: 'east',
+                active: false,
+                lat: 51.332767,
+                lng: 12.403157,
+                label: 'Leipzig - Ost'
+            },
+            {
+                value: 'south',
+                active: false,
+                lat: 51.307803,
+                lng: 12.375401,
+                label: 'Leipzig - Süd'
+            },
+            {
+                value: 'west',
+                active: false,
+                lat: 51.337170,
+                lng: 12.339277,
+                label: 'Leipzig - West'
+            }
+        ],
+        filter: ''
+    },
+    search: {
         active: false,
         value: '',
         filter: 'regex(?title, ".*%s.*", "i")'
@@ -26,22 +75,27 @@ export const filterSettings = {
             }
         },
     },*/
-    'elevatorCabineIsAvailable': {
+    evlevatorAll: {
+        active: false,
+        value: '',
+        filter: '',
+    },
+    elevatorCabineIsAvailable: {
         active: false,
         value: 'ja',
         filter: '?elevatorCabineIsAvailable = "%s"'
     },
-    'elevatorIsWheelchairAccessible': {
+    elevatorIsWheelchairAccessible: {
         active: false,
         value: 'ja',
         filter: '?elevatorIsWheelchairAccessible = "%s"'
     },
-    'toiletIsAvailable': {
+    toiletIsAvailable: {
         active: false,
         value: '',
         filter: ''
     },
-    'toiletIsWheelchairAccessible': {
+    toiletIsWheelchairAccessible: {
         active: false,
         value: '',
         filter: ''
@@ -92,10 +146,25 @@ const filter = (state = filterSettings, action) => {
     switch (action.type) {
     case 'SET_FILTER':
         const filterObj = {};
-        filterObj[action.key] = Object.assign({}, state[action.key], {
-            active: action.active,
-            value: typeof action.value === 'undefined' ? state[action.key].value : action.value
-        });
+        if (typeof state[action.key].value === 'string') {
+            filterObj[action.key] = Object.assign({}, state[action.key], {
+                active: action.active,
+                value: typeof action.value === 'undefined' ? state[action.key].value : action.value
+            });
+        } else {
+            const filterObjValue = state[action.key].value.map((option) => {
+                if (option.value === action.value) {
+                    option.active = true;
+                    return option;
+                }
+                option.active = false;
+                return option;
+            });
+            filterObj[action.key] = Object.assign({}, state[action.key], {
+                active: action.active,
+                value: filterObjValue
+            });
+        }
         return Object.assign({}, state, filterObj);
 
     default:

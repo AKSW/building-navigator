@@ -10,8 +10,10 @@ import places from './places';
 const initialMainState = {
     //curHistoryRoute: '/',
     //prevHistoryRoute: '/',
+    searchSubmitted: false,
     showWelcomeMessage: true,
     sidebarIsVisible: true,
+    sidebarRoute: '',
 };
 
 const main = (state = initialMainState, action) => {
@@ -24,6 +26,10 @@ const main = (state = initialMainState, action) => {
         return Object.assign({}, state, {
             prevHistoryRoute: action.key,
         });*/
+    case 'UPDATE_MAIN_STATE':
+        const newObj = {};
+        newObj[action.key] = action.value;
+        return Object.assign({}, state, newObj);
     case 'TOGGLE_SIDEBAR':
         return Object.assign({}, state, {
             sidebarIsVisible: ! state.sidebarIsVisible,
@@ -63,6 +69,7 @@ const rdfstore = (state = initialRdfstoreState, action) => {
 };*/
 
 const initialMapConfig = {
+    //51.339695, 12.373075
     center: {
         lat: 51.3412,
         lng: 12.3747

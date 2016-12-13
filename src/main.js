@@ -10,7 +10,7 @@ import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 //import a11y from 'react-a11y';
 //import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-//import injectTapEventPlugin from 'react-tap-event-plugin';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import mainReducer from './reducers';
 import api from './middleware/api';
@@ -19,7 +19,7 @@ import getRoutes from './routes';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
-//injectTapEventPlugin();
+injectTapEventPlugin();
 
 // warn about accessiblity issues
 // TODO only in DEV mode, throws react TypeError: ReactDOM.findDOMNode is not a function...
@@ -28,7 +28,7 @@ import getRoutes from './routes';
 const logger = createLogger();
 const store = createStore(
     mainReducer,
-    undefined, // @TODO add intial values here...
+    undefined, // @todo may add intial values here...
     applyMiddleware(thunk, api, logger) // logger mus be the last middleware
 );
 

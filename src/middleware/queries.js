@@ -16,6 +16,7 @@ PREFIX dc: <http://purl.org/dc/elements/1.1/>
 PREFIX geo: <http://www.w3.org/2003/01/geo/>
 PREFIX plcOnt: <http://behindertenverband-leipzig.de/place-ontology/>
 PREFIX elvOnt: <https://github.com/AKSW/leds-asp-f-ontologies/blob/master/ontologies/elevator/ontology.ttl#>
+PREFIX toilOnt: <https://github.com/AKSW/leds-asp-f-ontologies/blob/master/ontologies/toilet/ontology.ttl#>
 PREFIX unitMeas: <https://github.com/AKSW/leds-asp-f-ontologies/blob/master/ontologies/unit-and-measurements/ontology.ttl#>
 PREFIX lePlace: <http://le-online.de/place/>
 PREFIX leNs: <http://le-online.de/ontology/place/ns#>
@@ -48,40 +49,30 @@ export const getPlaces = (state) => {
     const filter = buildFilterQuery(state.filter);
 
     const query = `${prefixes()}
-SELECT ?uri ?id ?title ?long AS ?lng ?lat
+SELECT ?uri ?id ?category ?title ?long AS ?lng ?lat ?address
     (bif:st_distance(?geo, bif:st_point(${state.map.center.lng}, ${state.map.center.lat})) AS ?distanceFromCenter)
-    ?elevatorCabineIsAvailable ?elevatorCabineLength ?elevatorCabineWidth ?elevatorDoorWidth ?elevatorCabineHighestButtonOutside ?elevatorCabineHighestButtonInside ?elevatorIsWheelchairAccessible
+    ?elevatorCabineIsAvailable ?elevatorIsWheelchairAccessible
+    ?toiletIsAvailable ?toiletIsWheelchairAccessible
 FROM <${graphUri()}>
 WHERE {
-    ?uri rdf:type plcOnt:place ;
-        plcOnt:ID ?id ;
-        dc:title ?title ;
-        geo:long ?long ;
-        geo:lat ?lat ;
-        elvOnt:hasElevatorCabine ?elevatorCabineUri .
-    ?elevatorCabineUri elvOnt:isAvailable ?elevatorCabineIsAvailable ;
-        unitMeas:length ?elevatorCabineLengthUri ;
-        unitMeas:width ?elevatorCabineWidthUri ;
-        elvOnt:hasDoorWidth ?elevatorDoorWidthUri ;
-        elvOnt:highestDistanceOfControlPanelButtonFromGroundInside ?elevatorCabineHighestButtonOutsideUri ;
-        elvOnt:highestDistanceOfControlPanelButtonFromGroundOutside ?elevatorCabineHighestButtonInsideUri .
-    ?elevatorCabineLengthUri unitMeas:cm ?elevatorCabineLength . 
-    ?elevatorCabineWidthUri unitMeas:cm ?elevatorCabineWidth .
-    ?elevatorDoorWidthUri unitMeas:cm ?elevatorDoorWidth .
-    ?elevatorCabineHighestButtonOutsideUri unitMeas:cm ?elevatorCabineHighestButtonOutside .
-    ?elevatorCabineHighestButtonInsideUri unitMeas:cm ?elevatorCabineHighestButtonInside .
+    ?uri rdf:type plcOnt:place .
+    ?uri plcOnt:ID ?id .
+    ?uri plcOnt:category ?category .
+    ?uri plcOnt:elevatorCabineIsAvailable ?elevatorCabineIsAvailable .
+    ?uri plcOnt:elevatorIsWheelchairAccessible ?elevatorIsWheelchairAccessible .
+    ?uri plcOnt:toiletIsAvailable ?toiletIsAvailable .
+    ?uri plcOnt:toiletIsWheelchairAccessible ?toiletIsWheelchairAccessible .
+    ?uri dc:title ?title .
+    ?uri geo:long ?long .
+    ?uri geo:lat ?lat .
+    ?uri <http://schema.org/streetAddress> ?streetAddress .
+    ?uri <http://schema.org/postalCode> ?postalCode .
+    ?uri <http://schema.org/addressLocality> ?addressLocality .
+
+    BIND(CONCAT(?streetAddress, ", ", ?postalCode, " ", ?addressLocality) AS ?address)
+
     BIND (bif:st_point(xsd:float(?long), xsd:float(?lat)) as ?geo)
-    BIND (
-        IF((
-            STR(?elevatorCabineIsAvailable) = "ja" &&
-            STR(?elevatorCabineLength) > "0" &&
-            STR(?elevatorCabineWidth) > "0" &&
-            STR(?elevatorDoorWidth) > "0" &&
-            STR(?elevatorCabineHighestButtonOutside) < "200" &&
-            STR(?elevatorCabineHighestButtonInside) < "200"
-        ), "ja", "nein")
-        as ?elevatorIsWheelchairAccessible
-    )
+    
     ${filter}
 }
 ORDER BY ?distanceFromCenter
@@ -92,13 +83,22 @@ LIMIT ${limit()}`;
 
 export const placeDetails = (uri) => {
     const query = `${prefixes()}
-SELECT ?address
+SELECT ?note
+    ?elevatorCabineLength ?elevatorCabineWidth ?elevatorDoorWidth ?elevatorCabineHighestButtonOutside ?elevatorCabineHighestButtonInside
 FROM <${graphUri()}>
 WHERE {
-    <${uri}> <http://schema.org/streetAddress> ?streetAddress ;
-        <http://schema.org/postalCode> ?postalCode ;
-        <http://schema.org/addressLocality> ?addressLocality .
-    BIND(CONCAT(?streetAddress, ", ", ?postalCode, " ", ?addressLocality) AS ?address)
+    OPTIONAL { <${uri}> plcOnt:note ?note . }
+    <${uri}> elvOnt:hasElevatorCabine ?elevatorCabineUri .
+    ?elevatorCabineUri unitMeas:length ?elevatorCabineLengthUri .
+    ?elevatorCabineUri unitMeas:width ?elevatorCabineWidthUri .
+    ?elevatorCabineUri elvOnt:hasDoorWidth ?elevatorDoorWidthUri .
+    ?elevatorCabineUri elvOnt:highestDistanceOfControlPanelButtonFromGroundInside ?elevatorCabineHighestButtonOutsideUri .
+    ?elevatorCabineUri elvOnt:highestDistanceOfControlPanelButtonFromGroundOutside ?elevatorCabineHighestButtonInsideUri .    
+    ?elevatorCabineLengthUri unitMeas:cm ?elevatorCabineLength . 
+    ?elevatorCabineWidthUri unitMeas:cm ?elevatorCabineWidth .
+    ?elevatorDoorWidthUri unitMeas:cm ?elevatorDoorWidth .
+    ?elevatorCabineHighestButtonOutsideUri unitMeas:cm ?elevatorCabineHighestButtonOutside .
+    ?elevatorCabineHighestButtonInsideUri unitMeas:cm ?elevatorCabineHighestButtonInside .
 }
 `;
     return query;

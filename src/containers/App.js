@@ -8,17 +8,17 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {browserHistory, hashHistory} from 'react-router';
-import {Grid} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
+import Cookies from 'js-cookie';
 
 import Alert from '../components/Alert';
 import MapContainer from '../containers/MapContainer';
-import Sidebar from '../components/Sidebar';
+import SidebarContainer from '../containers/SidebarContainer';
 import WelcomeMessage from '../components/WelcomeMessage';
 import {
     setupStore,
     requestPlaces,
     toggleWelcomeMsg,
-    toggleSidebar
 } from '../actions';
 
 const App = ({
@@ -27,17 +27,18 @@ const App = ({
     //isMapChild,
     error,
     rdfstoreCnct,
-    sidebarIsVisible,
-    onToggleSidebar,
-    onHideWelcomeMsg
+    onHideWelcomeMsg,
+    mouseFocus
 }) => {
-    //children = !isMapChild ? (children) : null;
-
     return (
         <div>
 
             {showWelcome &&
                 <WelcomeMessage onHide={onHideWelcomeMsg} />
+            }
+
+            {!showWelcome &&
+                mouseFocus('formDistrict')
             }
 
             {error &&
@@ -47,20 +48,24 @@ const App = ({
                 <div>Init RDFStore...</div>
             }
             {!error && rdfstoreCnct &&
-                <div role="main" id="content">
-                    <Grid fluid={true}>
-                        <Sidebar
-                            sidebarIsVisible={sidebarIsVisible}
-                            onToggleSidebar={onToggleSidebar}
-                        >
-                            {children}
-                        </Sidebar>
-                    </Grid>
-                    {<MapContainer tabIndex="-1" aria-hidden="true" />}
+                <div role="main">
+                    <SidebarContainer>
+                        {children}
+                    </SidebarContainer>
+                    {<MapContainer />}
                 </div>
             }
         </div>
     );
+};
+
+const setMouseFocus = (elId) => {
+    window.setTimeout(() => {
+        const el = document.getElementById(elId);
+        if (el !== null) {
+            el.focus();
+        }
+    }, 100);
 };
 
 const getError = (state) => {
@@ -74,10 +79,8 @@ const getError = (state) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    //console.log('ownProps:', ownProps);
     return {
-        showWelcome: state.main.showWelcomeMessage,
-        sidebarIsVisible: state.main.sidebarIsVisible,
+        showWelcome: Cookies.get('showWelcomeMessage') === 'false' ? false : state.main.showWelcomeMessage,
         children: ownProps.children,
         //isMapChild: ownProps.location.pathname.match(/^\/map/),
         //rdfstoreCnct: state.rdfstore.connected,
@@ -98,9 +101,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onHideWelcomeMsg: () => {
             dispatch(toggleWelcomeMsg());
+            Cookies.set('showWelcomeMessage', false);
+            setMouseFocus('formDistrict');
         },
-        onToggleSidebar: () => {
-            dispatch(toggleSidebar());
+        mouseFocus: (elId) => {
+            setMouseFocus(elId);
         }
     };
 };

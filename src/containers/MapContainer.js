@@ -11,7 +11,7 @@ import {hashHistory} from 'react-router';
 import Map from '../components/Map';
 import {
     updateMapConfig,
-    setMapZoom,
+    updateMapZoom,
     setSelectedPlace,
     requestPlaces,
     updateSelectedPlaceId
@@ -145,6 +145,8 @@ const mapStateToProps = (state, ownProps) => {
         selectedPlace: state.places.selectedPlace,
         selectedPlaceId: state.places.selectedPlaceId,
         mapConfig: state.map,
+        sidebarIsVisible: state.main.sidebarIsVisible,
+        doPlacesRequestAfterDrag: state.main.searchSubmitted && state.main.sidebarRoute === '/results' ? true : false
     };
 };
 
@@ -173,12 +175,17 @@ const mapDispatchToProps = (dispatch) => {
                 center: {lat: group.lat, lng: group.lng},
             }));
             map.zoomIn();
-            //dispatch(setMapZoom({zoom: mapMaxZoom()}));
+            //dispatch(updateMapZoom({zoom: mapMaxZoom()}));
         },
-        onClickShowDetails: (place) => {
+        onClickShowDetails: (e, place) => {
             dispatch(setSelectedPlace(place));
-            getPopupOfPlaceId(place.id.value);
-            hashHistory.push(`/place/${place.id.value}`);
+            /*getPopupOfPlaceId(place.id.value);
+            hashHistory.push(`/place/${place.id.value}`);*/
+
+            const resultPlace = document.getElementById(`result-entry-${place.id.value}`);
+            console.log('TODO: scroll to place');
+            console.log(resultPlace.offsetTop);
+            e.preventDefault();
         },
         onZoomend: (node) => {
             map = node.leafletElement;
@@ -188,13 +195,15 @@ const mapDispatchToProps = (dispatch) => {
                 bounds: map.getBounds()
             }));
         },
-        onDragend: (node) => {
+        onDragend: (node, doPlacesRequest) => {
             map = node.leafletElement;
             dispatch(updateMapConfig({
                 center: map.getCenter(),
                 bounds: map.getBounds()
             }));
-            dispatch(requestPlaces());
+            if (doPlacesRequest) {
+                dispatch(requestPlaces());
+            }
         }
     };
 };

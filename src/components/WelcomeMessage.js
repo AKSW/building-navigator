@@ -33,7 +33,7 @@ const WelcomeMessage = ({
 
                 <Modal.Body tabIndex="1">
                     Hier können Sie barrierefreie Gebäude in Leipzig finden.
-                    Wählen Sie dazu gewünschte Kriterien, zum Beispiel einen Fahrstuhl aus.
+                    Wählen Sie dazu den gewünschten Ort und Kriterien, zum Beispiel einen Fahrstuhl aus.
                     Oder suchen Sie nach dem Namen einer Einrichtung.
                 </Modal.Body>
 

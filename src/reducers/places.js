@@ -15,6 +15,15 @@ const initialPlaceState = {
     }
 };
 
+/** @todo add place state */
+/** @todo add all initial props */
+/** @todo write place.prop.value to place.prop */
+/** @todo change 'ja|nein' value to boolean */
+
+/*const place = (state = initialPlaceState, action) => {
+ // ...
+};*/
+
 const places = (state = initialPlacesState, action) => {
     switch (action.type) {
     case 'PLACES_REQUEST':

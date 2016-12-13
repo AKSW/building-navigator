@@ -11,6 +11,14 @@ import {Grid, Row, Col, Button, Glyphicon} from 'react-bootstrap';
 import ResultsEntry from './ResultsEntry';
 import MapContainer from '../containers/MapContainer';
 
+const resultsStyle = {
+    backToSearchWrapper: {
+        paddingLeft: '0px',
+        margin: '0px 0px 20px -5px',
+
+    }
+};
+
 const Results = ({
     places,
     filter,
@@ -20,8 +28,14 @@ const Results = ({
     onClickShowOnMap,
     toggleDetails,
     doDetailsRequest,
-    doRequest
+    doRequest,
+    submittedSearch,
+    gotoSearch
 }) => {
+
+    if (!submittedSearch) {
+        gotoSearch();
+    }
 
     const resultsEntries = places.map((place, id) => {
         return (
@@ -46,11 +60,13 @@ const Results = ({
     return (
         <div>
             <Row>
-                <Col md={12}>
-                    <Link to={'/search'}
-                        className="btn btn-link"
+                <Col md={12} style={resultsStyle.backToSearchWrapper}>
+                    <Link
+                        to={'/search'}
+                        className="btn btn-primary btn-lg"
+                        title="Zurück zur Suche"
                     >
-                        <Glyphicon glyph="search" aria-hidden="true" /> Zur Suche
+                        <Glyphicon glyph="search" aria-hidden="true" /> Suche
                     </Link>
                 </Col>
                 <Col md={12}>
@@ -72,12 +88,19 @@ const Results = ({
                 </Col>
             </Row>
             {resultsEntries}
-            <p>
-                <Link to={'/search'}>
-                    <Glyphicon glyph="search" aria-hidden="true" /> Zur Suche
-                </Link>
-                {/*<Link to={'/map'}>Alle Ergebnisse auf Karte anzeigen</Link>*/}
-            </p>
+            {places.length > 3 &&
+                <Row>
+                    <Col md={12} style={resultsStyle.backToSearchWrapper}>
+                        <Link
+                            to={'/search'}
+                            className="btn btn-primary btn-lg"
+                            title="Zurück zur Suche"
+                        >
+                            <Glyphicon glyph="search" aria-hidden="true" /> Suche
+                        </Link>
+                    </Col>
+                </Row>
+            }
         </div>
     );
 };
