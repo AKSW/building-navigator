@@ -21,6 +21,7 @@ const resultsStyle = {
 
 const Results = ({
     places,
+    selectedPlaceId,
     filter,
     activeFilter,
     placesAccessAttr,
@@ -42,6 +43,7 @@ const Results = ({
             <div key={id}>
                 <ResultsEntry
                     place={place}
+                    selectedPlaceId={selectedPlaceId}
                     tabIdx={2 + id}
                     idx={1 + id}
                     filter={filter}
@@ -66,7 +68,7 @@ const Results = ({
                         className="btn btn-primary btn-lg"
                         title="Zurück zur Suche"
                     >
-                        <Glyphicon glyph="search" aria-hidden="true" /> Suche
+                        <Glyphicon glyph="search" aria-hidden="true" /> Zur Suche
                     </Link>
                 </Col>
                 <Col md={12}>

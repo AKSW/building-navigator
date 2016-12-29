@@ -19,16 +19,20 @@ import {
     setupStore,
     requestPlaces,
     toggleWelcomeMsg,
+    updateMainState
 } from '../actions';
+
+import styles from '../main.css';
 
 const App = ({
     children,
     showWelcome,
     //isMapChild,
     error,
-    rdfstoreCnct,
+    storeCnct,
     onHideWelcomeMsg,
-    mouseFocus
+    mouseFocus,
+    doCheckIfSmallDisplay
 }) => {
     return (
         <div>
@@ -38,21 +42,23 @@ const App = ({
             }
 
             {!showWelcome &&
-                mouseFocus('formDistrict')
+                mouseFocus('formFilterSearch')
             }
+
+            {doCheckIfSmallDisplay()}
 
             {error &&
                 <Alert error={error} />
             }
-            {!error && !rdfstoreCnct &&
+            {!error && !storeCnct &&
                 <div>Init RDFStore...</div>
             }
-            {!error && rdfstoreCnct &&
-                <div role="main">
+            {!error && storeCnct &&
+                <div role="main" className={styles.mainApp}>
                     <SidebarContainer>
                         {children}
                     </SidebarContainer>
-                    {<MapContainer />}
+                    {<MapContainer location={children.props.location} />}
                 </div>
             }
         </div>
@@ -60,6 +66,7 @@ const App = ({
 };
 
 const setMouseFocus = (elId) => {
+    /** @todo find a way to test after dom rendered instead timeout! */
     window.setTimeout(() => {
         const el = document.getElementById(elId);
         if (el !== null) {
@@ -68,10 +75,30 @@ const setMouseFocus = (elId) => {
     }, 100);
 };
 
+const checkIfSmallDisplay = () => {
+    /** @todo find a way to test after dom rendered instead timeout! */
+    /*window.setTimeout(() => {
+        const appEl = document.getElementById('react');
+        const sidebarEl = document.getElementById('sidebar');
+        console.log('App-Sidebar verhältnis: ', appEl.offsetWidth, sidebarEl.offsetWidth);
+
+    }, 100);*/
+    return new Promise((resolve, reject) => {
+        /** @todo find a way to test after dom rendered instead timeout! */
+        window.setTimeout(() => {
+            const appEl = document.getElementById('react');
+            const sidebarEl = document.getElementById('sidebar');
+            console.log('App-Sidebar verhältnis: ', appEl.offsetWidth, sidebarEl.offsetWidth);
+            resolve(appEl.offsetWidth - sidebarEl.offsetWidth);
+            return;
+        }, 100);
+    });
+};
+
 const getError = (state) => {
-    /*if (state.rdfstore.error !== undefined) {
-        return state.rdfstore.error;
-    }*/
+    if (state.store.error !== undefined) {
+        return state.store.error;
+    }
     if (state.places.error !== undefined) {
         return state.places.error;
     }
@@ -83,29 +110,34 @@ const mapStateToProps = (state, ownProps) => {
         showWelcome: Cookies.get('showWelcomeMessage') === 'false' ? false : state.main.showWelcomeMessage,
         children: ownProps.children,
         //isMapChild: ownProps.location.pathname.match(/^\/map/),
-        //rdfstoreCnct: state.rdfstore.connected,
-        rdfstoreCnct: true,
+        storeCnct: state.store.connected,
         error: getError(state)
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     // start setting up store
-    /*dispatch(setupStore()).then(
+    dispatch(setupStore()).then(
         response => {
             // request places first time
-            dispatch(requestPlaces());
+            //dispatch(requestPlaces());
         }
-    );*/
+    );
     //dispatch(requestPlaces());
     return {
         onHideWelcomeMsg: () => {
             dispatch(toggleWelcomeMsg());
             Cookies.set('showWelcomeMessage', false);
-            setMouseFocus('formDistrict');
         },
         mouseFocus: (elId) => {
             setMouseFocus(elId);
+        },
+        doCheckIfSmallDisplay: () => {
+            checkIfSmallDisplay().then(
+                response => {
+                    console.log(response);
+                }
+            );
         }
     };
 };

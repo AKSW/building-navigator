@@ -10,72 +10,122 @@ export const accessibilityFilters = {
 
 export const filterSettings = {
     district: {
-        active: true,
+        filter: undefined, // district is not a filter!
         value: [
             {
-                value: 'center',
+                id: 'center',
                 active: true,
                 lat: 51.3412,
                 lng: 12.3747,
                 label: 'Leipzig - Zentrum'
             },
             {
-                value: 'north',
+                id: 'north',
                 active: false,
                 lat: 51.364498,
                 lng: 12.367856,
                 label: 'Leipzig - Nord'
             },
             {
-                value: 'east',
+                id: 'east',
                 active: false,
                 lat: 51.332767,
                 lng: 12.403157,
                 label: 'Leipzig - Ost'
             },
             {
-                value: 'south',
+                id: 'south',
                 active: false,
                 lat: 51.307803,
                 lng: 12.375401,
                 label: 'Leipzig - Süd'
             },
             {
-                value: 'west',
+                id: 'west',
                 active: false,
                 lat: 51.337170,
                 lng: 12.339277,
                 label: 'Leipzig - West'
             }
-        ],
-        filter: ''
+        ]
     },
     search: {
         active: false,
-        value: '',
-        filter: 'regex(?title, ".*%s.*", "i")'
+        filter: 'titel',
+        value: ''
     },
-    // 'accessibleLift' {
-    //     filter: 'regex(?elevatorCabineIsAvailable, "ja") && \
-    //         ?elevatorCabineWidth > "110" && \
-    //         ?elevatorDoorWidth > "70"';
-    // },
-    /*'elevator': {
-        active: false,
-        value: {
-            'elevatorCabineIsAvailable': {
-                active: false,
-                value: 'ja',
-                filter: '?elevatorCabineIsAvailable = "%s"'
+    category: {
+        filter: [],
+        value: [
+            {
+                id: 'all',
+                active: true,
+                filter: undefined,
+                value: null,
+                label: 'Alle',
+                aria: 'Aria Label...'
             },
-            'elevatorIsWheelchairAccessible': {
+            {
+                id: 'bildung',
                 active: false,
-                value: 'ja',
-                filter: '?elevatorIsWheelchairAccessible = "%s"'
+                filter: 'kategorie',
+                value: 'Bildung',
+                label: 'Bildung',
+                aria: 'Aria Label...'
+            },
+            {
+                id: 'kultur',
+                active: false,
+                filter: 'kategorie',
+                value: 'Kultur',
+                label: 'Kultur',
+                aria: 'Aria Label...'
+            },
+            {
+                id: 'unterhaltung',
+                active: false,
+                filter: 'kategorie',
+                value: 'Unterhaltung',
+                label: 'Unterhaltung',
+                aria: 'Aria Label...'
             }
-        },
-    },*/
-    evlevatorAll: {
+        ]
+    },
+    elevator: {
+        filter: [],
+        value: [
+            {
+                id: 'all',
+                active: true,
+                filter: undefined,
+                value: null,
+                label: 'keine Einschränkung',
+                aria: 'Aria Label...'
+            },
+            {
+                id: 'personenaufzug_vorhanden',
+                active: false,
+                filter: 'personenaufzug_vorhanden',
+                value: 'ja',
+                label: 'Aufzug ist vorhanden',
+                aria: '...'
+            },
+            {
+                id: 'personenaufzug_rollstuhlgerecht',
+                active: false,
+                filter: 'personenaufzug_rollstuhlgerecht',
+                value: 'ja',
+                label: 'Aufzug ist rollstuhlgerecht',
+                aria: '...'
+            }
+        ]
+    },
+    hilfeHoergesch: {
+        active: false,
+        filter: 'hilfe_fuer_hoergeschaedigte',
+        value: 'ja'
+    },
+    /*elevatorAll: {
         active: false,
         value: '',
         filter: '',
@@ -100,7 +150,7 @@ export const filterSettings = {
         value: '',
         filter: ''
     },
-    /*'liftAvailable': {
+    'liftAvailable': {
         p: 'lift-available',
         active: false,
         type: 'checkbox',
@@ -144,7 +194,29 @@ export const filterSettings = {
 
 const filter = (state = filterSettings, action) => {
     switch (action.type) {
-    case 'SET_FILTER':
+    case 'UPDATE_FILTER':
+        const newState = {};
+        // update string (like search) filter
+        if (typeof state[action.filterId].filter === 'string') {
+            newState[action.filterId] = Object.assign({}, state[action.filterId], {
+                active: action.active,
+                value: action.value === null ? state[action.filterId].value : action.value
+            });
+        }
+        // update option filter, set all options to false except current selection
+        else {
+            const filterOptions = state[action.filterId].value.map((option) => {
+                if (option.id === action.optionId) {
+                    option.active = action.active;
+                    return option;
+                }
+                option.active = false;
+                return option;
+            });
+            newState[action.filterId] = Object.assign({}, state[action.filterId], filterOptions);
+        }
+        return Object.assign({}, state, newState);
+    /*case 'SET_FILTER':
         const filterObj = {};
         if (typeof state[action.key].value === 'string') {
             filterObj[action.key] = Object.assign({}, state[action.key], {
@@ -166,10 +238,16 @@ const filter = (state = filterSettings, action) => {
             });
         }
         return Object.assign({}, state, filterObj);
-
+    */
     default:
         return state;
     }
 };
 
 export default filter;
+
+export const getActiveFilterOption = (groupFilter) => {
+    return groupFilter.value.filter((option) => {
+        return option.active;
+    })[0];
+};

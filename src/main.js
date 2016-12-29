@@ -56,7 +56,7 @@ ReactDOM.render(
                     }
                 }}
             >
-                {getRoutes()}
+                {getRoutes(store)}
             </Router>
         </Provider>,
     //</MuiThemeProvider>,

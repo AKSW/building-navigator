@@ -19,9 +19,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateSidebarRoute: (route) => {
-            dispatch(updateMainState('sidebarRoute', route));
-        },
         onToggleSidebar: () => {
             dispatch(toggleSidebar());
         }

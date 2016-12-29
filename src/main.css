@@ -1,0 +1,61 @@
+.mainApp {
+    font-size: 1.05em;
+}
+.h3, h3 {
+    font-size: 21px;
+}
+.form-control {
+    font-size: 16px;   
+}
+.btn {
+    font-size: 16px;
+}
+:global(.leaflet-container) {
+    position: absolute;
+    height: 100%;
+    margin: 0;
+    width: 100%;
+}
+#mapContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: calc(100% + 275px);
+    /*
+    // @todo fallback for brwosers without 'calc()'
+    width: 100%;
+    margin-left: 275px;
+    */
+}
+/*#mapContainer.full {            
+    margin-left: 0px;
+}*/
+.leaflet-bar a, .leaflet-bar a:hover {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+}
+.leaflet-control-container {
+    position: absolute;
+    right: 275px;
+    height: 100%;
+}
+@media (max-width: 992px) {
+    #mapContainer {
+        /*margin-left: 225px;*/
+        width: calc(100% + 225px);
+    }
+    .leaflet-control-container {
+        right: 225px;
+    }
+}
+@media (max-width: 768px) {
+    #mapContainer {
+        width: calc(100% + 140px);
+        /*margin-left: 140px;*/
+    }
+    .leaflet-control-container {
+        right: 140px;
+    }
+}

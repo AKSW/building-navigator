@@ -21,11 +21,11 @@ import {mapMaxZoom} from './MapContainer';
 
 const showOnMap = (dispatch, place) => {
     dispatch(updateMapCenter({
-        lat: parseFloat(place.lat.value),
-        lng: parseFloat(place.lng.value)
+        lat: parseFloat(place.latitude),
+        lng: parseFloat(place.longitude)
     }));
     dispatch(updateMapZoom({zoom: mapMaxZoom()}));
-    dispatch(updateSelectedPlaceId(place.id.value));
+    dispatch(updateSelectedPlaceId(place.id));
     dispatch(setSelectedPlace(place));
 };
 
@@ -56,6 +56,7 @@ const mapStateToProps = (state, ownProps) => {
 
     return {
         places: state.places.places,
+        selectedPlaceId: state.places.selectedPlaceId,
         placesAccessAttr,
         filter: state.filter,
         activeFilter,
@@ -77,7 +78,7 @@ const mapDispatchToProps = (dispatch) => {
             e.preventDefault();
         },
         toggleDetails: (place) => {
-            if (!place._UI.receivedDetails
+            /*if (!place._UI.receivedDetails
             ) {
                 dispatch(requestPlaceDetails(place.uri.value)).then(
                     response => {
@@ -86,7 +87,8 @@ const mapDispatchToProps = (dispatch) => {
                 );
             } else {
                 dispatch(toggleDetails(place.uri.value));
-            }
+            }*/
+            dispatch(toggleDetails(place.id));
         },
         gotoSearch: () => {
             hashHistory.push('/search');

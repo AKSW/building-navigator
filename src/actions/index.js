@@ -45,6 +45,16 @@ export const setFilter = (key, payload = {active: true, value: undefined}) => {
     };
 };
 
+export const updateFilter = (payload = {filterId: '', optionId: null, active: true, value: null}) => {
+    return {
+        type: 'UPDATE_FILTER',
+        filterId: payload.filterId,
+        optionId: payload.optionId,
+        active: payload.active,
+        value: payload.value
+    };
+};
+
 export const STORE_REQUEST = 'STORE_REQUEST';
 export const STORE_RECEIVE = 'STORE_RECEIVE';
 export const STORE_FAILURE = 'STORE_FAILURE';
@@ -101,13 +111,20 @@ export const requestPlaceDetails = (placeUri) => {
 
 /**
  Show or hide the details of a place in results list by its URI
- @param {String} placeUri URI of the place
+ @param {String} placeId ID of the place
  @returns {Object} Result object
 */
-export const toggleDetails = (placeUri) => {
+export const toggleDetails = (placeId) => {
     return {
         type: 'TOGGLE_DETAILS',
-        payload: placeUri
+        payload: placeId
+    };
+};
+
+export const showDetails = (placeId) => {
+    return {
+        type: 'SHOW_DETAILS',
+        payload: placeId
     };
 };
 
@@ -124,6 +141,12 @@ export const updateSelectedPlaceId = (placeId) => {
         payload: placeId
     };
 };
+
+/*export const sortPlacesByAcessibleRating = () => {
+    return {
+        type: 'SORT_PLACES_BY_ACCESSIBLE_RATING'
+    };
+};*/
 
 export const updateMapConfig = ({center, zoom, bounds}) => {
     return {

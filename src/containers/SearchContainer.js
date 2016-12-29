@@ -12,18 +12,13 @@ import {hashHistory} from 'react-router';
 
 import Search from '../components/Search';
 import {
-    setFilter,
+    updateFilter,
     updateMainState,
     requestPlaces,
     updateMapCenter,
     updateMapZoom
 } from '../actions';
-
-const getActiveOptions = (filter, key) => {
-    return filter[key].value.filter((option) => {
-        return option.active;
-    });
-};
+import {getActiveFilterOption} from '../reducers/filter';
 
 const getSelectedOptions = (el) => {
     return [].filter.call(el.options, function(o) {
@@ -37,15 +32,56 @@ const mapStateToProps = (state, ownProps) => {
     return {
         filter: state.filter,
         doRequest: state.places.doRequest,
-        selectedDistrict: getActiveOptions(state.filter, 'district')[0],
+        getActiveFilterOption
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onChange: (filter, key) => {
-            const el = ReactDOM.findDOMNode(filter[key].node);
+        onChange: (filterGroup, filterId) => {
+            const el = ReactDOM.findDOMNode(filterGroup.node);
 
+            let active = true;
+            let value = null;
+            let optionId = null;
+
+            //console.log('onChange', filterId, el.label, el.value, el.checked,
+            //el.selected, el.active, el.id, el.type);
+            //console.log('filterGroup: ', filterGroup);
+            // Aha: in setFilter(), wenn typeof filter[key].value === array, alle false außer gruppe mit index el.id
+
+
+            switch (el.type) {
+            case 'search':
+                value = el.value.trim();
+                active = value === '' ? false : true;
+                break;
+            case 'select-one':
+                optionId = el.value;
+                break;
+            case 'radio':
+                optionId = el.value;
+                break;
+            case 'checkbox':
+                active = el.checked;
+                break;
+            default:
+            }
+
+            //const value = getSelectedOptions(el)[0];
+
+            //console.log('UPDATE FILTER: ', filterId, optionId, active, value);
+
+            dispatch(updateFilter({filterId, optionId, active, value}));
+
+            // may zoom to district
+            if (filterId === 'district') {
+                const activeDistrict = getActiveFilterOption(filterGroup);
+                dispatch(updateMapCenter({lat: activeDistrict.lat, lng: activeDistrict.lng}));
+                dispatch(updateMapZoom({zoom: 15}));
+            }
+
+            /*
             if (key === 'district') {
                 const value = getSelectedOptions(el)[0];
                 dispatch(setFilter('district', {active: true, value}));
@@ -58,7 +94,7 @@ const mapDispatchToProps = (dispatch) => {
                 const active = el.value === '' ? false : true;
                 dispatch(setFilter('search', {active, value: el.value.trim()}));
             }
-            else if (key === 'evlevatorAll') {
+            else if (key === 'elevatorAll') {
                 dispatch(setFilter('elevatorCabineIsAvailable', {active: false}));
                 dispatch(setFilter('elevatorIsWheelchairAccessible', {active: false}));
             }
@@ -69,10 +105,16 @@ const mapDispatchToProps = (dispatch) => {
             else if (key === 'elevatorIsWheelchairAccessible') {
                 dispatch(setFilter('elevatorCabineIsAvailable', {active: false}));
                 dispatch(setFilter('elevatorIsWheelchairAccessible', {active: true}));
-            }
+            }*/
         },
         onSubmit: (e, filter) => {
             e.preventDefault();
+            window.setTimeout(() => {
+                const el = document.getElementById('search-request-loader');
+                if (el !== null) {
+                    el.focus();
+                }
+            }, 100);
             dispatch(updateMainState('searchSubmitted', true));
             dispatch(requestPlaces()).then(
                 response => {

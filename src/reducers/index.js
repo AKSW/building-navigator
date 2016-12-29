@@ -10,10 +10,13 @@ import places from './places';
 const initialMainState = {
     //curHistoryRoute: '/',
     //prevHistoryRoute: '/',
+    rootDomId: 'react',
     searchSubmitted: false,
     showWelcomeMessage: true,
     sidebarIsVisible: true,
-    sidebarRoute: '',
+    resultsStart: 0,
+    resultsLimit: 10,
+    isSmallDisplay: false,
 };
 
 const main = (state = initialMainState, action) => {
@@ -43,19 +46,34 @@ const main = (state = initialMainState, action) => {
     }
 };
 
-/*const initialRdfstoreState = {
-    connected: false
+const initialStoreState = {
+    connected: false,
+    places: []
 };
 
-const rdfstore = (state = initialRdfstoreState, action) => {
+const store = (state = initialStoreState, action) => {
     switch (action.type) {
     case 'STORE_REQUEST':
         return Object.assign({}, state, {
             connected: false,
         });
     case 'STORE_RECEIVE':
+        const placesData = [];
+        for (const key in action.payload) {
+            /*const place = action.payload[key];
+            place.id = key;
+            placesData.push(place);*/
+            placesData.push({
+                id: key,
+                lat: action.payload[key].latitude,
+                lng: action.payload[key].longitude,
+                titel: action.payload[key].titel,
+                kategorie: action.payload[key].kategorie,
+            });
+        }
         return Object.assign({}, state, {
-            connected: true
+            connected: true,
+            places: placesData
         });
     case 'STORE_FAILURE':
         return Object.assign({}, state, {
@@ -66,7 +84,7 @@ const rdfstore = (state = initialRdfstoreState, action) => {
     default:
         return state;
     }
-};*/
+};
 
 const initialMapConfig = {
     //51.339695, 12.373075
@@ -111,7 +129,7 @@ const mapConfig = (state = initialMapConfig, action) => {
 const buildingNavigator = combineReducers({
     main,
     filter,
-    //rdfstore,
+    store,
     places,
     map: mapConfig,
 });

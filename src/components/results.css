@@ -1,0 +1,15 @@
+.entry {
+	border-bottom: 1px solid lightGray;
+    margin: 0px -20px 0px -15px;
+    padding: 1px 15px;
+}
+.selected {
+	background-color: lightYellow
+}
+.entry address {
+	padding: 0px;
+	margin: 0px;
+}
+.entry :global(.row) {
+	margin-bottom: 7px;
+}

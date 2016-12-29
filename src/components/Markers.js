@@ -6,6 +6,8 @@ import {Marker as OSMarker, Icon, Popup} from 'react-leaflet';
 import {Link} from 'react-router';
 import L from 'leaflet';
 
+import A11yIcons from './A11yIcons';
+
 /** @todo add number of grouped places to icon -> with divIcon?! */
 const groupIcon = L.icon({
     iconUrl: './images/group-marker-icon.png',
@@ -41,23 +43,90 @@ const Markers = ({
                 key={id}
                 position={pos}
                 onClick={(e) => onClickGroupMarker(e, groupData)}
-                data-name="Gruppen-Marker XYZ"
+                data-name={`group-marker-${id}`}
+                data-id={id}
                 icon={groupIcon}
              />
         );
     };
 
-    const markerHtml = (id, place) => {
-        const pos = [parseFloat(place.lat.value), parseFloat(place.lng.value)];
+    const multiMarkerHtml = (id, groupData) => {
+        const pos = [groupData.lat, groupData.lng];
+        let isSelected = false;
         const popup = (
             <Popup>
                 <span>
-                    <div id={`place-popup-${place.id.value}`}>
+                    {groupData.places.map(place => {
+                        if (selectedPlaceId === place.id) {
+                            isSelected = true;
+                        }
+                        return (
+                            <div key={place.id} id={`place-popup-${place.id}`}>
+                                <h3>{place.titel}</h3>
+                                <A11yIcons
+                                    place={place}
+                                    showDetails={false}
+                                />
+                                <strong>Adresse</strong>:&nbsp;
+                                <address>
+                                    {place.strasse}, {place.plz} {place.ort}
+                                </address>
+                                <p>
+                                    <a href={`#/place/${place.id}`}
+                                        onClick={e => onClickShowDetails(e, place)}>
+                                            Details
+                                    </a>
+                                </p>
+                                <hr />
+                            </div>
+                        );
+                    })}
+                </span>
+            </Popup>
+        );
+        if (isSelected) {
+            return (
+                <OSMarker
+                    key={id}
+                    position={pos}
+                    data-name={`multi-marker-${id}`}
+                    data-id={id}
+                    icon={selectedIcon}
+                >
+                    {popup}
+                </OSMarker>
+            );
+        }
+        return (
+            <OSMarker
+                key={id}
+                position={pos}
+                data-name={`multi-marker-${id}`}
+                data-id={id}
+                icon={markerIcon}
+            >
+                {popup}
+            </OSMarker>
+        );
+    };
+
+    const markerHtml = (id, place) => {
+        const pos = [parseFloat(place.latitude), parseFloat(place.longitude)];
+        const popup = (
+            <Popup>
+                <span>
+                    <div id={`place-popup-${place.id}`}>
+                        <h3>{place.titel}</h3>
+                        <A11yIcons
+                            place={place}
+                            showDetails={false}
+                        />
+                        <strong>Adresse</strong>:&nbsp;
+                        <address>
+                            {place.strasse}, {place.plz} {place.ort}
+                        </address>
                         <p>
-                            <strong>{place.title.value}</strong>
-                        </p>
-                        <p>
-                            <a href={`#/place/${place.id.value}`}
+                            <a href={`#/place/${place.id}`}
                                 onClick={e => onClickShowDetails(e, place)}>
                                     Details
                             </a>
@@ -66,14 +135,14 @@ const Markers = ({
                 </span>
             </Popup>
         );
-        if (selectedPlaceId === place.id.value) {
+        if (selectedPlaceId === place.id) {
             return (
                 <OSMarker
-                    key={id}
+                    key={place.id}
                     position={pos}
                     onClick={(e) => onClickMarker(e, place)}
-                    data-name={place.title.value}
-                    data-id={place.id.value}
+                    data-name={place.titel}
+                    data-id={place.id}
                     icon={selectedIcon}
                 >
                     {popup}
@@ -83,11 +152,11 @@ const Markers = ({
 
         return (
             <OSMarker
-                key={id}
+                key={place.id}
                 position={pos}
                 onClick={(e) => onClickMarker(e, place)}
-                data-name={place.title.value}
-                data-id={place.id.value}
+                data-name={place.titel}
+                data-id={place.id}
                 icon={markerIcon}
             >
                 {popup}
@@ -95,11 +164,18 @@ const Markers = ({
         );
     };
 
-    const markersHtml = markers.map((marker, id) => {
+    /*const markersHtml = markers.map((marker, id) => {
         return marker.places.length > 1 ?
             groupMarkerHtml(id, marker) :
             markerHtml(markers.length + id, marker.places[0])
         ;
+    });*/
+
+    const markersHtml = markers.map((marker, id) => {
+        if (marker.type === 'multi-marker') {
+            return multiMarkerHtml(id, marker);
+        }
+        return markerHtml(markers.length + id, marker.places[0]);
     });
 
     return (

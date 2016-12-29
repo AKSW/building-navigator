@@ -19,6 +19,7 @@ const Map = ({
     selectedPlace,
     selectedPlaceId,
     requestPlaces,
+    showMapControls,
     onLoadMap,
     onClickMarker,
     onClickGroupMarker,
@@ -46,8 +47,12 @@ const Map = ({
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
-            <ZoomControl position="topright"/>
-            <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
+            {showMapControls &&
+                <div>
+                    <ZoomControl position="topright"/>
+                    <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
+                </div>
+            }
             {markers.length > 0 &&
                 <Markers
                     markers={markers}

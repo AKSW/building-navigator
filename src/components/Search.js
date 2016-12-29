@@ -46,46 +46,46 @@ const formStyle = {};
     );
 };*/
 
-const FormControlRadio = ({onChange, filter, name, id, label}) => {
-    const ariaLabel = `Filter: ${label}`;
-    return (
-        <Radio
-            onChange={e => onChange(
-                filter,
-                id,
-            )}
-            ref={node => {
-                /** @todo test (old) browser compatibility with saving node in state */
-                filter[id].node = node;
-            }}
-            defaultChecked={filter[id].active}
-            aria-label={ariaLabel}
-            value="ja"
-            name={name}
-        >
-            {label}
-        </Radio>
-    );
-};
-
 const Search = ({
     filter,
     onSubmit,
     onChange,
     doRequest,
-    selectedDistrict
+    getActiveFilterOption,
 }) => {
+
+    const FormControlRadio = ({filterGroup, entry, id}) => {
+        //const ariaLabel = `Filter: ${label}`;
+        //console.log('FormControlRadio ', filterGroup, entry);
+        return (
+            <div className="radio">
+                <label>
+                    <input
+                        type="radio"
+                        name={filterGroup}
+                        onChange={e => onChange(
+                            entry,
+                            filterGroup,
+                        )}
+                        ref={node => {
+                            /** @todo test (old) browser compatibility with saving node in state */
+                            entry.node = node;
+                        }}
+                        defaultChecked={entry.active}
+                        value={entry.id}
+                        aria-label={entry.aria}
+                    />
+                    {entry.label}
+                </label>
+            </div>
+        );
+    };
 
     /*const optionsHtml = filter.category.options.map((option, key) => {
         return (
             <option key={key} value={option.value}>{option.text}</option>
         );
     });*/
-    const districtHtml = filter.district.value.map((district, key) => {
-        return (
-            <option key={key} value={district.value}>{district.label}</option>
-        );
-    });
 
     return (
         <Form
@@ -93,6 +93,11 @@ const Search = ({
             onSubmit={e => onSubmit(e, filter)}
             style={formStyle}
         >
+            {doRequest &&
+                <div id="search-request-loader">
+                    <span><i className="fa fa-circle-o-notch fa-spin"></i> Suche gestartet, bitte warten.</span>
+                </div>
+            }
 
             <FormGroup>
                 <Col md={12}>
@@ -113,24 +118,6 @@ const Search = ({
                 </Col>
             </FormGroup>
 
-            <FormGroup controlId="formDistrict">
-                <Col md={12}>
-                    <ControlLabel>Wo suchen Sie?</ControlLabel>
-                    <FormControl
-                        componentClass="select"
-                        value={selectedDistrict.value}
-                        aria-label="Ort der Suche auswählen"
-                        onChange={e => onChange(
-                            filter,
-                            'district',
-                        )}
-                        ref={node => (filter.district.node = node)}
-                    >
-                        {districtHtml}
-                    </FormControl>
-                </Col>
-            </FormGroup>
-
             <FormGroup controlId="formFilterSearch">
                 <Col md={12}>
                     <ControlLabel>Gebäudename durch Texteingabe auswählen</ControlLabel>
@@ -139,13 +126,35 @@ const Search = ({
                         aria-label="Hier können Sie Gebäude über ihren Namen suchen"
                         //autoFocus
                         //tabIndex="1"
-                        value={filter.search.value}
+                        defaultValue={filter.search.value}
                         onChange={e => onChange(
-                            filter,
+                            filter.search,
                             'search',
                         )}
                         ref={node => (filter.search.node = node)}
                     />
+                </Col>
+            </FormGroup>
+
+            <FormGroup controlId="formDistrict">
+                <Col md={12}>
+                    <ControlLabel>Stadtviertel auswählen</ControlLabel>
+                    <FormControl
+                        componentClass="select"
+                        value={getActiveFilterOption(filter.district).id}
+                        aria-label="Ort der Suche auswählen"
+                        onChange={e => onChange(
+                            filter.district,
+                            'district',
+                        )}
+                        ref={node => (filter.district.node = node)}
+                    >
+                        {filter.district.value.map((district, key) => {
+                            return (
+                                <option key={key} value={district.id}>{district.label}</option>
+                            );
+                        })}
+                    </FormControl>
                 </Col>
             </FormGroup>
 
@@ -162,18 +171,32 @@ const Search = ({
                 <Col md={9}>
                     <FormControl
                         componentClass="select"
+                        onChange={e => onChange(
+                            filter.category,
+                            'category',
+                        )}
+                        ref={node => {
+                            filter.category.node = node;
+                        }}
+                        //defaultValue={}
+                        value={getActiveFilterOption(filter.category).id}
                         aria-label={'Hier können Sie Gebäude über Filter auswählen.' +
                             'Aktueller Filter, Gebäude aus den folgenden Kategorien anzeigen'}
                     >
-                        <option value="0">Alle</option>
+                        {/*<option value="all">Alle</option>
                         <option value="Unterhaltung">Unterhaltung</option>
                         <option value="Kultur">Kultur</option>
-                        <option value="Bildung">Bildung</option>
+                        <option value="Bildung">Bildung</option>*/}
+                        {filter.category.value.map((catFilter, key) => {
+                            return (
+                                <option key={key} value={catFilter.id}>{catFilter.label}</option>
+                            );
+                        })}
                     </FormControl>
                 </Col>
             </FormGroup>
 
-            <FormGroup controlId="formFilterCategory">
+            {/*<FormGroup controlId="formFilterEntrance">
                 <Col componentClass={ControlLabel} md={3}>
                     Eingang
                 </Col>
@@ -194,9 +217,52 @@ const Search = ({
                         <option value="3">vollständig rollstuhlgerecht</option>
                     </FormControl>
                 </Col>
+            </FormGroup>*/}
+
+            <FormGroup controlId="formFilterElevator">
+                <Col componentClass={ControlLabel} md={3}>
+                    Aufzug NEU
+                </Col>
+                <Col md={9}>
+                    {filter.elevator.value.map((entry, key) => {
+                        return (
+                            <FormControlRadio key={key}
+                                filterGroup="elevator"
+                                entry={entry}
+                            />
+                        );
+                    })}
+                </Col>
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup controlId="formFilterEtc">
+                <Col componentClass={ControlLabel} md={3}>
+                    Sonstiges
+                </Col>
+                <Col md={9}>
+                    <div className="checkbox">
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="hilfeHoergesch"
+                                onChange={e => onChange(
+                                    filter.hilfeHoergesch,
+                                    'hilfeHoergesch',
+                                )}
+                                ref={node => {
+                                    filter.hilfeHoergesch.node = node;
+                                }}
+                                value="hilfe_fuer_hoergeschaedigte"
+                                defaultChecked={filter.hilfeHoergesch.active}
+                                aria-label="Hilfestellung für Hörgeschädigte"
+                            />
+                            Hilfestellung für Hörgeschädigte
+                        </label>
+                    </div>
+                </Col>
+            </FormGroup>
+
+            {/*<FormGroup>
                 <Col componentClass={ControlLabel} md={3}>
                     Aufzug
                 </Col>
@@ -204,7 +270,7 @@ const Search = ({
                     <Radio
                         onChange={e => onChange(
                             filter,
-                            'evlevatorAll',
+                            'elevatorAll',
                         )}
                         defaultChecked={
                             !filter.elevatorCabineIsAvailable.active &&
@@ -233,6 +299,8 @@ const Search = ({
                     />
                 </Col>
             </FormGroup>
+
+            <hr />
 
             <FormGroup>
                 <Col componentClass={ControlLabel} md={3}>
@@ -270,6 +338,8 @@ const Search = ({
                 </Col>
             </FormGroup>
 
+            <hr />
+
             <FormGroup controlId="formFilterParking">
                 <Col componentClass={ControlLabel} md={3}>
                     Parken
@@ -292,6 +362,8 @@ const Search = ({
                 </Col>
             </FormGroup>
 
+            <hr />
+
             <FormGroup controlId="formFilterEtc">
                 <Col componentClass={ControlLabel} md={3}>
                     Sonstiges
@@ -308,7 +380,7 @@ const Search = ({
                         Hilfestellung für Sehgeschädigte
                     </Checkbox>
                 </Col>
-            </FormGroup>
+            </FormGroup>*/}
 
             <FormGroup>
                 <Col md={12}>
