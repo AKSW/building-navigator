@@ -16,10 +16,9 @@ const Map = ({
     prevHistoryRoute,
     mapConfig,
     markers,
-    selectedPlace,
     selectedPlaceId,
     requestPlaces,
-    showMapControls,
+    hideMapControls,
     onLoadMap,
     onClickMarker,
     onClickGroupMarker,
@@ -43,15 +42,15 @@ const Map = ({
             ref={node => (mapRef = node)}
         >
             <TileLayer
-                onLoad={e => onLoadMap(e, selectedPlace)}
+                onLoad={e => onLoadMap(e)}
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
-            {showMapControls &&
-                <div>
-                    <ZoomControl position="topright"/>
-                    <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
-                </div>
+            {!hideMapControls &&
+                <ZoomControl position="topright"/>
+            }
+            {!hideMapControls &&
+                <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
             }
             {markers.length > 0 &&
                 <Markers

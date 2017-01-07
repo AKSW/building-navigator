@@ -142,6 +142,12 @@ export const updateSelectedPlaceId = (placeId) => {
     };
 };
 
+export const scrollToSelectedPlace = () => {
+    return {
+        type: 'SCROLL_TO_SELECTED_PLACE'
+    };
+};
+
 /*export const sortPlacesByAcessibleRating = () => {
     return {
         type: 'SORT_PLACES_BY_ACCESSIBLE_RATING'

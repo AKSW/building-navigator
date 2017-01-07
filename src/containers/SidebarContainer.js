@@ -12,7 +12,7 @@ import {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebarIsVisible: state.main.sidebarIsVisible,
+        mainState: state.main,
         children: ownProps.children,
     };
 };

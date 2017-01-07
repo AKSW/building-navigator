@@ -7,9 +7,6 @@
 .form-control {
     font-size: 16px;   
 }
-.btn {
-    font-size: 16px;
-}
 :global(.leaflet-container) {
     position: absolute;
     height: 100%;

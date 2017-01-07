@@ -44,7 +44,7 @@ const A11yIcons = ({
     showDetails
 }) => {
     const iconObj = ({src, style, label, descr}) => {
-        src = `/images/icons/${src}`;
+        src = `./images/icons/${src}`;
         style = typeof style === 'undefined' ? entryStyle.accIcon : style;
         descr = typeof descr === 'undefined' ? label : descr;
         return {

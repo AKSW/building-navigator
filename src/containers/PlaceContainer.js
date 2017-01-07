@@ -21,7 +21,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    dispatch(requestPlaceById(ownProps.params.place));
+    //dispatch(requestPlaceById(ownProps.params.place));
+    console.log('TODO: requestPlaceById');
     return {
         onClickShowOnMap: () => {
         }

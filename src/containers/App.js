@@ -6,6 +6,7 @@
 /*eslint-disable no-console */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {browserHistory, hashHistory} from 'react-router';
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -21,6 +22,7 @@ import {
     toggleWelcomeMsg,
     updateMainState
 } from '../actions';
+import {getElementById, focusOnNode} from './Utilities';
 
 import styles from '../main.css';
 
@@ -32,26 +34,27 @@ const App = ({
     storeCnct,
     onHideWelcomeMsg,
     mouseFocus,
-    doCheckIfSmallDisplay
+    isSmallView,
+    mainState,
+    filter
 }) => {
     return (
         <div>
-
             {showWelcome &&
-                <WelcomeMessage onHide={onHideWelcomeMsg} />
+                <WelcomeMessage
+                    onHide={e => {
+                        onHideWelcomeMsg(filter);
+                        focusOnNode(filter.search.node);
+                    }}
+                    focusOnNode={focusOnNode}
+                />
             }
-
-            {!showWelcome &&
-                mouseFocus('formFilterSearch')
-            }
-
-            {doCheckIfSmallDisplay()}
 
             {error &&
                 <Alert error={error} />
             }
             {!error && !storeCnct &&
-                <div>Init RDFStore...</div>
+                <p><i className="fa fa-circle-o-notch fa-spin"></i> Starte Programm...</p>
             }
             {!error && storeCnct &&
                 <div role="main" className={styles.mainApp}>
@@ -59,40 +62,17 @@ const App = ({
                         {children}
                     </SidebarContainer>
                     {<MapContainer location={children.props.location} />}
+                    <img
+                        className="hidden"
+                        src="./images/blank.gif"
+                        onLoad={() => {
+                            isSmallView(mainState);
+                        }}
+                    />
                 </div>
             }
         </div>
     );
-};
-
-const setMouseFocus = (elId) => {
-    /** @todo find a way to test after dom rendered instead timeout! */
-    window.setTimeout(() => {
-        const el = document.getElementById(elId);
-        if (el !== null) {
-            el.focus();
-        }
-    }, 100);
-};
-
-const checkIfSmallDisplay = () => {
-    /** @todo find a way to test after dom rendered instead timeout! */
-    /*window.setTimeout(() => {
-        const appEl = document.getElementById('react');
-        const sidebarEl = document.getElementById('sidebar');
-        console.log('App-Sidebar verhältnis: ', appEl.offsetWidth, sidebarEl.offsetWidth);
-
-    }, 100);*/
-    return new Promise((resolve, reject) => {
-        /** @todo find a way to test after dom rendered instead timeout! */
-        window.setTimeout(() => {
-            const appEl = document.getElementById('react');
-            const sidebarEl = document.getElementById('sidebar');
-            console.log('App-Sidebar verhältnis: ', appEl.offsetWidth, sidebarEl.offsetWidth);
-            resolve(appEl.offsetWidth - sidebarEl.offsetWidth);
-            return;
-        }, 100);
-    });
 };
 
 const getError = (state) => {
@@ -107,11 +87,14 @@ const getError = (state) => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        showWelcome: Cookies.get('showWelcomeMessage') === 'false' ? false : state.main.showWelcomeMessage,
+        //showWelcome: Cookies.get('showWelcomeMessage') === 'false' ? false : state.main.showWelcomeMessage,
+        showWelcome: state.main.showWelcomeMessage,
         children: ownProps.children,
         //isMapChild: ownProps.location.pathname.match(/^\/map/),
         storeCnct: state.store.connected,
-        error: getError(state)
+        error: getError(state),
+        mainState: state.main,
+        filter: state.filter
     };
 };
 
@@ -123,22 +106,18 @@ const mapDispatchToProps = (dispatch) => {
             //dispatch(requestPlaces());
         }
     );
-    //dispatch(requestPlaces());
     return {
-        onHideWelcomeMsg: () => {
+        onHideWelcomeMsg: (filter) => {
             dispatch(toggleWelcomeMsg());
-            Cookies.set('showWelcomeMessage', false);
         },
-        mouseFocus: (elId) => {
-            setMouseFocus(elId);
+        // @todo do this somewhere else (a better place/way)
+        isSmallView: (mainState) => {
+            const appEl = document.getElementById(mainState.rootNodeId);
+            if (appEl === null || appEl.offsetWidth <= 0) {
+                return;
+            }
+            dispatch(updateMainState('isSmallView', appEl.offsetWidth <= mainState.smallViewMax));
         },
-        doCheckIfSmallDisplay: () => {
-            checkIfSmallDisplay().then(
-                response => {
-                    console.log(response);
-                }
-            );
-        }
     };
 };
 

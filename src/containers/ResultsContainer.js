@@ -5,6 +5,7 @@
 /*eslint-disable no-console */
 
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {hashHistory} from 'react-router';
 
@@ -15,21 +16,31 @@ import {
     setSelectedPlace,
     toggleDetails,
     requestPlaceDetails,
-    updateSelectedPlaceId
+    updateSelectedPlaceId,
+    toggleSidebar
 } from '../actions';
 import {mapMaxZoom} from './MapContainer';
+import {getElementById, scrollTo, focusOnNode} from './Utilities';
+
+let isSmallView = false;
+//let sidebarNode = null;
+let rootNodeId = '';
 
 const showOnMap = (dispatch, place) => {
+    if (isSmallView) {
+        dispatch(toggleSidebar());
+    }
     dispatch(updateMapCenter({
         lat: parseFloat(place.latitude),
         lng: parseFloat(place.longitude)
     }));
     dispatch(updateMapZoom({zoom: mapMaxZoom()}));
     dispatch(updateSelectedPlaceId(place.id));
-    dispatch(setSelectedPlace(place));
 };
 
 const mapStateToProps = (state, ownProps) => {
+    isSmallView = state.main.isSmallView;
+    rootNodeId = state.main.rootNodeId;
     let activeFilter = 0;
     const placesAccessAttr = [];
 
@@ -62,12 +73,13 @@ const mapStateToProps = (state, ownProps) => {
         activeFilter,
         doRequest: state.places.doRequest,
         doDetailsRequest: state.places.doDetailsRequest,
-        submittedSearch: state.main.searchSubmitted
+        submittedSearch: state.main.searchSubmitted,
+        scrollToSelectedPlace: state.places.scrollToSelectedPlace,
+        sidebarNode: state.main.sidebarNode
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    /** @todo may request places (if state.places is emtpy */
     return {
         onClickResult: (e, place) => {
             showOnMap(dispatch, place);
@@ -78,20 +90,25 @@ const mapDispatchToProps = (dispatch) => {
             e.preventDefault();
         },
         toggleDetails: (place) => {
-            /*if (!place._UI.receivedDetails
-            ) {
-                dispatch(requestPlaceDetails(place.uri.value)).then(
-                    response => {
-                        dispatch(toggleDetails(place.uri.value));
-                    }
-                );
-            } else {
-                dispatch(toggleDetails(place.uri.value));
-            }*/
             dispatch(toggleDetails(place.id));
         },
         gotoSearch: () => {
             hashHistory.push('/search');
+        },
+        doScrollTo: (resultNode, sidebarNode) => {
+            getElementById(rootNodeId, 'sidebar').then(sidebar => {
+                const el = ReactDOM.findDOMNode(resultNode);
+                scrollTo(sidebar, el.offsetTop, 300);
+            });
+            /*const rootNode = document.getElementById(rootNodeId);
+            window.setTimeout(() => {
+                const sidebar = rootNode.querySelector('#sidebar');
+                const el = ReactDOM.findDOMNode(resultNode);
+                scrollTo(sidebar, el.offsetTop, 300);
+            }, 0);*/
+        },
+        getFocus: (node) => {
+            focusOnNode(node);
         }
     };
 };

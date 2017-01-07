@@ -5,6 +5,7 @@
 /*eslint-disable no-console */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import {hashHistory} from 'react-router';
 
@@ -16,11 +17,13 @@ import {
     setSelectedPlace,
     requestPlaces,
     updateSelectedPlaceId,
-    showDetails
+    showDetails,
+    toggleSidebar,
+    scrollToSelectedPlace
 } from '../actions';
-import {scrollTo} from './SmoothScroll';
 
 let mapNodeRef = null;
+let sidebarIsVisible = false;
 
 export const mapMaxZoom = () => {
     return 18;
@@ -56,61 +59,6 @@ const mayPopupSelectedPlace = (map, selectedPlace) => {
     }
 };
 
-const groupUngroupPlacesOld = (places, zoom) => {
-    const markers = [];
-    places.sort((a, b) => {
-        return parseFloat(a.lng.value) - parseFloat(b.lng.value);
-    });
-    /** @todo BUGFIX need loop in loop! */
-    places.forEach((place, idx) => {
-        if (idx === 0) {
-            markers.push({
-                lat: parseFloat(place.lat.value),
-                lng: parseFloat(place.lng.value),
-                places: [place]
-            });
-            return;
-        }
-
-        /*const isNewMarker = true;
-        markers.forEach((marker, midx) => {
-            // if (getDistance(place, marker) < -1) {
-            //     // add to group
-            //     isNewMarker = false;
-            //     return;
-            // }
-            const d = getDistance({
-                lat1: parseFloat(place.lat.value),
-                lng1: parseFloat(place.lng.value),
-                lat2: marker.lat,
-                lng2: marker.lng
-            });
-            console.log('Distance:', place, marker, d);
-        });
-
-        if (!isNewMarker) {
-            return;
-        }*/
-
-        const midx = markers.length - 1;
-        /** @todo introduce multi-popup-marker */
-        if (zoom < mapMaxZoom() &&
-            (parseFloat(place.lng.value) - markers[midx].lng) * zoom <= 0.044 &&
-            Math.abs(parseFloat(place.lat.value) - markers[midx].lat) * zoom <= 0.018
-        ) {
-            //console.log('Create Group', place, markers[midx].places);
-            markers[midx].places.push(place);
-        } else {
-            markers.push({
-                lat: parseFloat(place.lat.value),
-                lng: parseFloat(place.lng.value),
-                places: [place]
-            });
-        }
-    });
-    return markers;
-};
-
 const groupUngroupPlaces = (places, zoom) => {
     const markers = [];
 
@@ -142,7 +90,6 @@ const groupUngroupPlaces = (places, zoom) => {
             const placeBLng = parseFloat(placeB.longitude);
             // may add multi marker
             if (markerLat === placeBLat && markerLng === placeBLng) {
-                console.log('MULTI-MARKER: ', place.titel, ' & ', placeB.titel);
                 marker.type = 'multi-marker';
                 marker.places.push(placeB);
                 places.splice(idxB, 1);
@@ -167,17 +114,10 @@ const groupUngroupPlaces = (places, zoom) => {
     return markers;
 };
 
-const isSmallMapView = (state) => {
-    const appEl = document.getElementById(state.main.rootDomId);
-    if (state.main.sidebarIsVisible && appEl.offsetWidth <= 420) {
-        return false;
-    }
-    return true;
-};
-
 //let timeout = undefined;
 
 const mapStateToProps = (state, ownProps) => {
+    sidebarIsVisible = state.main.sidebarIsVisible;
     /** @todo dont group marker in closest zoom -> use multi-pop *7
     /** @todo use multi-popup for places on same lat-lng */
     /** @todo may group/split markers (after timeout x) */
@@ -188,8 +128,9 @@ const mapStateToProps = (state, ownProps) => {
         console.log('TODO: may group markers', state.places.places, state.map.zoom);
     }, 1000);*/
 
-    // we need to clone, else it sorts also the states places!
-    const markers = groupUngroupPlaces(state.places.places.slice(0), state.map.zoom);
+    // we clone with slice, otherwise it sorts also the states places!
+    const places = state.places.places.slice(0);
+    const markers = groupUngroupPlaces(places, state.map.zoom);
     console.log('markers: ', markers);
     //console.log('ownProps: ', ownProps);
 
@@ -197,29 +138,26 @@ const mapStateToProps = (state, ownProps) => {
         prevHistoryRoute: state.main.prevHistoryRoute,
         requestPlaces: state.places.doRequest,
         markers,
-        selectedPlace: state.places.selectedPlace,
         selectedPlaceId: state.places.selectedPlaceId,
         mapConfig: state.map,
         sidebarIsVisible: state.main.sidebarIsVisible,
-        doPlacesRequestAfterDrag: state.main.searchSubmitted && ownProps.location.pathname === '/results' ?
-            true :
-            false,
-        showMapControls: isSmallMapView(state)
+        doPlacesRequestAfterDrag: state.main.searchSubmitted && ownProps.location.pathname === '/results',
+        hideMapControls: state.main.isSmallView && state.main.sidebarIsVisible
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     let map = null;
     return {
-        onLoadMap: (e, selectedPlace) => {
+        onLoadMap: (e) => {
             map = e.target._map;
             mapNodeRef = map;
             // we also need to update map config here
-            dispatch(updateMapConfig({
+            /*dispatch(updateMapConfig({
                 zoom: map.getZoom(),
                 center: map.getCenter(),
                 bounds: map.getBounds()
-            }));
+            }));*/
             /** @todo do not reopen popup after closed, but zoom/drag starts onLoadMap */
             //mayPopupSelectedPlace(map, selectedPlace);
         },
@@ -236,21 +174,15 @@ const mapDispatchToProps = (dispatch) => {
             //dispatch(updateMapZoom({zoom: mapMaxZoom()}));
         },
         onClickShowDetails: (e, place) => {
-            //dispatch(setSelectedPlace(place));
+            if (!sidebarIsVisible) {
+                dispatch(toggleSidebar());
+            }
             dispatch(updateSelectedPlaceId(place.id));
             dispatch(showDetails(place.id));
             /*getPopupOfPlaceId(place.id.value);
             hashHistory.push(`/place/${place.id.value}`);*/
-
-            const resultEntry = document.getElementById(`result-entry-${place.id}`);
             //resultEntry.scrollIntoView({behavior: 'smooth'});
-            console.log('TODO: scroll to place');
-            console.log(resultEntry.offsetTop);
-            scrollTo(
-                document.getElementById('sidebar'),
-                resultEntry.offsetTop,
-                300
-            );
+            dispatch(scrollToSelectedPlace());
             e.preventDefault();
         },
         onZoomend: (node) => {

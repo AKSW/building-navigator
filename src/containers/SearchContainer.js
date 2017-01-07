@@ -19,6 +19,7 @@ import {
     updateMapZoom
 } from '../actions';
 import {getActiveFilterOption} from '../reducers/filter';
+import {getElementById, focusOnNode} from './Utilities';
 
 const getSelectedOptions = (el) => {
     return [].filter.call(el.options, function(o) {
@@ -109,18 +110,15 @@ const mapDispatchToProps = (dispatch) => {
         },
         onSubmit: (e, filter) => {
             e.preventDefault();
-            window.setTimeout(() => {
-                const el = document.getElementById('search-request-loader');
-                if (el !== null) {
-                    el.focus();
-                }
-            }, 100);
             dispatch(updateMainState('searchSubmitted', true));
             dispatch(requestPlaces()).then(
                 response => {
                     hashHistory.push('/results');
                 }
             );
+        },
+        getFocus: (node) => {
+            focusOnNode(node);
         },
     };
 };

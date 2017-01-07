@@ -13,13 +13,18 @@ import styles from './sidebar.css';
 
 const Sidebar = ({
     children,
-    sidebarIsVisible,
-    onToggleSidebar
+    onToggleSidebar,
+    mainState
 }) => {
 
-    const sidebarHtml = sidebarIsVisible ? (
+    const sidebarHtml = mainState.sidebarIsVisible ? (
         <Swipeable onSwipedLeft={onToggleSidebar}>
-            <div className={styles.sidebar} id="sidebar">
+            <div className={styles.sidebar} id="sidebar"
+                ref={node => {
+                    /** @todo test (old) browser compatibility with saving node in state */
+                    mainState.sidebarNode = node;
+                }}
+            >
                 {/* render route, e.g. /search or /results */}
                 {children}
             </div>

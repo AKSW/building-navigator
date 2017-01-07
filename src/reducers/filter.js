@@ -51,7 +51,7 @@ export const filterSettings = {
     },
     search: {
         active: false,
-        filter: 'titel',
+        filter: 'title',
         value: ''
     },
     category: {
@@ -68,31 +68,49 @@ export const filterSettings = {
             {
                 id: 'bildung',
                 active: false,
-                filter: 'kategorie',
+                filter: 'category',
                 value: 'Bildung',
                 label: 'Bildung',
                 aria: 'Aria Label...'
             },
             {
-                id: 'kultur',
+                id: 'gesundheit',
                 active: false,
-                filter: 'kategorie',
-                value: 'Kultur',
-                label: 'Kultur',
+                filter: 'category',
+                value: 'Gesundheit',
+                label: 'Gesundheit',
                 aria: 'Aria Label...'
             },
             {
-                id: 'unterhaltung',
+                id: 'recht',
                 active: false,
-                filter: 'kategorie',
-                value: 'Unterhaltung',
-                label: 'Unterhaltung',
+                filter: 'category',
+                value: 'Recht',
+                label: 'Recht',
+                aria: 'Aria Label...'
+            },
+            {
+                id: 'verbaende',
+                active: false,
+                filter: 'category',
+                value: 'Verbände',
+                label: 'Verbände',
+                aria: 'Aria Label...'
+            },
+            {
+                id: 'verkehr',
+                active: false,
+                filter: 'category',
+                value: 'Verkehr',
+                label: 'Verkehr',
                 aria: 'Aria Label...'
             }
         ]
     },
-    elevator: {
+    entrance: {
         filter: [],
+        label: 'Eingang',
+        aria: 'Aktueller Filter, Anforderungen an den Eingangsbereich',
         value: [
             {
                 id: 'all',
@@ -100,23 +118,48 @@ export const filterSettings = {
                 filter: undefined,
                 value: null,
                 label: 'keine Einschränkung',
-                aria: 'Aria Label...'
             },
             {
-                id: 'personenaufzug_vorhanden',
+                id: 'entrance-partly-suit-f-wheelchair',
                 active: false,
-                filter: 'personenaufzug_vorhanden',
-                value: 'ja',
+                filter: 'entrance-suit-f-wheelchair',
+                value: 1,
+                label: 'Eingang ist mindestens teilweise rollstuhlgerecht',
+            },
+            {
+                id: 'entrance-suit-f-wheelchair',
+                active: false,
+                filter: 'entrance-suit-f-wheelchair',
+                value: 2,
+                label: 'Eingang ist rollstuhlgerecht',
+            },
+        ]
+    },
+    elevator: {
+        filter: [],
+        label: 'Aufzug',
+        aria: 'Aktueller Filter, Anforderungen an den Aufzug',
+        value: [
+            {
+                id: 'all',
+                active: true,
+                filter: undefined,
+                value: null,
+                label: 'keine Einschränkung',
+            },
+            {
+                id: 'lift-avail',
+                active: false,
+                filter: 'lift-avail',
+                value: 1,
                 label: 'Aufzug ist vorhanden',
-                aria: '...'
             },
             {
-                id: 'personenaufzug_rollstuhlgerecht',
+                id: 'lift-suit-f-wheelchair',
                 active: false,
-                filter: 'personenaufzug_rollstuhlgerecht',
-                value: 'ja',
+                filter: 'lift-suit-f-wheelchair',
+                value: 1,
                 label: 'Aufzug ist rollstuhlgerecht',
-                aria: '...'
             }
         ]
     },

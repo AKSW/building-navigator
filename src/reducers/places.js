@@ -5,15 +5,17 @@ const initialPlacesState = {
     doRequest: false,
     doDetailsRequest: false,
     places: [],
-    selectedPlace: {},
+    //selectedPlace: {},
     selectedPlaceId: undefined,
+    scrollToSelectedPlace: false,
 };
 
 const initialPlaceState = {
     _UI: {
         showDetails: false,
-        receivedDetails: false,
+        //receivedDetails: false,
         a11yRating: 0.00,
+        resultsListNode: null
     },
     /*id: 'id',
     title: 'titel',
@@ -66,8 +68,8 @@ const placeReducer = (state = initialPlaceState, action) => {
         place._UI = Object.assign({}, initialPlaceState._UI, {a11yRating});
 
         // bugfix https://github.com/AKSW/transform-bvl-csv-to-json-files/issues/2
-        if (place.personenaufzug_rollstuhlgerecht === "ja") {
-            place.personenaufzug_vorhanden = "ja";
+        if (place.personenaufzug_rollstuhlgerecht === 'ja') {
+            place.personenaufzug_vorhanden = 'ja';
         }
         console.log('a11yRating of', place, place._UI.a11yRating);
         /*const newPlace = {
@@ -83,6 +85,9 @@ const placeReducer = (state = initialPlaceState, action) => {
 };
 
 const places = (state = initialPlacesState, action) => {
+    if (action.type !== 'SCROLL_TO_SELECTED_PLACE') {
+        state.scrollToSelectedPlace = false;
+    }
     switch (action.type) {
     case 'PLACES_REQUEST':
         return Object.assign({}, state, {
@@ -175,6 +180,10 @@ const places = (state = initialPlacesState, action) => {
     case 'SORT_PLACES_BY_ACCESSIBLE_RATING':
         console.log('SORT_PLACES_BY_ACCESSIBLE_RATING: ', action);
         return state;
+    case 'SCROLL_TO_SELECTED_PLACE':
+        return Object.assign({}, state, {
+            scrollToSelectedPlace: true
+        });
     default:
         return state;
     }

@@ -29,6 +29,10 @@ const markerIcon = L.icon({
     popupAnchor:  [0, -45]
 });
 
+const popupStyle = {
+    fontSize: '16px'
+};
+
 const Markers = ({
     markers,
     selectedPlaceId,
@@ -53,15 +57,17 @@ const Markers = ({
     const multiMarkerHtml = (id, groupData) => {
         const pos = [groupData.lat, groupData.lng];
         let isSelected = false;
+        let selectedPlace = null;
         const popup = (
             <Popup>
                 <span>
                     {groupData.places.map(place => {
                         if (selectedPlaceId === place.id) {
                             isSelected = true;
+                            selectedPlace = place;
                         }
                         return (
-                            <div key={place.id} id={`place-popup-${place.id}`}>
+                            <div key={place.id} id={`place-popup-${place.id}`} style={popupStyle}>
                                 <h3>{place.titel}</h3>
                                 <A11yIcons
                                     place={place}
@@ -92,6 +98,7 @@ const Markers = ({
                     data-name={`multi-marker-${id}`}
                     data-id={id}
                     icon={selectedIcon}
+                    onClick={(e) => onClickMarker(e, selectedPlace)}
                 >
                     {popup}
                 </OSMarker>
@@ -104,18 +111,19 @@ const Markers = ({
                 data-name={`multi-marker-${id}`}
                 data-id={id}
                 icon={markerIcon}
+                onClick={(e) => onClickMarker(e, groupData.places[0])}
             >
                 {popup}
             </OSMarker>
         );
     };
 
-    const markerHtml = (id, place) => {
+    const singleMarkerHtml = (id, place) => {
         const pos = [parseFloat(place.latitude), parseFloat(place.longitude)];
         const popup = (
             <Popup>
                 <span>
-                    <div id={`place-popup-${place.id}`}>
+                    <div id={`place-popup-${place.id}`} style={popupStyle}>
                         <h3>{place.titel}</h3>
                         <A11yIcons
                             place={place}
@@ -144,6 +152,7 @@ const Markers = ({
                     data-name={place.titel}
                     data-id={place.id}
                     icon={selectedIcon}
+                    title={place.titel}
                 >
                     {popup}
                 </OSMarker>
@@ -158,29 +167,23 @@ const Markers = ({
                 data-name={place.titel}
                 data-id={place.id}
                 icon={markerIcon}
+                title={place.titel}
             >
                 {popup}
             </OSMarker>
         );
     };
 
-    /*const markersHtml = markers.map((marker, id) => {
-        return marker.places.length > 1 ?
-            groupMarkerHtml(id, marker) :
-            markerHtml(markers.length + id, marker.places[0])
-        ;
-    });*/
-
-    const markersHtml = markers.map((marker, id) => {
+    const markerHtml = markers.map((marker, id) => {
         if (marker.type === 'multi-marker') {
             return multiMarkerHtml(id, marker);
         }
-        return markerHtml(markers.length + id, marker.places[0]);
+        return singleMarkerHtml(markers.length + id, marker.places[0]);
     });
 
     return (
         <div>
-            {markersHtml}
+            {markerHtml}
         </div>
     );
 };

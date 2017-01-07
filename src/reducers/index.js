@@ -3,6 +3,7 @@
 
 //import {List, Map} from 'immutable';
 import {combineReducers} from 'redux';
+import Cookies from 'js-cookie';
 
 import filter from './filter';
 import places from './places';
@@ -10,13 +11,16 @@ import places from './places';
 const initialMainState = {
     //curHistoryRoute: '/',
     //prevHistoryRoute: '/',
-    rootDomId: 'react',
+    // @todo get root id from config
+    rootNodeId: 'react',
     searchSubmitted: false,
-    showWelcomeMessage: true,
+    showWelcomeMessage: Cookies.get('showWelcomeMessage') !== 'false',
+    sidebarNode: null,
     sidebarIsVisible: true,
     resultsStart: 0,
     resultsLimit: 10,
-    isSmallDisplay: false,
+    smallViewMax: 420,
+    isSmallView: false,
 };
 
 const main = (state = initialMainState, action) => {
@@ -38,6 +42,7 @@ const main = (state = initialMainState, action) => {
             sidebarIsVisible: ! state.sidebarIsVisible,
         });
     case 'TOGGLE_WELCOME_MSG':
+        Cookies.set('showWelcomeMessage', !state.showWelcomeMessage);
         return Object.assign({}, state, {
             showWelcomeMessage: ! state.showWelcomeMessage,
         });
@@ -60,16 +65,16 @@ const store = (state = initialStoreState, action) => {
     case 'STORE_RECEIVE':
         const placesData = [];
         for (const key in action.payload) {
-            /*const place = action.payload[key];
+            const place = action.payload[key];
             place.id = key;
-            placesData.push(place);*/
-            placesData.push({
+            placesData.push(place);
+            /*placesData.push({
                 id: key,
                 lat: action.payload[key].latitude,
                 lng: action.payload[key].longitude,
                 titel: action.payload[key].titel,
                 kategorie: action.payload[key].kategorie,
-            });
+            });*/
         }
         return Object.assign({}, state, {
             connected: true,
@@ -88,6 +93,7 @@ const store = (state = initialStoreState, action) => {
 
 const initialMapConfig = {
     //51.339695, 12.373075
+    node: null,
     center: {
         lat: 51.3412,
         lng: 12.3747

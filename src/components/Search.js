@@ -23,7 +23,7 @@ import {
     Clearfix,
 } from 'react-bootstrap';
 
-const formStyle = {};
+import styles from './search.css';
 
 /*const FormControlCheckbox = ({onChange, filter, id, label}) => {
     const ariaLabel = `Filter: ${label}`;
@@ -52,6 +52,7 @@ const Search = ({
     onChange,
     doRequest,
     getActiveFilterOption,
+    getFocus
 }) => {
 
     const FormControlRadio = ({filterGroup, entry, id}) => {
@@ -63,13 +64,15 @@ const Search = ({
                     <input
                         type="radio"
                         name={filterGroup}
-                        onChange={e => onChange(
-                            entry,
-                            filterGroup,
-                        )}
                         ref={node => {
                             /** @todo test (old) browser compatibility with saving node in state */
                             entry.node = node;
+                        }}
+                        onChange={e => {
+                            onChange(entry, filterGroup);
+                            window.setTimeout(() => {
+                                getFocus(entry.node);
+                            }, 0);
                         }}
                         defaultChecked={entry.active}
                         value={entry.id}
@@ -91,13 +94,14 @@ const Search = ({
         <Form
             horizontal
             onSubmit={e => onSubmit(e, filter)}
-            style={formStyle}
         >
-            {doRequest &&
-                <div id="search-request-loader">
-                    <span><i className="fa fa-circle-o-notch fa-spin"></i> Suche gestartet, bitte warten.</span>
-                </div>
-            }
+            <img
+                className="hidden"
+                src="./images/blank.gif"
+                onLoad={() => {
+                    getFocus(filter.search.node);
+                }}
+            />
 
             <FormGroup>
                 <Col md={12}>
@@ -131,7 +135,9 @@ const Search = ({
                             filter.search,
                             'search',
                         )}
-                        ref={node => (filter.search.node = node)}
+                        ref={node => {
+                            filter.search.node = node;
+                        }}
                     />
                 </Col>
             </FormGroup>
@@ -183,10 +189,6 @@ const Search = ({
                         aria-label={'Hier können Sie Gebäude über Filter auswählen.' +
                             'Aktueller Filter, Gebäude aus den folgenden Kategorien anzeigen'}
                     >
-                        {/*<option value="all">Alle</option>
-                        <option value="Unterhaltung">Unterhaltung</option>
-                        <option value="Kultur">Kultur</option>
-                        <option value="Bildung">Bildung</option>*/}
                         {filter.category.value.map((catFilter, key) => {
                             return (
                                 <option key={key} value={catFilter.id}>{catFilter.label}</option>
@@ -196,32 +198,42 @@ const Search = ({
                 </Col>
             </FormGroup>
 
-            {/*<FormGroup controlId="formFilterEntrance">
+            <br />
+
+            <FormGroup controlId="formFilterEntrance">
                 <Col componentClass={ControlLabel} md={3}>
-                    Eingang
+                    {filter.entrance.label}
                 </Col>
                 <Col md={9}>
-                    <FormControl
-                        componentClass="select"
-                        size="3"
-                        aria-label="Aktueller Filter, Anforderungen an den Eingangsbereich"
-                        defaultValue={"0"}
-                    >
-                        <option value="0">keine Einschränkung</option>
-                        <option
-                            value="1"
-                            aria-label="Eingang ist mindestens teilweise rollstuhlgerecht"
+                    <div className={styles.noScrollMultiSelect}>
+                        <FormControl
+                            componentClass="select"
+                            onChange={e => onChange(
+                                filter.entrance,
+                                'entrance',
+                            )}
+                            ref={node => {
+                                filter.entrance.node = node;
+                            }}
+                            value={getActiveFilterOption(filter.entrance).id}
+                            size={filter.entrance.value.length}
+                            aria-label={filter.entrance.aria}
                         >
-                            teilweise rollstuhlgerecht
-                        </option>
-                        <option value="3">vollständig rollstuhlgerecht</option>
-                    </FormControl>
+                            {filter.entrance.value.map((entry, key) => {
+                                return (
+                                    <option key={key} value={entry.id}>{entry.label}</option>
+                                );
+                            })}
+                        </FormControl>
+                    </div>
                 </Col>
-            </FormGroup>*/}
+            </FormGroup>
 
-            <FormGroup controlId="formFilterElevator">
+            <hr />
+
+            {/*<FormGroup controlId="formFilterElevator">
                 <Col componentClass={ControlLabel} md={3}>
-                    Aufzug NEU
+                    Aufzug
                 </Col>
                 <Col md={9}>
                     {filter.elevator.value.map((entry, key) => {
@@ -233,7 +245,38 @@ const Search = ({
                         );
                     })}
                 </Col>
+            </FormGroup>*/}
+
+            <FormGroup controlId="formFilterElevator">
+                <Col componentClass={ControlLabel} md={3}>
+                    {filter.elevator.label}
+                </Col>
+                <Col md={9}>
+                    <div className={styles.noScrollMultiSelect}>
+                        <FormControl
+                            componentClass="select"
+                            onChange={e => onChange(
+                                filter.elevator,
+                                'elevator',
+                            )}
+                            ref={node => {
+                                filter.elevator.node = node;
+                            }}
+                            value={getActiveFilterOption(filter.elevator).id}
+                            size={filter.elevator.value.length}
+                            aria-label={filter.elevator.aria}
+                        >
+                            {filter.elevator.value.map((entry, key) => {
+                                return (
+                                    <option key={key} value={entry.id}>{entry.label}</option>
+                                );
+                            })}
+                        </FormControl>
+                    </div>
+                </Col>
             </FormGroup>
+
+            <hr />
 
             <FormGroup controlId="formFilterEtc">
                 <Col componentClass={ControlLabel} md={3}>
@@ -263,46 +306,6 @@ const Search = ({
             </FormGroup>
 
             {/*<FormGroup>
-                <Col componentClass={ControlLabel} md={3}>
-                    Aufzug
-                </Col>
-                <Col md={9}>
-                    <Radio
-                        onChange={e => onChange(
-                            filter,
-                            'elevatorAll',
-                        )}
-                        defaultChecked={
-                            !filter.elevatorCabineIsAvailable.active &&
-                            !filter.elevatorIsWheelchairAccessible.active
-                        }
-                        aria-label={'Aktueller Filter, Anforderungen an den Aufzug. ' +
-                            'Aktuelle Auswahl, keine Einschränkung'}
-                        value="ja"
-                        name="elevator"
-                    >
-                        keine Einschränkung
-                    </Radio>
-                    <FormControlRadio
-                        onChange={onChange}
-                        filter={filter}
-                        name="elevator"
-                        id="elevatorCabineIsAvailable"
-                        label="Aufzug ist vorhanden"
-                    />
-                    <FormControlRadio
-                        onChange={onChange}
-                        filter={filter}
-                        id="elevatorIsWheelchairAccessible"
-                        name="elevator"
-                        label="Aufzug ist rollstuhlgerecht"
-                    />
-                </Col>
-            </FormGroup>
-
-            <hr />
-
-            <FormGroup>
                 <Col componentClass={ControlLabel} md={3}>
                     Toilette
                 </Col>

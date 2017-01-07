@@ -31,7 +31,11 @@ const Results = ({
     doDetailsRequest,
     doRequest,
     submittedSearch,
-    gotoSearch
+    gotoSearch,
+    scrollToSelectedPlace,
+    doScrollTo,
+    sidebarNode,
+    getFocus
 }) => {
 
     if (!submittedSearch) {
@@ -40,22 +44,23 @@ const Results = ({
 
     const resultsEntries = places.map((place, id) => {
         return (
-            <div key={id}>
-                <ResultsEntry
-                    place={place}
-                    selectedPlaceId={selectedPlaceId}
-                    tabIdx={2 + id}
-                    idx={1 + id}
-                    filter={filter}
-                    activeFilter={activeFilter}
-                    placesAccessAttr={placesAccessAttr[id]}
-                    placesLength={places.length}
-                    toggleDetails={toggleDetails}
-                    onClickResult={onClickResult}
-                    onClickShowOnMap={onClickShowOnMap}
-                    doDetailsRequest={doDetailsRequest}
-                />
-            </div>
+            <ResultsEntry
+                key={id}
+                place={place}
+                selectedPlaceId={selectedPlaceId}
+                tabIdx={3 + id}
+                idx={1 + id}
+                filter={filter}
+                activeFilter={activeFilter}
+                placesAccessAttr={placesAccessAttr[id]}
+                placesLength={places.length}
+                toggleDetails={toggleDetails}
+                onClickResult={(e, map) => onClickResult(e, map)}
+                onClickShowOnMap={onClickShowOnMap}
+                doDetailsRequest={doDetailsRequest}
+                scrollToSelectedPlace={scrollToSelectedPlace}
+                doScrollTo={(el) => doScrollTo(el, sidebarNode)}
+            />
         );
     });
 
@@ -64,6 +69,7 @@ const Results = ({
             <Row>
                 <Col md={12} style={resultsStyle.backToSearchWrapper}>
                     <Link
+                        tabIndex="1"
                         to={'/search'}
                         className="btn btn-primary btn-lg"
                         title="Zurück zur Suche"
@@ -78,7 +84,7 @@ const Results = ({
                         </p>
                     }
                     {!doRequest &&
-                        <p tabIndex="1" id="getFocus">
+                        <p tabIndex="2" ref={node => getFocus(node)}>
                             {places.length === 0 ? 'Kein Ergebnis' : ''}
                             {places.length === 1 ? `${places.length} Ergebnis` : ''}
                             {places.length > 1 ? `${places.length} Ergebnisse` : ''}
@@ -93,12 +99,13 @@ const Results = ({
             {places.length > 3 &&
                 <Row>
                     <Col md={12} style={resultsStyle.backToSearchWrapper}>
+                        <br />
                         <Link
                             to={'/search'}
                             className="btn btn-primary btn-lg"
                             title="Zurück zur Suche"
                         >
-                            <Glyphicon glyph="search" aria-hidden="true" /> Suche
+                            <Glyphicon glyph="search" aria-hidden="true" /> Zur Suche
                         </Link>
                     </Col>
                 </Row>

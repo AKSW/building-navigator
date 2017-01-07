@@ -21,7 +21,8 @@ const modalStyle = {
 };
 
 const WelcomeMessage = ({
-    onHide
+    onHide,
+    focusOnNode
 }) => {
     return (
         <div>
@@ -31,7 +32,11 @@ const WelcomeMessage = ({
                     <Modal.Title>Willkommen!</Modal.Title>
                 </Modal.Header>
 
-                <Modal.Body tabIndex="1">
+                <Modal.Body tabIndex="1"
+                    ref={node => {
+                        focusOnNode(node);
+                    }}
+                >
                     Hier können Sie barrierefreie Gebäude in Leipzig finden.
                     Wählen Sie dazu den gewünschten Ort und Kriterien, zum Beispiel einen Fahrstuhl aus.
                     Oder suchen Sie nach dem Namen einer Einrichtung.

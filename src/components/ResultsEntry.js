@@ -20,15 +20,6 @@ import {
 import A11yIcons from './A11yIcons';
 import styles from './results.css';
 
-const entryStyle = {
-    borderBottom: '1px solid lightGray',
-    margin: '0px -20px 0px -15px',
-    padding: '1px 15px',
-    selectedEntry: {
-        backgroundColor: 'lightYellow',
-    }
-};
-
 const ResultsEntry = ({
     place,
     selectedPlaceId,
@@ -41,7 +32,9 @@ const ResultsEntry = ({
     onClickResult,
     onClickShowOnMap,
     toggleDetails,
-    doDetailsRequest
+    doDetailsRequest,
+    scrollToSelectedPlace,
+    doScrollTo
 }) => {
     /*const ariaLabel = `${idx} von ${placesLength}. ${place.titel}`;
     if (placesAccessAttr > activeFilter) {
@@ -164,7 +157,19 @@ const ResultsEntry = ({
         `${styles.entry} ${styles.selected}`;
 
     return (
-        <div className={className} id={`result-entry-${place.id}`}>
+        <div className={className} id={`result-entry-${place.id}`}
+            ref={node => {
+                /** @todo test (old) browser compatibility with saving node in state */
+                place._UI.resultsListNode = node;
+            }}
+        >
+            {scrollToSelectedPlace && selectedPlaceId === place.id &&
+                <img
+                    className="hidden"
+                    src="./images/blank.gif"
+                    onLoad={() => doScrollTo(place._UI.resultsListNode)}
+                />
+            }
             {entryHtml}
             <div>
                 <Button

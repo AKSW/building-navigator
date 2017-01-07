@@ -6,7 +6,8 @@ const PATHS = {
 };
 
 module.exports = {
-    devtool: 'inline-source-map',
+    //devtool: 'inline-source-map',
+    devtool: 'eval',
     debug: true,
     context: path.resolve(__dirname),
     entry: './src/main.js',    
@@ -15,6 +16,9 @@ module.exports = {
         path: PATHS.dist,
         publicPath: '/',
         filename: '/main.min.js',
+        /*library: 'BuildingNavigator',
+        libraryTarget: 'umd',
+        umdNamedDefine: true*/
     },
     resolve: {
         root: path.resolve(__dirname),

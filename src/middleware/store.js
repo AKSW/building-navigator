@@ -4,38 +4,12 @@
 import 'whatwg-fetch';
 
 const dataDir = () => {
-    return 'http://asimeon.de/building-navigator/data';
-    //return '/data';
+    return 'https://raw.githubusercontent.com/AKSW/transform-bvl-csv-to-json-files/master/result/';
 };
 
 const initStoreFile = () => {
-    return '/sample-building-coordinates.json';
+    return '/building-coordinates.json';
 };
-
-/*const remoteUrl = () => {
-    return 'http://localhost:8890/sparql';
-};
-
-export const request = (query) => {
-    const fd = new FormData();
-    fd.append('query', query);
-    fd.append('format', 'application/json');
-
-    return new Promise(
-        function(resolve, reject) {
-            fetch(remoteUrl(), {
-                method: 'POST',
-                body: fd
-            }).then(function(response) {
-                return response.json();
-            }).then(function(json) {
-                resolve(json.results.bindings);
-            }).catch(function(ex) {
-                reject(ex);
-            });
-        }
-    );
-};*/
 
 const loadJson = (file) => {
     return new Promise(
@@ -48,6 +22,9 @@ const loadJson = (file) => {
                 }*/
             })
             .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
                 return response.json();
             }).then((json) => {
                 resolve(json);
@@ -85,14 +62,14 @@ export const sortPlacesByDistToLoc = ({places, lat, lng}) => {
         const distA = getDistance({
             lat1: lat,
             lng1: lng,
-            lat2: a.lat,
-            lng2: a.lng
+            lat2: a.latitude,
+            lng2: a.longitude
         });
         const distB = getDistance({
             lat1: lat,
             lng1: lng,
-            lat2: b.lat,
-            lng2: b.lng
+            lat2: b.latitude,
+            lng2: b.longitude
         });
         // if distance a to center is less then distance b to center, return -1
         if (distA < distB) {
@@ -109,6 +86,7 @@ export const sortPlacesByDistToLoc = ({places, lat, lng}) => {
 export const filterPlaces = (places, filter) => {
     const filterMatches = [];
 
+    // create filterMatch array with activated filters from state
     const createFilterMatches = (fi) => {
         for (const fkey in fi) {
             const filterType = typeof fi[fkey].filter;
@@ -127,32 +105,35 @@ export const filterPlaces = (places, filter) => {
         }
     };
     createFilterMatches(filter);
-
     console.log('filterMatches: ', filterMatches);
 
-    const placeMatchesFilter = (place) => {
-        let matches = true;
-        for (const midx in filterMatches) {
-            const r = new RegExp(filterMatches[midx].value, "i");
-            if (!place.hasOwnProperty(filterMatches[midx].key) ||
-                !place[filterMatches[midx].key].match(r)
-            ) {
-                matches = false;
-            }
+    // check if place matches the filter
+    const placeMatchFilter = (place, fi) => {
+        if (!place.hasOwnProperty(fi.key)) {
+            return false;
         }
-        return matches;
+        if (typeof place[fi.key] === 'number') {
+            return place[fi.key] === fi.value;
+        }
+        const r = new RegExp(fi.value, "i");
+        return place[fi.key].match(r) === null ? false : true;
     };
 
     if (filterMatches.length > 0) {
         places = places.filter(place => {
-            return placeMatchesFilter(place);
+            for (const midx in filterMatches) {
+                if (false === placeMatchFilter(place, filterMatches[midx])) {
+                    return false;
+                }
+            }
+            return true;
         });
     }
 
     return places;
 };
 
-const getMaxLimitPlaces = (state = {}, places = []) => {
+const slicePlaces = (state = {}, places = []) => {
     return places.slice(state.main.resultsStart, state.main.resultsLimit);
 };
 
@@ -163,7 +144,7 @@ export const getPlaces = (state = {}) => {
         lng: state.map.center.lng
     });
     list = filterPlaces(list, state.filter);
-    list = getMaxLimitPlaces(state, list);
+    list = slicePlaces(state, list);
 
     const PlacesDetailsPromises = list.map((place) => {
         return getPlaceById(place.id).then(

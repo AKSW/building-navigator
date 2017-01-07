@@ -12,14 +12,10 @@ import PlaceContainer from './containers/PlaceContainer';
 //import MapContainer from './containers/MapContainer';
 
 const enterMain = (nextState) => {
-    const appEl = document.getElementById('react');
-    const sidebarEl = document.getElementById('sidebar');
-    console.log('TODO: check visible map view also after TOGGLE_SIDEBAR');
-    console.log('Entering ROUTE, state:', nextState, 'appEl: ', appEl, ' sidebar: ', sidebarEl);
+    //console.log('Entering ROUTE, state:', nextState);
 };
 
-export default (store) => {
-    console.log('store: ', store);
+export default () => {
     return (
         <div>
             <Route path="/" component={App} onEnter={enterMain}>
