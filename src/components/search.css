@@ -1,0 +1,27 @@
+.noScrollMultiSelect {
+    display:inline-block;
+    vertical-align:top;
+    overflow:hidden;
+}
+.noScrollMultiSelect select {
+    width: auto;
+    padding:7px;
+    margin:-5px -20px -5px -5px; 
+    background-color: transparent;
+    border: none;
+    font-size: 1.05em;
+    color: #333;
+}
+.noScrollMultiSelect select:focus {
+    box-shadow: none
+}
+.noScrollMultiSelect option {
+    border-radius: 3px;
+    padding: 5px;
+}
+.noScrollMultiSelect option::before {
+    content: "◦ ";
+}
+.noScrollMultiSelect option:checked::before {
+    content: "✓ ";
+}
