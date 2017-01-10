@@ -1,18 +1,20 @@
 /*eslint-disable no-console */
 /*eslint no-unused-vars: 0*/
+/*eslint no-undef: 0*/
 
 import React, {PropTypes} from 'react';
 import {Marker as OSMarker, Icon, Popup} from 'react-leaflet';
 import {Link} from 'react-router';
 import L from 'leaflet';
+//import {DivIcon} from 'leaflet';
 
 import A11yIcons from './A11yIcons';
 
-/** @todo add number of grouped places to icon -> with divIcon?! */
 const groupIcon = L.icon({
-    iconUrl: './images/group-marker-icon.png',
-    iconSize: [53, 42],
-    iconAnchor: [26, 42]
+    iconUrl: './images/group-marker-icon-new.png',
+    iconSize: [45, 45],
+    iconAnchor: [22, 22],
+    popupAnchor:  [0, -20],
 });
 
 const selectedIcon = L.icon({
@@ -35,6 +37,7 @@ const popupStyle = {
 
 const Markers = ({
     markers,
+    testAllPlaces,
     selectedPlaceId,
     onClickMarker,
     onClickGroupMarker,

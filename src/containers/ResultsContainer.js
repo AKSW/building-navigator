@@ -73,7 +73,7 @@ const mapStateToProps = (state, ownProps) => {
         activeFilter,
         doRequest: state.places.doRequest,
         doDetailsRequest: state.places.doDetailsRequest,
-        submittedSearch: state.main.searchSubmitted,
+        searchSubmitted: state.main.searchSubmitted,
         scrollToSelectedPlace: state.places.scrollToSelectedPlace,
         sidebarNode: state.main.sidebarNode
     };

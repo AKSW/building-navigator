@@ -94,14 +94,14 @@ const groupUngroupPlaces = (places, zoom) => {
                 marker.places.push(placeB);
                 places.splice(idxB, 1);
             }
-            /*const distAB = getDistance({
+            const distAB = getDistance({
                 lat1: markerLat,
                 lng1: markerLng,
                 lat2: parseFloat(placeB.latitude),
                 lng2: parseFloat(placeB.longitude)
             });
-            console.log('Distance ', place.titel, ' to ', placeB.titel, ': ', distAB);
-            if (distAB <= (18 % zoom)) {
+            /*console.log('Distance ', place.titel, ' to ', placeB.titel, ': ', distAB);
+            if (distAB <= (18 % zoom) * 2) {
                 console.log('ADD TO GROUP!');
             }*/
         });
@@ -142,7 +142,7 @@ const mapStateToProps = (state, ownProps) => {
         mapConfig: state.map,
         sidebarIsVisible: state.main.sidebarIsVisible,
         doPlacesRequestAfterDrag: state.main.searchSubmitted && ownProps.location.pathname === '/results',
-        hideMapControls: state.main.isSmallView && state.main.sidebarIsVisible
+        hideMapControls: state.main.isSmallView && state.main.sidebarIsVisible,
     };
 };
 

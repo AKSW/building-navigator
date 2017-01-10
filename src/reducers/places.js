@@ -67,11 +67,7 @@ const placeReducer = (state = initialPlaceState, action) => {
         });
         place._UI = Object.assign({}, initialPlaceState._UI, {a11yRating});
 
-        // bugfix https://github.com/AKSW/transform-bvl-csv-to-json-files/issues/2
-        if (place.personenaufzug_rollstuhlgerecht === 'ja') {
-            place.personenaufzug_vorhanden = 'ja';
-        }
-        console.log('a11yRating of', place, place._UI.a11yRating);
+        //console.log('a11yRating of', place, place._UI.a11yRating);
         /*const newPlace = {
             id: place.id,
             title: place.titel,

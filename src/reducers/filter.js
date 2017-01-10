@@ -13,10 +13,19 @@ export const filterSettings = {
         filter: undefined, // district is not a filter!
         value: [
             {
-                id: 'center',
+                id: 'all',
                 active: true,
                 lat: 51.3412,
                 lng: 12.3747,
+                zoom: 13,
+                label: 'Leipzig'
+            },
+            {
+                id: 'center',
+                active: false,
+                lat: 51.3412,
+                lng: 12.3747,
+                zoom: 15,
                 label: 'Leipzig - Zentrum'
             },
             {
@@ -24,6 +33,7 @@ export const filterSettings = {
                 active: false,
                 lat: 51.364498,
                 lng: 12.367856,
+                zoom: 15,
                 label: 'Leipzig - Nord'
             },
             {
@@ -31,6 +41,7 @@ export const filterSettings = {
                 active: false,
                 lat: 51.332767,
                 lng: 12.403157,
+                zoom: 15,
                 label: 'Leipzig - Ost'
             },
             {
@@ -38,6 +49,7 @@ export const filterSettings = {
                 active: false,
                 lat: 51.307803,
                 lng: 12.375401,
+                zoom: 15,
                 label: 'Leipzig - Süd'
             },
             {
@@ -45,6 +57,7 @@ export const filterSettings = {
                 active: false,
                 lat: 51.337170,
                 lng: 12.339277,
+                zoom: 15,
                 label: 'Leipzig - West'
             }
         ]
@@ -56,6 +69,10 @@ export const filterSettings = {
     },
     category: {
         filter: [],
+        id: 'category',
+        label: 'Kategorie',
+        aria: 'Hier können Sie Gebäude über Filter auswählen.' +
+            ' Aktueller Filter, Gebäude aus den folgenden Kategorien anzeigen',
         value: [
             {
                 id: 'all',
@@ -109,6 +126,7 @@ export const filterSettings = {
     },
     entrance: {
         filter: [],
+        id: 'entrance',
         label: 'Eingang',
         aria: 'Aktueller Filter, Anforderungen an den Eingangsbereich',
         value: [
@@ -137,6 +155,7 @@ export const filterSettings = {
     },
     elevator: {
         filter: [],
+        id: 'elevator',
         label: 'Aufzug',
         aria: 'Aktueller Filter, Anforderungen an den Aufzug',
         value: [
@@ -163,10 +182,81 @@ export const filterSettings = {
             }
         ]
     },
-    hilfeHoergesch: {
+    toilet: {
+        filter: [],
+        id: 'toilet',
+        label: 'Toilette',
+        aria: 'Aktueller Filter, Anforderungen an die Toilette',
+        value: [
+            {
+                id: 'all',
+                active: true,
+                filter: undefined,
+                value: null,
+                label: 'keine Einschränkung',
+            },
+            {
+                id: 'toilet-avail',
+                active: false,
+                filter: 'toilet-avail',
+                value: 1,
+                label: 'Toilette ist vorhanden',
+            },
+            {
+                id: 'toilet-suit-f-wheelchair',
+                active: false,
+                filter: 'toilet-suit-f-wheelchair',
+                value: 1,
+                label: 'Toilette ist rollstuhlgerecht',
+            }
+        ]
+    },
+    parking: {
+        filter: [],
+        id: 'parking',
+        label: 'Parkplatz',
+        aria: 'Aktueller Filter, Anforderungen an den Parkplatz',
+        value: [
+            {
+                id: 'all',
+                active: true,
+                filter: undefined,
+                value: null,
+                label: 'keine Einschränkung',
+            },
+            {
+                id: 'parking-avail',
+                active: false,
+                filter: 'parking-avail',
+                value: 1,
+                label: 'Parkplatz ist vorhanden',
+            },
+            {
+                id: 'parking-f-disabled-avail',
+                active: false,
+                filter: 'parking-f-disabled-avail',
+                value: 1,
+                label: 'Parkplatz ist behindertengerecht',
+            }
+        ]
+    },
+    generalHelp: {
         active: false,
-        filter: 'hilfe_fuer_hoergeschaedigte',
-        value: 'ja'
+        filter: 'general-help',
+        value: 1,
+        label: 'Allgemeine Hilfestellung'
+    },
+    hearingHelp: {
+        active: false,
+        filter: 'help-for-hearing-imp',
+        value: 1,
+        label: 'Hilfestellung für Hörgeschädigte'
+    },
+    blindHelp: {
+        active: false,
+        filter: 'help-for-blind',
+        value: 1,
+        label: 'Hilfestellung für Sehgeschädigte'
     },
     /*elevatorAll: {
         active: false,

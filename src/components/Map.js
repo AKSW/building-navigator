@@ -26,7 +26,7 @@ const Map = ({
     onDragend,
     onClickShowDetails,
     sidebarIsVisible,
-    doPlacesRequestAfterDrag
+    doPlacesRequestAfterDrag,
 }) => {
     const center = [mapConfig.center.lat, mapConfig.center.lng];
     let mapRef = null;
@@ -52,15 +52,13 @@ const Map = ({
             {!hideMapControls &&
                 <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
             }
-            {markers.length > 0 &&
-                <Markers
-                    markers={markers}
-                    selectedPlaceId={selectedPlaceId}
-                    onClickMarker={onClickMarker}
-                    onClickGroupMarker={onClickGroupMarker}
-                    onClickShowDetails={onClickShowDetails}
-                />
-            }
+            <Markers
+                markers={markers}
+                selectedPlaceId={selectedPlaceId}
+                onClickMarker={onClickMarker}
+                onClickGroupMarker={onClickGroupMarker}
+                onClickShowDetails={onClickShowDetails}
+            />
         </OSMap>
     );
 

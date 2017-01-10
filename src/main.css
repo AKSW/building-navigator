@@ -28,15 +28,18 @@
 /*#mapContainer.full {            
     margin-left: 0px;
 }*/
-.leaflet-bar a, .leaflet-bar a:hover {
+:global(.leaflet-bar) a, :global(.leaflet-bar) a:hover {
     width: 36px;
     height: 36px;
     line-height: 36px;
 }
-.leaflet-control-container {
+:global(.leaflet-div-icon) {
+    background: transparent;
+    border: none;
+}
+:global(.leaflet-div-icon) span {
     position: absolute;
-    right: 275px;
-    height: 100%;
+    font-size: 16px;
 }
 @media (max-width: 992px) {
     #mapContainer {

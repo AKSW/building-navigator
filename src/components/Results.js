@@ -30,7 +30,7 @@ const Results = ({
     toggleDetails,
     doDetailsRequest,
     doRequest,
-    submittedSearch,
+    searchSubmitted,
     gotoSearch,
     scrollToSelectedPlace,
     doScrollTo,
@@ -38,7 +38,7 @@ const Results = ({
     getFocus
 }) => {
 
-    if (!submittedSearch) {
+    if (!searchSubmitted) {
         gotoSearch();
     }
 

@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch) => {
             if (filterId === 'district') {
                 const activeDistrict = getActiveFilterOption(filterGroup);
                 dispatch(updateMapCenter({lat: activeDistrict.lat, lng: activeDistrict.lng}));
-                dispatch(updateMapZoom({zoom: 15}));
+                dispatch(updateMapZoom({zoom: activeDistrict.zoom}));
             }
 
             /*
@@ -114,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(requestPlaces()).then(
                 response => {
                     hashHistory.push('/results');
+                    /** @todo may zoom into/out bounds of results on map */
                 }
             );
         },
