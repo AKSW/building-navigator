@@ -122,29 +122,9 @@ const Search = ({
                 </Col>
             </FormGroup>
 
-            <FormGroup controlId="formFilterSearch">
-                <Col md={12}>
-                    <ControlLabel>Gebäudename durch Texteingabe auswählen</ControlLabel>
-                    <FormControl
-                        type="search"
-                        aria-label="Hier können Sie Gebäude über ihren Namen suchen"
-                        //autoFocus
-                        //tabIndex="1"
-                        defaultValue={filter.search.value}
-                        onChange={e => onChange(
-                            filter.search,
-                            'search',
-                        )}
-                        ref={node => {
-                            filter.search.node = node;
-                        }}
-                    />
-                </Col>
-            </FormGroup>
-
             <FormGroup controlId="formDistrict">
                 <Col md={12}>
-                    <ControlLabel>Stadtviertel auswählen</ControlLabel>
+                    <ControlLabel>Ausgangspunkt wählen:</ControlLabel>
                     <FormControl
                         componentClass="select"
                         value={getActiveFilterOption(filter.district).id}
@@ -161,6 +141,26 @@ const Search = ({
                             );
                         })}
                     </FormControl>
+                </Col>
+            </FormGroup>
+
+            <FormGroup controlId="formFilterSearch">
+                <Col md={12}>
+                    <ControlLabel><h3>Gebäudename durch Texteingabe auswählen</h3></ControlLabel>
+                    <FormControl
+                        type="search"
+                        aria-label="Hier können Sie Gebäude über ihren Namen suchen"
+                        //autoFocus
+                        //tabIndex="1"
+                        defaultValue={filter.search.value}
+                        onChange={e => onChange(
+                            filter.search,
+                            'search',
+                        )}
+                        ref={node => {
+                            filter.search.node = node;
+                        }}
+                    />
                 </Col>
             </FormGroup>
 
