@@ -9,7 +9,7 @@ import {Router, Route, browserHistory, hashHistory} from 'react-router';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 //import a11y from 'react-a11y';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import mainReducer from './reducers';
 import api from './middleware/api';
@@ -22,7 +22,7 @@ const BuildingNavigator = (config) => {
 
     // Needed for onTouchTap
     // http://stackoverflow.com/a/34015469/988941
-    injectTapEventPlugin();
+    // injectTapEventPlugin();
 
     // warn about accessiblity issues
     // TODO only in DEV mode, throws react TypeError: ReactDOM.findDOMNode is not a function...
