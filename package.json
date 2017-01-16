@@ -6,7 +6,8 @@
     "lint": "eslint src/",
     "start": "gulp",
     "test": "jest",
-    "test:watch": "npm test -- --watch"
+    "test:watch": "npm test -- --watch",
+    "build-dist": "webpack -p --progress --config ./webpack.production.config.js && echo '\n\n========================================\n\nDo not forget to push the dist-changes!\n\n========================================'"
   },
   "author": "Simeon Ackermann",
   "license": "",

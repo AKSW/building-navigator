@@ -57,7 +57,13 @@ module.exports = {
           'NODE_ENV': JSON.stringify('production')
         }
       }),
+      new webpack.optimize.AggressiveMergingPlugin(),
+      new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false
+        },
+      }),
     ],
 };

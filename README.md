@@ -4,7 +4,7 @@ Interactive map with accessible information about places in Leipzig.
 
 ## HowTo Run
 
-Checkout this repository and start 
+Checkout this repository and open the `dist/index.html` file into your browser.
 
 ## Compatibility
 
@@ -72,7 +72,17 @@ The store are two parts: firstly the RDFStore which imports our RDF data and is 
 
 All tests are under `./test/` and executed via `npm test`.
 
+Tests are currently not supported.
+
 
 ## Developing
 
 As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/Dockerizing/NodeJS-NPM-ECMA6-Stack
+
+Mount this project into the container and access http://localhost:8080.
+
+### Create Production
+
+To create the production files in `./dist/` exec into the Docker container and run:
+
+    npm run build-dist
