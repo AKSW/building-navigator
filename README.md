@@ -1,22 +1,30 @@
 # Building Navigator
 
-Interactive map with accessible information about places in Leipzig.
+This tool provides an interactive map with accessible information about places in Leipzig. You can search for certain places or filter them. Later means, that you provide certain requirements, such as lift needs to be suitable for wheelchairs, and the tool will display only buildings which match these.
 
-## HowTo Run
+**Important:** This tool is under heavy development, we are currently in [round 3](https://github.com/AKSW/building-navigator/projects/2) of the project, focusing on refinement and UI improvements. Furthermore supporting screenreaders and text-to-speech software is also one of the primary objectives.
+
+## The team behind the scene
+
+This tool is being developed by [Simeon Ackermann](https://github.com/simeonackermann) and [Konrad Abicht](https://github.com/k00ni) as part of the [LEDS-project](http://www.leds-projekt.de/de/linked-enterprise-data-services.html). We work together with the [Behindertenverband Leipzig e.V.](http://www.le-online.de/), a non-profit organization located in Leipzig, which cares about issue of disabled people.
+
+## For developers
+
+### HowTo Run
 
 Checkout this repository and open the `dist/index.html` file into your browser.
 
-## Compatibility
+### Compatibility
 
 Promises: http://caniuse.com/#feat=promises
 
-## Accessibility
+### Accessibility
 
 Callbacks instead Promise
 
 https://facebook.github.io/react-native/docs/accessibility.html
 
-## Architecture and software details
+### Architecture and software details
 
 ![](./assets/architecture.png)
 
@@ -54,7 +62,7 @@ The store are two parts: firstly the RDFStore which imports our RDF data and is 
 * webpack.config.js
 ```
 
-## Required libraries
+### Required libraries
 
 - ReactJS as main JS UI library
 - Redux as store extension
@@ -68,14 +76,14 @@ The store are two parts: firstly the RDFStore which imports our RDF data and is 
 - raw-load to load the RDFile
 
 
-## Tests
+### Tests
 
 All tests are under `./test/` and executed via `npm test`.
 
 Tests are currently not supported.
 
 
-## Developing
+### Developing
 
 As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/Dockerizing/NodeJS-NPM-ECMA6-Stack
 
