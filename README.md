@@ -4,6 +4,10 @@ This tool provides an interactive map with accessible information about places i
 
 **Important:** This tool is under heavy development, we are currently in [round 3](https://github.com/AKSW/building-navigator/projects/2) of the project, focusing on refinement and UI improvements. Furthermore supporting screenreaders and text-to-speech software is also one of the primary objectives.
 
+**Screenshot:**
+
+![](https://github.com/AKSW/building-navigator/raw/master/assets/screenshot-round2.png)
+
 ## The team behind the scene
 
 This tool is being developed by [Simeon Ackermann](https://github.com/simeonackermann) and [Konrad Abicht](https://github.com/k00ni) as part of the [LEDS-project](http://www.leds-projekt.de/de/linked-enterprise-data-services.html). We work together with the [Behindertenverband Leipzig e.V.](http://www.le-online.de/), a non-profit organization located in Leipzig, which cares about issue of disabled people.
