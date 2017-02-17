@@ -13,12 +13,11 @@ module.exports = {
     entry: './src/main.js',    
     //entry: ['whatwg-fetch', './src/main.js'],
     output: {
+        library: 'BuildingNavigator',
         path: PATHS.dist,
         publicPath: '/',
-        filename: '/main.min.js',
-        /*library: 'BuildingNavigator',
-        libraryTarget: 'umd',
-        umdNamedDefine: true*/
+        filename: 'main.min.js',
+        libraryTarget: 'var'
     },
     resolve: {
         root: path.resolve(__dirname),
@@ -37,13 +36,6 @@ module.exports = {
         sqlite3: 'sqlite3'
     },
     module: {
-        preLoaders: [
-            {
-                test: /\.js?$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader'
-            },
-        ],
         loaders: [
          {
            test: /\.js?$/,

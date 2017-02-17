@@ -1,56 +1,39 @@
-/*eslint-disable no-console */
-/*eslint no-unused-vars: 0*/
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {createStore, applyMiddleware} from 'redux';
-import {Router, Route, browserHistory, hashHistory} from 'react-router';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
-//import a11y from 'react-a11y';
-// import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import mainReducer from './reducers';
-import api from './middleware/api';
-import getRoutes from './routes';
+import Logger from './utils/Logger';
 
-const BuildingNavigator = (config) => {
+import BuildingStore from './stores/BuildingStore';
+import FilterStore from './stores/FilterStore';
+import MapStore from './stores/MapStore';
+import UIStore from './stores/UIStore';
+
+import BuildingNavigator from './BuildingNavigator';
+
+/**
+ * Initial create Logger and stores.
+ * Render BuildingNavigator and pass Logger and stores
+ *
+ * @param {Object} config Configuration object which has key 'container' set to target ID.
+ * @throws Container id not given
+ */
+const runBuildingNavigator = (config) => {
     if (! ('container' in config)) {
         throw new Error('Error: "container" id not found');
     }
 
-    // Needed for onTouchTap
-    // http://stackoverflow.com/a/34015469/988941
-    // injectTapEventPlugin();
+    const loggerMode = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
+    const logger = new Logger(loggerMode);
+    const stores = {
+        buildingStore: new BuildingStore(logger),
+        filterStore: new FilterStore(logger),
+        mapStore: new MapStore(logger),
+        uiStore: new UIStore(logger)
+    };
+    //const router = new Router(logger);
+    //router.createRoutes();
 
-    // warn about accessiblity issues
-    // TODO only in DEV mode, throws react TypeError: ReactDOM.findDOMNode is not a function...
-    //a11y(React);
+    ReactDOM.render( <BuildingNavigator stores={stores} logger={logger} />, document.getElementById(config.container) );
+}
 
-    const logger = createLogger();
-    const store = createStore(
-        mainReducer,
-        undefined, // @todo may add intial values here...
-        applyMiddleware(thunk, api, logger) // logger mus be the last middleware
-    );
-
-    const state = store.getState();
-    state.main.rootNodeId = config.container;
-    const appEl = document.getElementById(state.main.rootNodeId);
-    ReactDOM.render(
-        <Provider store={store}>
-            <Router history={hashHistory}
-                onUpdate={() => {
-                    // ...
-                }}
-            >
-                {getRoutes()}
-            </Router>
-        </Provider>,
-        appEl
-    );
-};
-
-module.exports = BuildingNavigator;
-window.BuildingNavigator = BuildingNavigator;
+module.exports = runBuildingNavigator;

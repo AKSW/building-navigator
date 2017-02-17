@@ -1,0 +1,103 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save-dev',
+1 verbose cli   'jest',
+1 verbose cli   'babel-jest' ]
+2 info using npm@3.8.6
+3 info using node@v5.12.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData jest
+8 silly fetchPackageMetaData babel-jest
+9 silly fetchNamedPackageData jest
+10 silly mapToRegistry name jest
+11 silly mapToRegistry using default registry
+12 silly mapToRegistry registry https://registry.npmjs.org/
+13 silly mapToRegistry data Result {
+13 silly mapToRegistry   raw: 'jest',
+13 silly mapToRegistry   scope: null,
+13 silly mapToRegistry   name: 'jest',
+13 silly mapToRegistry   rawSpec: '',
+13 silly mapToRegistry   spec: 'latest',
+13 silly mapToRegistry   type: 'tag' }
+14 silly mapToRegistry uri https://registry.npmjs.org/jest
+15 silly fetchNamedPackageData babel-jest
+16 silly mapToRegistry name babel-jest
+17 silly mapToRegistry using default registry
+18 silly mapToRegistry registry https://registry.npmjs.org/
+19 silly mapToRegistry data Result {
+19 silly mapToRegistry   raw: 'babel-jest',
+19 silly mapToRegistry   scope: null,
+19 silly mapToRegistry   name: 'babel-jest',
+19 silly mapToRegistry   rawSpec: '',
+19 silly mapToRegistry   spec: 'latest',
+19 silly mapToRegistry   type: 'tag' }
+20 silly mapToRegistry uri https://registry.npmjs.org/babel-jest
+21 verbose request uri https://registry.npmjs.org/jest
+22 verbose request no auth needed
+23 info attempt registry request try #1 at 12:11:34 PM
+24 verbose request id 0de0311b3e9dd1b1
+25 http request GET https://registry.npmjs.org/jest
+26 verbose request uri https://registry.npmjs.org/babel-jest
+27 verbose request no auth needed
+28 info attempt registry request try #1 at 12:11:35 PM
+29 http request GET https://registry.npmjs.org/babel-jest
+30 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+31 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+32 info attempt registry request try #2 at 12:12:05 PM
+33 http request GET https://registry.npmjs.org/jest
+34 info attempt registry request try #2 at 12:12:05 PM
+35 http request GET https://registry.npmjs.org/babel-jest
+36 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+37 info retry will retry, error on last attempt: Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+38 info attempt registry request try #3 at 12:13:25 PM
+39 http request GET https://registry.npmjs.org/jest
+40 info attempt registry request try #3 at 12:13:25 PM
+41 http request GET https://registry.npmjs.org/babel-jest
+42 silly fetchPackageMetaData Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+42 silly fetchPackageMetaData     at errnoException (dns.js:26:10)
+42 silly fetchPackageMetaData     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:77:26)
+42 silly fetchPackageMetaData  error for jest { [Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443]
+42 silly fetchPackageMetaData   code: 'ENOTFOUND',
+42 silly fetchPackageMetaData   errno: 'ENOTFOUND',
+42 silly fetchPackageMetaData   syscall: 'getaddrinfo',
+42 silly fetchPackageMetaData   hostname: 'registry.npmjs.org',
+42 silly fetchPackageMetaData   host: 'registry.npmjs.org',
+42 silly fetchPackageMetaData   port: 443 }
+43 silly fetchPackageMetaData Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+43 silly fetchPackageMetaData     at errnoException (dns.js:26:10)
+43 silly fetchPackageMetaData     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:77:26)
+43 silly fetchPackageMetaData  error for babel-jest { [Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443]
+43 silly fetchPackageMetaData   code: 'ENOTFOUND',
+43 silly fetchPackageMetaData   errno: 'ENOTFOUND',
+43 silly fetchPackageMetaData   syscall: 'getaddrinfo',
+43 silly fetchPackageMetaData   hostname: 'registry.npmjs.org',
+43 silly fetchPackageMetaData   host: 'registry.npmjs.org',
+43 silly fetchPackageMetaData   port: 443 }
+44 silly rollbackFailedOptional Starting
+45 silly rollbackFailedOptional Finishing
+46 silly runTopLevelLifecycles Starting
+47 silly runTopLevelLifecycles Finishing
+48 silly install printInstalled
+49 verbose stack Error: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+49 verbose stack     at errnoException (dns.js:26:10)
+49 verbose stack     at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:77:26)
+50 verbose cwd /usr/local/node/project/dist/data
+51 error Linux 4.2.7-200.fc22.x86_64
+52 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "--save-dev" "jest" "babel-jest"
+53 error node v5.12.0
+54 error npm  v3.8.6
+55 error code ENOTFOUND
+56 error errno ENOTFOUND
+57 error syscall getaddrinfo
+58 error network getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+59 error network This is most likely not a problem with npm itself
+59 error network and is related to network connectivity.
+59 error network In most cases you are behind a proxy or have bad network settings.
+59 error network
+59 error network If you are behind a proxy, please make sure that the
+59 error network 'proxy' config is set properly.  See: 'npm help config'
+60 verbose exit [ 1, true ]

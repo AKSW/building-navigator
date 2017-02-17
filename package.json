@@ -1,7 +1,9 @@
 {
-  "name": "Bootstrap",
+  "name": "building-navigator",
   "description": "No description yet",
-  "main": "index.js",
+  "main": "app/main.js",
+  "author": "Simeon Ackermann, Konrad Abicht",
+  "license": "GPL-3.0",
   "scripts": {
     "lint": "eslint src/",
     "start": "gulp",
@@ -9,65 +11,28 @@
     "test:watch": "npm test -- --watch",
     "build-dist": "webpack -p --progress --config ./webpack.production.config.js && echo '\n\n========================================\n\nDo not forget to push the dist-changes!\n\n========================================'"
   },
-  "author": "Simeon Ackermann",
-  "license": "",
   "dependencies": {
-    "immutable": "^3.8.1",
     "js-cookie": "^2.1.3",
     "leaflet": "^0.7.7",
+    "promise-polyfill": "^6.0.2",
     "react": "^15.0.0",
     "react-bootstrap": "^0.30.1",
     "react-dom": "^15.0.0",
     "react-leaflet": "^0.12.3",
-    "react-redux": "^4.4.5",
-    "react-router": "~2.8.1",
-    "react-router-bootstrap": "^0.23.1",
     "react-swipeable": "^3.7.0",
     "react-tap-event-plugin": "^1.0.0",
-    "redux": "~3.6.0",
-    "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.1.0",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.9.0",
-    "babel-eslint": "^6.0.4",
-    "babel-jest": "~16.0.0",
+    "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.4",
-    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
-    "css-loader": "^0.26.1",
-    "eslint": "^3.0.0",
-    "eslint-loader": "^1.3.0",
-    "eslint-plugin-react": "^6.0.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-git": "^1.11.3",
-    "gulp-util": "^3.0.7",
-    "jest": "~16.0.1",
-    "react-a11y": "^0.3.3",
-    "style-loader": "^0.13.1",
+    "jest": "^18.1.0",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1",
-    "webpack-node-externals": "^1.3.3"
-  },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "ttl"
-    ],
-    "moduleDirectories": [
-      "node_modules",
-      "bower_components",
-      "shared"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
-      "^.+\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js"
-    }
+    "webpack-dev-server": "^1.14.1"
   },
   "babel": {
     "presets": [

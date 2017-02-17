@@ -1,9 +1,9 @@
 import React from 'react';
 
-class A11yIcons extends React.Component {
+class Marker extends React.Component {
     render() {
         return (null);
     }
 }
 
-export default A11yIcons;
+export default Marker;

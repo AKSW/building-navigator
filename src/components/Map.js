@@ -1,85 +1,44 @@
-/*eslint-disable no-console */
-/*eslint no-unused-vars: 0*/
+import React from 'react';
 
-/*
- * Map component
- */
+import Marker from './map/Marker';
 
-import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
-import {Button, Glyphicon} from 'react-bootstrap';
-import {Map as OSMap, Marker, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
+class Map extends React.Component {
+    constructor(props) {
+        super();
 
-import Markers from './Markers';
+        this.state = {
+            buildings: []
+        }
+    }
 
-const Map = ({
-    prevHistoryRoute,
-    mapConfig,
-    markers,
-    selectedPlaceId,
-    requestPlaces,
-    hideMapControls,
-    onLoadMap,
-    onClickMarker,
-    onClickGroupMarker,
-    onZoomend,
-    onDragend,
-    onClickShowDetails,
-    sidebarIsVisible,
-    doPlacesRequestAfterDrag,
-}) => {
-    const center = [mapConfig.center.lat, mapConfig.center.lng];
-    let mapRef = null;
+    componentWillReceiveProps() {
+        this.setState({
+            buildings: this.props.stores.buildingStore.getVisibles()
+        });
+    }
 
-    const osMapHtml = (
-        <OSMap
-            id="OSMap"
-            center={center}
-            zoom={mapConfig.zoom}
-            zoomControl={false}
-            onZoomend={e => onZoomend(mapRef)}
-            onDragend={e => onDragend(mapRef, doPlacesRequestAfterDrag)}
-            ref={node => (mapRef = node)}
-        >
-            <TileLayer
-                onLoad={e => onLoadMap(e)}
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-            />
-            {!hideMapControls &&
-                <ZoomControl position="topright"/>
-            }
-            {!hideMapControls &&
-                <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
-            }
-            <Markers
-                markers={markers}
-                selectedPlaceId={selectedPlaceId}
-                onClickMarker={onClickMarker}
-                onClickGroupMarker={onClickGroupMarker}
-                onClickShowDetails={onClickShowDetails}
-            />
-        </OSMap>
-    );
+    /**
+     * @todo Map should only update if visible buildings changed
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+    }
 
-    return (
-        <div id="mapContainer" className={sidebarIsVisible === true ? '' : 'full'} tabIndex="-1">
-            {osMapHtml}
-            {requestPlaces &&
-                <span>...loading places</span>
-            }
-            {!requestPlaces && markers.length === 0 &&
-                <span>No places found!</span>
-            }
-        </div>
-    );
-};
-
-Map.propTypes = {
-    mapConfig: PropTypes.object,
-    requestPlaces: PropTypes.bool,
-    places: PropTypes.array,
-    onZoomend: PropTypes.func
-};
+    render() {
+        return (
+            <div>
+                <p>{`Anzahl gebäude: ${this.state.buildings.length}`}</p>
+                <ul>
+                    {this.state.buildings.map((building) =>
+                        <li key={building.id}>
+                            <span>{building.title}</span>
+                        </li>
+                    )}
+                </ul>
+                <Marker />
+            </div>
+        );
+    }
+}
 
 export default Map;
