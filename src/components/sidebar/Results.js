@@ -4,7 +4,7 @@ class Results extends React.Component {
     render() {
         return (
             <div>
-                <h3>Result...</h3>
+                <h3>Results</h3>
                 Gebäude: 
                 {this.props.buildings.length}
             </div>

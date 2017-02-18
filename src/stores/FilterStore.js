@@ -9,7 +9,7 @@ class FilterStore {
         this.add({
             uniqueKey: 'title',
             title: 'Suche',
-            selected: ''
+            value: ''
         })
 
         /*
@@ -22,7 +22,7 @@ class FilterStore {
                 {title: 'egal', value: 0},
                 {title: 'ist vorhanden', value: 1},
             ],
-            selected: 0
+            value: 0
         });
     }
 
@@ -53,7 +53,7 @@ class FilterStore {
     update(updated_filter_key, new_filter_value) {
         this.filters.forEach((filter, fid) => {
             if (updated_filter_key == filter.uniqueKey) {
-                filter.selected = new_filter_value;
+                filter.value = new_filter_value;
                 return;
             }
         });

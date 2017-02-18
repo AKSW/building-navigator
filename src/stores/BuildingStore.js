@@ -22,28 +22,41 @@ class BuildingStore {
                 const building = buildings[idx];
                 building.id = idx;
                 building.visible = true;
-                building.a11yRating = 0.0;
+                building.a11yRating = this.getA11yRating(building);
                 this.buildings.push(building);
             }
+            return this.buildings.length;
         };
         
         return this.jsonLoader.loadJson('/building-coordinates.json')
             .then((buildings) => {
-                addAll(buildings);
-                return this.buildings.length;
+                return addAll(buildings);
             }).catch((ex) => {
                 throw new Error(ex);
             });
     }
 
     loadBuildingData(id) {
+        const load = (data) => {
+            // @todo
+            return true;
+        };
+
         return this.jsonLoader.loadJson(`/buildings/${id}.json`)
             .then((data) => {
-                //addAll(buildings);
-                return true;
+                return load(data);
             }).catch((ex) => {
                 throw new Error(ex);
             });
+    }
+
+    /**
+     * Get accessibility (a11y) rating of a building
+     *
+     * @return {Float}
+     */
+    getA11yRating(building) {
+        return 0.00;
     }
 
     /**
@@ -77,8 +90,12 @@ class BuildingStore {
             filters.forEach((filter, fid) => {
 
                 if (filter.uniqueKey === 'title') {
-                    // filter by title ...
-                } else if (building[filter.uniqueKey] < filter.selected) {
+                    const r = new RegExp(filter.value, "i");
+                    if (building.title.match(r) === null) {
+                        isVisible = false;
+                        return;
+                    }
+                } else if (building[filter.uniqueKey] < filter.value) {
                     isVisible = false;
                     return;
                 }

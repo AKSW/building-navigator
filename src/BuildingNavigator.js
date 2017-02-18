@@ -82,8 +82,7 @@ class BuildingNavigator extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>Building Navigator</h1>
+            <div className="row">
                 {this.logger.hasError() &&
                     <p>Fehler, Beschreibung siehe Konsole.</p>
                 }

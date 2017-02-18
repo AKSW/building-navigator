@@ -1,5 +1,14 @@
 import React from 'react';
 
+import {
+    Button,
+    Col,
+    Form,
+    FormGroup,
+    ControlLabel,
+    FormControl,
+} from 'react-bootstrap';
+
 class Search extends React.Component {
     constructor(props) {
         super();
@@ -57,29 +66,63 @@ class Search extends React.Component {
 
 
         return (
-            <form onSubmit={this.handleSubmit}>
+            <Form horizontal onSubmit={this.handleSubmit}>
                 <h2>Suche</h2>
-                <div>
-                    Suche: <input type="search" value={search.selected} name={search.uniqueKey} onChange={this.handleChange} />
-                </div>
+                
+                <FormGroup controlId="formFilterSearch">
+                    <Col md={12}>
+                        <ControlLabel><h3>Gebäudename</h3></ControlLabel>
+                        <FormControl
+                            type="search"
+                            name={search.uniqueKey}
+                            defaultValue={search.value}
+                            onChange={this.handleChange}
+                            aria-label="Hier können Sie Gebäude über ihren Namen suchen"
+                        />
+                    </Col>
+                </FormGroup>
+
+                <FormGroup>
+                    <Col md={10}>
+                        <h3>Gebäude über Filter auswählen</h3>
+                    </Col>
+                </FormGroup>
+
+                {/**/}
+
+                    
 
                 {selectFilters.map((filter) =>
-                    <div key={filter.title}>
-
-                        <strong>{filter.title}:</strong><br/>
-
-                        <select name={filter.uniqueKey}
-                                onChange={this.handleChange}
-                                title={filter.title}>
-
-                            {filter.valueSet.map((value) =>
-                                <option value={value.value} key={value.value}>{value.title}</option>
-                            )}
-
-                        </select>
-                    </div>
+                    <FormGroup controlId={`formFilter${filter.uniqueKey}`} key={filter.uniqueKey}>
+                        <Col componentClass={ControlLabel} md={3}>
+                            {filter.title}
+                        </Col>
+                        <Col md={9}>
+                            <div className="filterSelect">
+                                <FormControl
+                                    componentClass="select"
+                                    onChange={this.handleChange}
+                                    defaultValue={filter.value}
+                                    size={filter.valueSet.length}
+                                    name={filter.uniqueKey}
+                                    aria-label=""
+                                    className="filterSelect"
+                                >
+                                    {filter.valueSet.map((entry, key) => {
+                                        return (
+                                            <option key={key} value={entry.value}>{entry.title}</option>
+                                        );
+                                    })}
+                                </FormControl>
+                            </div>
+                        </Col>
+                    </FormGroup>
                 )}
-            </form>
+
+                <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
+                    <span>Anzeigen</span>
+                </Button>
+            </Form>
         );
     }
 }

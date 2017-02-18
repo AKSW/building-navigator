@@ -26,7 +26,8 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-6">
+                <h3>Map</h3>
                 <p>{`Anzahl gebäude: ${this.state.buildings.length}`}</p>
                 <ul>
                     {this.state.buildings.map((building) =>

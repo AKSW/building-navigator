@@ -24,7 +24,7 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col-md-4">
                 {this.state.sidebarRoute === 'search' &&
                     <Search filters={this.state.filters} />
                 }
