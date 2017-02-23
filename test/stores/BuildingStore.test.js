@@ -1,7 +1,7 @@
 import React from 'react';
 import Promise from 'promise-polyfill';
 
-import BuildingStore from '../src/stores/BuildingStore';
+import BuildingStore from '../../src/stores/BuildingStore';
 
 const buildingCoords = `{
     "0-name":{"category":"Bildung","title":"My first Title","longitude":0,"latitude":0,"entrance-suit-f-wheelchair":0,"lift-suit-f-wheelchair":0,"lift-avail":0,"toilet-avail":0,"toilet-suit-f-wheelchair":0,"parking-avail":false,"parking-f-disabled-avail":0,"help-for-hearing-imp":0,"help-for-blind":0,"general-help":0},
@@ -29,16 +29,16 @@ const mockResponse = (status, statusText, response) => {
 window.fetch = jest.fn().mockImplementation(() =>
     Promise.resolve(mockResponse(200, null, buildingCoords)));
 
-describe('BuildingStore', () => {
+describe('BuildingStore()', () => {
 
     const buildingStore = new BuildingStore();
 
-    it('Empty BuildingStore', () => {
+    it('creates an empty store', () => {
         expect(buildingStore.getAll().length).toBe(0);
         expect(buildingStore.getVisibles().length).toBe(0);
     });
 
-    it('Init 10 BuildingStore', () => {
+    it('inits 10 buildings', () => {
         return buildingStore.initAll()
             .then((count) => {
                 expect(count).toBe(10);
@@ -55,7 +55,7 @@ describe('BuildingStore', () => {
         }
     ];
 
-    it('BuildingStore apply lift-avail filter', () => {
+    it('applies `lift-avail` filter', () => {
         return buildingStore1.initAll()
             .then((data) => {
                 buildingStore1.applyFilters(filter1);
@@ -72,7 +72,7 @@ describe('BuildingStore', () => {
         }
     ];
 
-    it('BuildingStore apply lift-avail filter', () => {
+    it('it applies `title` filter', () => {
         return buildingStore2.initAll()
             .then((data) => {
                 buildingStore2.applyFilters(filter2);
