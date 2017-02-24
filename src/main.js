@@ -2,12 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Logger from './utils/Logger';
-
-import BuildingStore from './stores/BuildingStore';
-import FilterStore from './stores/FilterStore';
-import MapStore from './stores/MapStore';
-import UIStore from './stores/UIStore';
-
+import * as Store from './stores';
 import BuildingNavigator from './BuildingNavigator';
 
 /**
@@ -25,10 +20,10 @@ const runBuildingNavigator = (config) => {
     const loggerMode = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
     const logger = new Logger(loggerMode);
     const stores = {
-        buildingStore: new BuildingStore(logger),
-        filterStore: new FilterStore(logger),
-        mapStore: new MapStore(logger),
-        uiStore: new UIStore(logger)
+        buildingStore: new Store.BuildingStore(logger),
+        filterStore: new Store.FilterStore(logger),
+        mapStore: new Store.MapStore(logger),
+        uiStore: new Store.UIStore(logger)
     };
     //const router = new Router(logger);
     //router.createRoutes();
