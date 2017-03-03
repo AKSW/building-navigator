@@ -1,4 +1,5 @@
 import React from 'react';
+import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
 
 import Marker from './map/Marker';
 
@@ -7,13 +8,17 @@ class Map extends React.Component {
         super();
 
         this.state = {
-            buildings: []
+            buildings: [],
+            mapStore: props.stores.mapStore
         }
+
+        this.handleZoomend = this.handleZoomend.bind(this);
+        this.handleDragend = this.handleDragend.bind(this);
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            buildings: this.props.stores.buildingStore.getVisibles()
+            buildings: nextProps.stores.buildingStore.getVisibles()
         });
     }
 
@@ -24,19 +29,52 @@ class Map extends React.Component {
         return true;
     }
 
+    updateMapConfig() {
+        const osmap = this.mapNode.leafletElement;
+        super.handleEvent({
+            action: 'update-map-config',
+            payload: {
+                center: {
+                    latitude: osmap.getCenter().lat,
+                    longitude: osmap.getCenter().lng
+                },
+                zoom: osmap.getZoom()
+            }
+        });
+    }
+
+    handleZoomend(e) {
+        this.updateMapConfig();
+    }
+
+    handleDragend(e) {
+        this.updateMapConfig();
+    }
+
     render() {
+        const mapCenter = [this.state.mapStore.get('center').latitude, this.state.mapStore.get('center').longitude];
+
+        const markers = this.state.buildings.map((building) => {
+            return (
+                <Marker key={building.id} building={building} zoom={this.state.mapStore.get('zoom')} />
+            );
+        });
         return (
-            <div className="col-md-6">
-                <h3>Map</h3>
-                <p>{`Anzahl gebäude: ${this.state.buildings.length}`}</p>
-                <ul>
-                    {this.state.buildings.map((building) =>
-                        <li key={building.id}>
-                            <span>{building.title}</span>
-                        </li>
-                    )}
-                </ul>
-                <Marker />
+            <div className="map-wrapper">
+                <OSMap
+                    ref={(node) => { this.mapNode = node; }}
+                    className="map"
+                    center={mapCenter}
+                    zoom={this.state.mapStore.get('zoom')}
+                    zoomControl={false}
+                    onZoomend={this.handleZoomend}
+                    onDragend={this.handleDragend}
+                >
+                    <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>' url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                    <ZoomControl position="topright"/>
+                    <ScaleControl position="bottomright" maxWidth={300} imperial={false} />
+                    {markers}
+                </OSMap>
             </div>
         );
     }

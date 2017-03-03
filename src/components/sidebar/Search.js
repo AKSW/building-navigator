@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
     Button,
     Col,
@@ -21,9 +20,9 @@ class Search extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            filters: this.props.filters,
+            filters: nextProps.filters,
         });
     }
 
@@ -31,7 +30,7 @@ class Search extends React.Component {
         super.handleEvent({
             action: 'apply-filters',
             payload: {
-                filters: this.props.filters
+                filters: this.state.filters
             }
         });
         super.handleEvent({
@@ -48,8 +47,8 @@ class Search extends React.Component {
         super.handleEvent({
             action: 'update-filter',
             payload: {
-                updated_filter_key: e.target.getAttribute('name'),
-                new_filter_value: e.target.value,
+                filterId: e.target.getAttribute('name'),
+                setKey: e.target.value,
             }
         });
     }
@@ -67,9 +66,11 @@ class Search extends React.Component {
 
         return (
             <Form horizontal onSubmit={this.handleSubmit}>
-                <h2>Suche</h2>
+                <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
+                    <span>Zeige Ergebnisse</span>
+                </Button>
                 
-                <FormGroup controlId="formFilterSearch">
+                {/*<FormGroup controlId="formFilterSearch">
                     <Col md={12}>
                         <ControlLabel><h3>Gebäudename</h3></ControlLabel>
                         <FormControl
@@ -80,7 +81,7 @@ class Search extends React.Component {
                             aria-label="Hier können Sie Gebäude über ihren Namen suchen"
                         />
                     </Col>
-                </FormGroup>
+                </FormGroup>*/}
 
                 <FormGroup>
                     <Col md={10}>
@@ -93,7 +94,7 @@ class Search extends React.Component {
                     
 
                 {selectFilters.map((filter) =>
-                    <FormGroup controlId={`formFilter${filter.uniqueKey}`} key={filter.uniqueKey}>
+                    <FormGroup controlId={`formFilter${filter.id}`} key={filter.id}>
                         <Col componentClass={ControlLabel} md={3}>
                             {filter.title}
                         </Col>
@@ -102,15 +103,15 @@ class Search extends React.Component {
                                 <FormControl
                                     componentClass="select"
                                     onChange={this.handleChange}
-                                    defaultValue={filter.value}
+                                    value={filter.selected}
                                     size={filter.valueSet.length}
-                                    name={filter.uniqueKey}
-                                    aria-label=""
+                                    name={filter.id}
+                                    aria-label={filter.aria}
                                     className="filterSelect"
                                 >
                                     {filter.valueSet.map((entry, key) => {
                                         return (
-                                            <option key={key} value={entry.value}>{entry.title}</option>
+                                            <option key={key} value={key}>{entry.title}</option>
                                         );
                                     })}
                                 </FormControl>
@@ -120,7 +121,7 @@ class Search extends React.Component {
                 )}
 
                 <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
-                    <span>Anzeigen</span>
+                    <span>Zeige Ergebnisse</span>
                 </Button>
             </Form>
         );

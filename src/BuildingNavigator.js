@@ -2,10 +2,11 @@ import React from 'react';
 import _ from 'lodash';
 
 import Logger from './utils/Logger';
-
+import {getUserGeolocation} from './utils/GeoUtils';
 import EventHandler from './EventHandler';
 import Sidebar from './components/Sidebar';
 import Map from './components/Map';
+import Welcome from './components/Welcome';
 
 /**
  * Main class, holds stores, logger, eventHandler and renders all other components
@@ -37,15 +38,24 @@ class BuildingNavigator extends React.Component {
     }
 
     /*
-    * Component will mount, do actions without sideeffect
-    */
-    componentWillMount() {
-    }
-
-    /*
-    * Componented mounted, load initial building data
+    * Componented mounted, do some initial things
     */
     componentDidMount() {
+        // if geolocate successed, center map
+        // @todo animate new map center with map.setView(...)
+        getUserGeolocation().then(
+            response => {
+                this.handleEvent({
+                    action: 'update-map-center',
+                    payload: {
+                        latitude: response.latitude,
+                        longitude: response.longitude,
+                    }
+                });
+            }
+        );
+
+        // load initial buildind data
         this.handleEvent({action: 'init-buildings'});
     }
 
@@ -55,20 +65,12 @@ class BuildingNavigator extends React.Component {
         this.logger.log('Current stores: ', this.stores);
     }
 
-    componentDidUpdate() {
-    }
-
-    componentWillUnmount() {
-    }
-
     /**
      * Pass event to EventHandler and update this state
      *
      * @param Object event with action and data object
      */
     handleEvent(event) {
-        this.logger.log('Handle event: ', event);
-
         this.eventHandler.handleEvent(event).then(
             response => {
                 this.setState( this.state );
@@ -82,12 +84,17 @@ class BuildingNavigator extends React.Component {
 
     render() {
         return (
-            <div className="row">
+            <div className="building-navigator">
                 {this.logger.hasError() &&
-                    <p>Fehler, Beschreibung siehe Konsole.</p>
+                    <p>Fehler ...</p>
+                }
+                {this.stores.uiStore.get('showWelcome') &&
+                    <Welcome />
                 }
                 <Sidebar stores={this.stores} />
-                <Map stores={this.stores} />
+                {this.stores.uiStore.get('globalDisability') !== "blind" &&
+                    <Map stores={this.stores} />
+                }
             </div>
         );
     }

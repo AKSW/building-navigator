@@ -9,27 +9,27 @@ class Sidebar extends React.Component {
 
         this.state = {
             sidebarRoute: 'search',
+            stores: props.stores,
             filters: props.stores.filterStore.getAll(),
-            buildings: [],
         };
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            sidebarRoute: this.props.stores.uiStore.get('sidebarRoute'),
-            filters: this.props.stores.filterStore.getAll(),
-            buildings: this.props.stores.buildingStore.getVisibles()
+            sidebarRoute: nextProps.stores.uiStore.get('sidebarRoute'),
+            filters: nextProps.stores.filterStore.getAll()
         });
     }
 
     render() {
+        const sidebarClass = this.state.stores.uiStore.get('globalDisability') === "blind" ? "sidebar sidebar-full" : "sidebar";
         return (
-            <div className="col-md-4">
+            <div className={sidebarClass}>
                 {this.state.sidebarRoute === 'search' &&
                     <Search filters={this.state.filters} />
                 }
                 {this.state.sidebarRoute === 'results' &&
-                    <Results buildings={this.state.buildings} />
+                    <Results stores={this.state.stores} />
                 }
             </div>
         );
