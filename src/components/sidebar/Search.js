@@ -29,9 +29,7 @@ class Search extends React.Component {
     handleSubmit(e) {
         super.handleEvent({
             action: 'apply-filters',
-            payload: {
-                filters: this.state.filters
-            }
+            payload: { filters: this.state.filters }
         });
         super.handleEvent({
             action: 'update-ui-config',
@@ -50,7 +48,14 @@ class Search extends React.Component {
                 filterId: e.target.getAttribute('name'),
                 setKey: e.target.value,
             }
-        });
+        }).then(
+            response => {
+                super.handleEvent({
+                    action: 'apply-filters',
+                    payload: { filters: this.state.filters }
+                });
+            }
+        );
     }
 
     render() {
