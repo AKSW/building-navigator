@@ -37,8 +37,7 @@ class FilterStore {
             valueSet: [
                 {title: 'keine Einschränkung', key: 'lift-avail', value: 0},
                 {title: 'ist vorhanden', key: 'lift-avail', value: 1},
-                {title: 'ist teilweise barrierefrei', key: 'lift-suit-f-wheelchair', value: 1},
-                {title: 'ist barrierefrei', key: 'lift-suit-f-wheelchair', value: 2},
+                {title: 'ist barrierefrei', key: 'lift-suit-f-wheelchair', value: 1},
             ],
             selected: 0,
         });

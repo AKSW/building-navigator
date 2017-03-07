@@ -59,16 +59,10 @@ class A11yIcons extends React.Component {
         };
         const lift = () => {
             let obj = {icon: null, descr: null};
-            if (building['lift-suit-f-wheelchair'] === 2) {
+            if (building['lift-suit-f-wheelchair'] === 1) {
                 obj = iconObj({
                     src: 'elevator-wheelchair.gif',
                     label: 'Aufzug ist vorhanden und rollstuhlgerecht'
-                });
-            }
-            else if (building['lift-suit-f-wheelchair'] === 1) {
-                obj = iconObj({
-                    src: 'elevator-restr.gif',
-                    label: 'Aufzug ist vorhanden und teilweise rollstuhlgerecht'
                 });
             }
             else if (building['lift-avail'] === 1) {
