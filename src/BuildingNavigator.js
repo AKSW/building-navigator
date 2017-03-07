@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
 import {getUserGeolocation} from './utils/GeoUtils';
@@ -31,7 +32,12 @@ class BuildingNavigator extends React.Component {
         * allows components to acces them by calling: super.handleEvent()
         */
         React.Component.prototype.handleEvent = (event) => {
-            this.handleEvent(event);
+            return new Promise((resolve, reject) => {
+                this.handleEvent(event).then(
+                    response => resolve(response),
+                    error => reject(error)
+                );
+            });
         };
         React.Component.prototype.logger = this.logger;
         React.Component.prototype.stores = this.stores;
@@ -69,17 +75,22 @@ class BuildingNavigator extends React.Component {
      * Pass event to EventHandler and update this state
      *
      * @param Object event with action and data object
+     * @return Promise with response or error
      */
     handleEvent(event) {
-        this.eventHandler.handleEvent(event).then(
-            response => {
-                this.setState( this.state );
-            },
-            error => {
-                this.logger.log(error, event, 'error');
-                this.setState( this.state );
-            }
-        );
+        return new Promise((resolve, reject) => {
+            this.eventHandler.handleEvent(event).then(
+                response => {
+                    this.setState( this.state );
+                    resolve(response);
+                },
+                error => {
+                    this.logger.log(error, event, 'error');
+                    this.setState( this.state );
+                    reject(error);
+                }
+            );
+        });
     }
 
     render() {

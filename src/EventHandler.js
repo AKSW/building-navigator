@@ -26,7 +26,7 @@ class EventHandler {
                 case 'init-buildings':
                     this.stores.buildingStore.initAll().then(
                         response => {
-                            resolve();
+                            resolve(response);
                         },
                         error => {
                             reject(error);
@@ -36,7 +36,7 @@ class EventHandler {
                 case 'load-building-data':
                     this.stores.buildingStore.loadBuildingData(payload.buildingId).then(
                         response => {
-                            resolve();
+                            resolve(response);
                         },
                         error => {
                             reject(error);
@@ -45,7 +45,7 @@ class EventHandler {
                     break;                
                 case 'apply-filters':
                     this.stores.buildingStore.applyFilters(payload.filters);
-                    resolve();
+                    resolve(true);
                     break;
                 case 'toggle-show-building-details':
                     // may load building details first
@@ -54,7 +54,7 @@ class EventHandler {
                         this.handleEvent({action:'load-building-data', payload: payload}).then(
                             response => {
                                 this.stores.buildingStore.toggleShowBuildingDetails(payload.buildingId);
-                                resolve();
+                                resolve(true);
                             },
                             error => {
                                 reject(error);
@@ -63,7 +63,7 @@ class EventHandler {
 
                     } else {
                         this.stores.buildingStore.toggleShowBuildingDetails(payload.buildingId);
-                        resolve();
+                        resolve(true);
                     }
                     break;
                 /*
@@ -71,7 +71,7 @@ class EventHandler {
                 */
                 case 'update-filter':
                     this.stores.filterStore.update(payload.filterId, parseInt(payload.setKey));
-                    resolve();
+                    resolve(true);
                     break;
                 case 'reset-all-filters':
                     this.stores.filterStore.resetAll();
@@ -82,22 +82,22 @@ class EventHandler {
                 */
                 case 'update-ui-config':
                     this.stores.uiStore.update(payload.key, payload.value);
-                    resolve();
+                    resolve(true);
                     break;
                 /*
                 MapStore() events
                 */
                 case 'update-map-config':
                     this.stores.mapStore.updateMapConfig(payload.center, payload.zoom);
-                    resolve();
+                    resolve(true);
                     break;
                 case 'update-map-center':
                     this.stores.mapStore.updateCenter(payload.latitude, payload.longitude);
-                    resolve();
+                    resolve(true);
                     break;
                 case 'update-map-zoom':
                     this.stores.mapStore.updateZoom(payload.zoom);
-                    resolve();
+                    resolve(true);
                     break;
                 default:
                     reject('Unkown action given: ' + action);
