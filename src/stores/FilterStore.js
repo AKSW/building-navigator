@@ -9,6 +9,7 @@ class FilterStore {
         // this.add({
         //     uniqueKey: 'title',
         //     title: 'Suche',
+        //     type: 'search'
         //     value: ''
         // })
 
@@ -17,14 +18,16 @@ class FilterStore {
          */
         this.add({
             id: 'entrance',
+            type: 'select-one',
             title: 'Eingang',
+            icon: 'universal-access',
             aria: 'Aktueller Filter, Anforderungen an den Eingangsbereich',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'entrance-suit-f-wheelchair', value: 0},
                 {title: 'ist teilweise rollstuhlgerecht', key: 'entrance-suit-f-wheelchair', value: 1},
                 {title: 'ist rollstuhlgerecht', key: 'entrance-suit-f-wheelchair', value: 2},
             ],
-            selected: 0,
+            value: 0,
         });
 
         /*
@@ -32,14 +35,16 @@ class FilterStore {
          */
         this.add({
             id: 'lift',
+            type: 'select-one',
             title: 'Aufzug',
+            icon: 'elevator',
             aria: 'Aktueller Filter, Anforderungen an den Aufzug',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'lift-avail', value: 0},
                 {title: 'ist vorhanden', key: 'lift-avail', value: 1},
                 {title: 'ist barrierefrei', key: 'lift-suit-f-wheelchair', value: 1},
             ],
-            selected: 0,
+            value: 0,
         });
 
         /*
@@ -47,7 +52,9 @@ class FilterStore {
          */
         this.add({
             id: 'toilet',
+            type: 'select-one',
             title: 'Toilette',
+            icon: 'male-female',
             aria: 'Aktueller Filter, Anforderungen an die Toilette',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'toilet-avail', value: 0},
@@ -55,7 +62,7 @@ class FilterStore {
                 {title: 'ist teilweise rollstuhlgerecht', key: 'toilet-suit-f-wheelchair', value: 1},
                 {title: 'ist rollstuhlgerecht', key: 'toilet-suit-f-wheelchair', value: 2},
             ],
-            selected: 0,
+            value: 0,
         });
 
         /*
@@ -63,6 +70,7 @@ class FilterStore {
          */
         this.add({
             id: 'parking',
+            type: 'select-one',
             title: 'Parkplatz',
             aria: 'Aktueller Filter, Anforderungen an den Parkplatz',
             valueSet: [
@@ -70,7 +78,7 @@ class FilterStore {
                 {title: 'ist vorhanden', key: 'parking-avail', value: 1},
                 {title: 'ist behindertengerecht', key: 'parking-f-disabled-avail', value: 1},
             ],
-            selected: 0,
+            value: 0,
         });
 
         /*
@@ -78,39 +86,33 @@ class FilterStore {
          */ 
         this.add({
             id: 'blind',
+            type: 'checkbox',
             title: 'Hilfestellung für Sehgeschädigte',
-            aria: '',
-            valueSet: [
-                {title: 'nicht vorhanden', key: 'help-for-blind', value: 0},
-                {title: 'vorhanden', key: 'help-for-blind', value: 1},
-            ],
-            selected: 0,
+            aria: 'Hilfestellung für Sehgeschädigte',
+            key: 'help-for-blind',
+            value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
         /*
          * Hearing help
          */ 
         this.add({
             id: 'hearing',
+            type: 'checkbox',
             title: 'Hilfestellung für Hörgeschädigte',
-            aria: '',
-            valueSet: [
-                {title: 'nicht vorhanden', key: 'help-for-hearing-imp', value: 0},
-                {title: 'vorhanden', key: 'help-for-hearing-imp', value: 1},
-            ],
-            selected: 0,
+            aria: 'Hilfestellung für Hörgeschädigte',
+            key: 'help-for-hearing-imp',
+            value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
         /*
          * General help
          */ 
         this.add({
             id: 'general',
+            type: 'checkbox',
             title: 'Allgemeine Hilfestellung',
-            aria: '',
-            valueSet: [
-                {title: 'nicht vorhanden', key: 'general-help', value: 0},
-                {title: 'vorhanden', key: 'general-help', value: 1},
-            ],
-            selected: 0,
+            aria: 'Allgemeine Hilfestellung',
+            key: 'general-help',
+            value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
     }
 
@@ -136,12 +138,12 @@ class FilterStore {
      * Updates a filter by its key with a new selected-value.
      *
      * @param {String} Filter id
-     * @param {Integer} Selected key of value sets
+     * @param {Integer|String} Selected value of values sets, checkbox or input
      */
     update(id, value) {
         this.getAll().forEach((filter, fid) => {
             if (id == filter.id) {
-                filter.selected = value;
+                filter.value = value;
                 return;
             }
         });
