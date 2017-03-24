@@ -7,6 +7,7 @@ import {
     FormGroup,
     ControlLabel,
     FormControl,
+    Clearfix
 } from 'react-bootstrap';
 
 import Cookies from 'js-cookie';
@@ -20,7 +21,6 @@ class Welcome extends React.Component {
     }
 
     handleGlobalDisab(e) {
-        super.logger.log('@todo: set filers if global disability was selected');
         super.handleEvent({
             action: 'update-ui-config',
             payload: {
@@ -31,20 +31,23 @@ class Welcome extends React.Component {
         super.handleEvent({action: 'reset-all-filters'});
         if (e.target.value === 'move') {
             super.handleEvent({action: 'update-filter',
-                payload: {filterId: 'entrance', setKey: 1}
+                payload: {filterId: 'entrance', value: 1}
             });
             super.handleEvent({action: 'update-filter',
-                payload: {filterId: 'lift', setKey: 2}
+                payload: {filterId: 'lift', value: 2}
             });
             super.handleEvent({action: 'update-filter',
-                payload: {filterId: 'toilet', setKey: 2}
+                payload: {filterId: 'toilet', value: 2}
             });
         }
         else if (e.target.value === 'hear') {
             super.handleEvent({action: 'update-filter',
-                payload: {filterId: 'hearing', setKey: 1}
+                payload: {filterId: 'hearing', value: 1}
             });
         }
+        super.handleEvent({
+            action: 'apply-filters'
+        });
     }
 
     handleOk(e) {
@@ -62,27 +65,27 @@ class Welcome extends React.Component {
         return (
             <div>
                 <div className="welcome-bgr"></div>
-                <Modal.Dialog className="welcome-msg">
+                <Modal.Dialog className="welcome-msg" bsSize="large" autoFocus={true}>
                     <Modal.Header>
-                        <Modal.Title>Willkommen!</Modal.Title>
+                        <Modal.Title componentClass="h3">Willkommen!</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body tabIndex="1">
-                        <p>
+                        <p className="welcome-text">
                             Hier können Sie barrierefreie Gebäude in Leipzig finden.
                             Wählen Sie dazu den gewünschten Ort und Kriterien, zum Beispiel einen Fahrstuhl aus.
                             Oder suchen Sie nach dem Namen einer Einrichtung.
                         </p>
-
-                        <FormGroup>
-                            <Col componentClass={ControlLabel} md={3}>
-                                Vorauswahl der Behinderung:
-                            </Col>
-                            <Col md={9}>
+                        <br />
+                        <Form className="global-dissability-form">
+                            <p><strong>Vorauswahl der Behinderung:</strong></p>
+                            <Col md={9} className="filterSelect">
                                 <FormControl
                                     componentClass="select"
                                     aria-label=""
                                     onChange={this.handleGlobalDisab}
+                                    size="4"
+                                    defaultValue="undefined"
                                 >
                                     <option value="undefined">keine Vorauswahl</option>
                                     <option value="blind">Blind oder Sehbehindert</option>
@@ -90,11 +93,12 @@ class Welcome extends React.Component {
                                     <option value="hear">Hörbehindert</option>
                                 </FormControl>
                             </Col>
-                        </FormGroup>
+                            <Clearfix />
+                        </Form>
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button bsStyle="primary" onClick={this.handleOk}>
+                        <Button bsStyle="primary" className="btn-lg" onClick={this.handleOk}>
                             OK, beginnen
                         </Button>
                     </Modal.Footer>
