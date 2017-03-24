@@ -263,7 +263,8 @@ div.back-to-search-wrapper {
     margin: 0;
     width: 100%;
 }
-.leaflet-control-zoom.leaflet-bar a, .leaflet-control-zoom.leaflet-bar a:hover {
+.leaflet-control-container .leaflet-control-zoom.leaflet-bar a,
+.leaflet-control-zoom.leaflet-bar a:hover {
     width: 36px;
     height: 36px;
     line-height: 36px;
