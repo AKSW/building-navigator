@@ -6,12 +6,10 @@ const PATHS = {
 };
 
 module.exports = {
-    //devtool: 'inline-source-map',
     devtool: 'eval',
     debug: true,
     context: path.resolve(__dirname),
     entry: './src/main.js',    
-    //entry: ['whatwg-fetch', './src/main.js'],
     output: {
         library: 'BuildingNavigator',
         path: PATHS.dist,
@@ -21,19 +19,6 @@ module.exports = {
     },
     resolve: {
         root: path.resolve(__dirname),
-    },
-    devServer: {
-        historyApiFallback: true,
-        index: '/dist/'
-    },
-    historyApiFallback: {
-        index: '/dist/',
-    },
-    node: {
-        fs: 'empty'
-    },
-    externals: {
-        sqlite3: 'sqlite3'
     },
     module: {
         loaders: [
