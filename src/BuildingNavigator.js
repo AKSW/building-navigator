@@ -3,11 +3,11 @@ import _ from 'lodash';
 import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
-import {getUserGeolocation} from './utils/GeoUtils';
 import EventHandler from './EventHandler';
 import Sidebar from './components/Sidebar';
 import Map from './components/Map';
 import Welcome from './components/Welcome';
+import {isMobileBrowser} from './utils/DetectMobile';
 
 /**
  * Main class, holds stores, logger, eventHandler and renders all other components
@@ -19,12 +19,10 @@ class BuildingNavigator extends React.Component {
 
         this.state = {
             stores: props.stores,
-            //buildingStore: new BuildingStore(),
-            //filterStore: new FilterStore()
         };
         this.logger = props.logger;
         this.stores = this.state.stores;
-        this.eventHandler = new EventHandler(this.state.stores, this.logger);
+        this.eventHandler = props.eventHandler;
         this.handleEvent = this.handleEvent.bind(this);
 
         /*
@@ -41,34 +39,31 @@ class BuildingNavigator extends React.Component {
         };
         React.Component.prototype.logger = this.logger;
         React.Component.prototype.stores = this.stores;
+
+        this._isMounted = false;
+        this._handleWindowResize = this._handleWindowResize.bind(this);
     }
 
     /*
     * Componented mounted, do some initial things
     */
     componentDidMount() {
-        // if geolocate successed, center map
-        // @todo animate new map center with map.setView(...)
-        getUserGeolocation().then(
-            response => {
-                this.handleEvent({
-                    action: 'update-map-center',
-                    payload: {
-                        latitude: response.latitude,
-                        longitude: response.longitude,
-                    }
-                });
-            }
-        );
+        this._isMounted = true;
+        window.addEventListener('resize', this._handleWindowResize);
+
+        if (isMobileBrowser()) {
+            this.handleEvent({action: 'update-ui-config',
+                payload: {key: 'isSmallView', value: true}
+            });
+        }
 
         // load initial buildind data
         this.handleEvent({action: 'init-buildings'});
     }
 
-    componentWillUpdate() {
-        // @todo deep copy causes high cpu load
-        //this.logger.log('Current stores: ', _.cloneDeep(this.stores));
-        this.logger.log('Current stores: ', this.stores);
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._handleWindowResize);
     }
 
     /**
@@ -93,6 +88,26 @@ class BuildingNavigator extends React.Component {
         });
     }
 
+    _handleWindowResize () {
+        // test if its a small view, write to state
+        if (this._isMounted) {
+            const appEl = document.getElementById(this.state.stores.uiStore.get('userConfig').container);
+            if (appEl.offsetWidth <= this.stores.uiStore.get('smallViewMax')) {
+                if (!this.stores.uiStore.get('isSmallView')) {
+                    this.handleEvent({action: 'update-ui-config',
+                        payload: {key: 'isSmallView', value: true}
+                    });
+                }
+            } else {
+                if (this.stores.uiStore.get('isSmallView')) {
+                    this.handleEvent({action: 'update-ui-config',
+                        payload: {key: 'isSmallView', value: false}
+                    });
+                }
+            }
+        }
+    }
+
     render() {
         return (
             <div className="building-navigator">
@@ -103,9 +118,7 @@ class BuildingNavigator extends React.Component {
                     <Welcome />
                 }
                 <Sidebar stores={this.stores} />
-                {this.stores.uiStore.get('globalDisability') !== "blind" &&
-                    <Map stores={this.stores} />
-                }
+                <Map aria-hidden={true} stores={this.stores} />
             </div>
         );
     }
@@ -113,7 +126,8 @@ class BuildingNavigator extends React.Component {
 
 BuildingNavigator.propTypes = {
   stores: React.PropTypes.object.isRequired,
-  logger: React.PropTypes.instanceOf(Logger).isRequired
+  logger: React.PropTypes.instanceOf(Logger).isRequired,
+  eventHandler: React.PropTypes.instanceOf(EventHandler).isRequired,
 };
 
 export default BuildingNavigator;
