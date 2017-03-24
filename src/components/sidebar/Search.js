@@ -1,11 +1,13 @@
 import React from 'react';
 import {
     Button,
+    Glyphicon,
     Col,
     Form,
     FormGroup,
     ControlLabel,
     FormControl,
+    Clearfix
 } from 'react-bootstrap';
 
 class Search extends React.Component {
@@ -42,38 +44,51 @@ class Search extends React.Component {
     }
 
     handleChange(e) {
+        const type = e.target.type;
+        let value = e.target.value;
+
+        if (type == 'select-one') {
+            value = parseInt(value);
+        }
+        else if (type == 'checkbox') {
+            value = Number(e.target.checked);
+        }
+
         super.handleEvent({
             action: 'update-filter',
             payload: {
                 filterId: e.target.getAttribute('name'),
-                setKey: e.target.value,
+                value: value,
             }
-        }).then(
-            response => {
-                super.handleEvent({
-                    action: 'apply-filters',
-                    payload: { filters: this.state.filters }
-                });
-            }
-        );
+        }).then(() => {
+            super.handleEvent({
+                action: 'apply-filters'
+            });
+        });
     }
 
     render() {
 
         const search = this.state.filters.find((filter) => {
-            return filter.uniqueKey === 'title';
+            return filter.type === 'search';
         });
 
         const selectFilters = this.state.filters.filter((filter) => {
-            return filter.uniqueKey !== 'title';
+            return filter.type === 'select-one';
         });
 
+        const checkboxFilters = this.state.filters.filter((filter) => {
+            return filter.type === 'checkbox';
+        });
 
         return (
             <Form horizontal onSubmit={this.handleSubmit}>
-                <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
-                    <span>Zeige Ergebnisse</span>
-                </Button>
+                <Col md={12}>
+                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
+                        <span>Zeige Ergebnisse</span>
+                    </Button>
+                </Col>
+                <Clearfix />
                 
                 {/*<FormGroup controlId="formFilterSearch">
                     <Col md={12}>
@@ -89,18 +104,18 @@ class Search extends React.Component {
                 </FormGroup>*/}
 
                 <FormGroup>
-                    <Col md={10}>
+                    <Col md={12}>
                         <h3>Gebäude über Filter auswählen</h3>
                     </Col>
                 </FormGroup>
 
-                {/**/}
-
-                    
 
                 {selectFilters.map((filter) =>
-                    <FormGroup controlId={`formFilter${filter.id}`} key={filter.id}>
+                    <div key={filter.id}><FormGroup controlId={`formFilter${filter.id}`} key={filter.id}>
                         <Col componentClass={ControlLabel} md={3}>
+                            {filter.hasOwnProperty('icon') &&
+                                <span className="filter-icon"><i className={`fi-${filter.icon}`} aria-hidden="true"></i>&nbsp;</span>
+                            }
                             {filter.title}
                         </Col>
                         <Col md={9}>
@@ -108,7 +123,7 @@ class Search extends React.Component {
                                 <FormControl
                                     componentClass="select"
                                     onChange={this.handleChange}
-                                    value={filter.selected}
+                                    value={filter.value}
                                     size={filter.valueSet.length}
                                     name={filter.id}
                                     aria-label={filter.aria}
@@ -122,12 +137,41 @@ class Search extends React.Component {
                                 </FormControl>
                             </div>
                         </Col>
+                    </FormGroup><hr /></div>
+                )}
+
+                <FormGroup controlId="formFilterEtc">
+                    <Col componentClass={ControlLabel} md={3}>
+                        Sonstiges
+                    </Col>
+                </FormGroup>
+
+                {checkboxFilters.map((filter) =>
+                    <FormGroup controlId={`formFilterEtc${filter.id}`} key={filter.id}>
+                        <Col md={9} mdOffset={3}>
+                            <div className="checkbox">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name={filter.id}
+                                        onChange={this.handleChange}
+                                        checked={Boolean(filter.value)}
+                                        aria-label={filter.aria}
+                                    />
+                                    {filter.title}
+                                </label>
+                            </div>
+                        </Col>
                     </FormGroup>
                 )}
 
-                <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
-                    <span>Zeige Ergebnisse</span>
-                </Button>
+                <hr />
+
+                <Col md={12}>
+                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
+                        <span>Zeige Ergebnisse</span>
+                    </Button>
+                </Col>
             </Form>
         );
     }
