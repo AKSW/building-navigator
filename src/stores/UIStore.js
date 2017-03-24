@@ -5,16 +5,26 @@ class UIStore {
         this.logger = logger;
 
         this.config = {
+            // given config from user
+            userConfig: null,
+            // max pixel for the mobile view
+            smallViewMax: 768,
+            // flag if browser screen is smal (e.g. mobile devices)
+            isSmallView: false,
             // preselected and global disability: blind|hear|move
             globalDisability: undefined,
             // show or hide welcome message, if cookie showWelcome doe not exist, its true
             showWelcome: Cookies.get('showWelcome') !== 'false',
             // route (component) of the sidebar
             sidebarRoute: 'search',
+            // sidebar is visible flag
+            sidebarIsVisible: true,
             // results start index
             resultsStart: 0,
-            // results max limit
-            resultsLimit: 10,
+            // steps for results
+            resultsSteps: 20,
+            // map bounds decreasing factor in (negative!) percent, avoids buildings too close to the border
+            mapPadding: -0.1,
         };
     }
 
