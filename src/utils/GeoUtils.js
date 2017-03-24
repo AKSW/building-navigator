@@ -25,6 +25,7 @@ export const getDistance = ({lat1, lng1, lat2, lng2}) =>  {
 /**
  * Get geo location of user via html5 geolocation API
  *
+ * @deprecated, since we use the map locate() function (http://leafletjs.com/reference.html#map-locate)
  * @return Promise Object with latitude and longitude or false
  */
 export const getUserGeolocation = () => {
