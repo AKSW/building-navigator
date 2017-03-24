@@ -25,57 +25,57 @@ class EventHandler {
                 */
                 case 'init-buildings':
                     this.stores.buildingStore.initAll().then(
-                        response => {
-                            resolve(response);
-                        },
-                        error => {
-                            reject(error);
-                        }
+                        response => resolve(response),
+                        error => reject(error)
+                    );
+                    break;
+                case 'may-load-building-data':
+                    this.stores.buildingStore.mayLoadBuildingData(payload.buildingId).then(
+                        response => resolve(response),
+                        error => reject(error)
                     );
                     break;
                 case 'load-building-data':
                     this.stores.buildingStore.loadBuildingData(payload.buildingId).then(
-                        response => {
-                            resolve(response);
-                        },
-                        error => {
-                            reject(error);
-                        }
+                        response => resolve(response),
+                        error => reject(error)
                     );
-                    break;                
+                    break;
                 case 'apply-filters':
-                    this.stores.buildingStore.applyFilters(payload.filters);
+                    this.stores.buildingStore.applyFilters(this.stores.filterStore.getAll());
+                    resolve(true);
+                    break;
+                case 'apply-bounds':
+                    const bounds = this.stores.mapStore.get('bounds');
+                    this.stores.buildingStore.applyBounds( bounds.northEast, bounds.southWest);
                     resolve(true);
                     break;
                 case 'toggle-show-building-details':
-                    // may load building details first
-                    const building = this.stores.buildingStore.getBuilding(payload.buildingId);
-                    if (!building.data.hasOwnProperty('id')) {
-                        this.handleEvent({action:'load-building-data', payload: payload}).then(
-                            response => {
-                                this.stores.buildingStore.toggleShowBuildingDetails(payload.buildingId);
-                                resolve(true);
-                            },
-                            error => {
-                                reject(error);
-                            }
-                        );
-
-                    } else {
-                        this.stores.buildingStore.toggleShowBuildingDetails(payload.buildingId);
-                        resolve(true);
-                    }
+                    this.stores.buildingStore.toggleShowBuildingDetails(payload.buildingId);
+                    resolve(true);
+                    break;
+                case 'show-building-details':
+                    this.stores.buildingStore.showBuildingDetails(payload.buildingId);
+                    resolve(true);
+                    break;
+                case 'hide-building-details':
+                    this.stores.buildingStore.hideBuildingDetails(payload.buildingId);
+                    resolve(true);
+                    break;
+                case 'set-selected-on-map':
+                    this.stores.buildingStore.setSelectedOnMap(payload.buildingId);
+                    resolve(true);
                     break;
                 /*
                 FilterStore() events
                 */
                 case 'update-filter':
-                    this.stores.filterStore.update(payload.filterId, parseInt(payload.setKey));
+                    this.stores.filterStore.update(payload.filterId, payload.value);
                     resolve(true);
                     break;
                 case 'reset-all-filters':
                     this.stores.filterStore.resetAll();
-                    resolve();
+                    resolve(true);
                     break;
                 /*
                 UIStore() events
@@ -84,11 +84,36 @@ class EventHandler {
                     this.stores.uiStore.update(payload.key, payload.value);
                     resolve(true);
                     break;
+                case 'toggle-sidebar':
+                    const currSidebState = this.stores.uiStore.get('sidebarIsVisible');
+                    this.stores.uiStore.update('sidebarIsVisible', !currSidebState);
+                    resolve(true);
+                    break;
+                case 'show-sidebar':
+                    this.stores.uiStore.update('sidebarIsVisible', true);
+                    resolve(true);
+                    break;
+                case 'hide-sidebar':
+                    this.stores.uiStore.update('sidebarIsVisible', false);
+                    resolve(true);
+                    break;
+                case 'next-results':
+                    this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') + this.stores.uiStore.get('resultsSteps'));
+                    resolve(true);
+                    break;
+                case 'prev-results':
+                    this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') - this.stores.uiStore.get('resultsSteps'));
+                    resolve(true);
+                    break;
                 /*
                 MapStore() events
                 */
                 case 'update-map-config':
-                    this.stores.mapStore.updateMapConfig(payload.center, payload.zoom);
+                    this.stores.mapStore.updateMapConfig(payload.bounds, payload.center, payload.zoom);
+                    resolve(true);
+                    break;
+                case 'update-map-bound':
+                    this.stores.mapStore.updateBounds(payload.northEast, payload.southWest);
                     resolve(true);
                     break;
                 case 'update-map-center':
@@ -102,6 +127,7 @@ class EventHandler {
                 default:
                     reject('Unkown action given: ' + action);
             }
+            this.logger.log('Current stores: ', this.stores);
         });
     }
 }
