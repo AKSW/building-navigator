@@ -38,6 +38,12 @@ class Results extends React.Component {
         });
     }
 
+    componentDidMount() {
+        getElement(this.state.stores.uiStore.get('userConfig').container, '.entry a').then((firstEl) => {
+            firstEl.focus();
+        })
+    }
+
     handleBackToSearch(e) {
         super.handleEvent({
             action: 'update-ui-config',
@@ -72,7 +78,7 @@ class Results extends React.Component {
             <ul className="pager">
                 {resultsStart > 0 &&
                     <li className="previous">
-                        <a role="button" href="#" onClick={this.handlePrevResults}>
+                        <a role="button" href="#" onClick={this.handlePrevResults} aria-label="Vorherige Ergebnisse">
                             <i className="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; vorherige
                         </a>
                     </li>
@@ -80,7 +86,7 @@ class Results extends React.Component {
                 <li><span>{(resultsStart+resultsSteps)/resultsSteps} von {Math.ceil(visiblesLength/resultsSteps)}</span></li>
                 {(resultsStart + resultsSteps) < visiblesLength &&
                     <li className="next">
-                        <a role="button" href="#" onClick={this.handleNextResults}>
+                        <a role="button" href="#" onClick={this.handleNextResults} aria-label="Nächste Ergebnisse">
                             nächste <i className="fa fa-chevron-right" aria-hidden="true"></i>
                         </a>
                     </li>
@@ -97,6 +103,11 @@ class Results extends React.Component {
                         </Button>
                     </Col>
                 </Row>
+                {this.state.buildings.length == 0 &&
+                    <div className="entry not-found">
+                        <h3><i className="fa fa-exclamation" aria-hidden={true}></i> Keine Gebäude gefunden.<br />Ändern sie die Filter der Suche oder den Standpunkt auf der Karte.</h3>
+                    </div>
+                }
                 {this.state.buildings.map((building, bid) => {
                     return (
                         <ResultsEntry key={bid} building={building} stores={this.state.stores} />
@@ -108,21 +119,6 @@ class Results extends React.Component {
                         {resultsPager}
                     </Row>
                 }
-
-                {/*<Row>
-                    <Pager>
-                        {resultsStart > 0 &&
-                            <Pager.Item href="#" onClick={this.handlePrevResults}>
-                                <i className="fa fa-chevron-left" aria-hidden="true"></i> Vorherige Ergebnisse
-                            </Pager.Item>
-                        }
-                        {(resultsStart + resultsSteps) < visiblesLength &&
-                            <Pager.Item href="#" onClick={this.handleNextResults}>
-                                Nächste Ergebnisse <i className="fa fa-chevron-right" aria-hidden="true"></i>
-                            </Pager.Item>
-                        }
-                  </Pager>
-                </Row>*/}
 
                 {this.state.buildings.length > 3 &&
                     <Row>
