@@ -1,6 +1,9 @@
 import Promise from 'promise-polyfill';
 import ReactDOM from 'react-dom';
 
+/*
+    Set focus on given node
+*/
 export const focusOnNode = (node) => {
     const el = ReactDOM.findDOMNode(node);
     if (el !== null) {
