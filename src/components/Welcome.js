@@ -72,9 +72,9 @@ class Welcome extends React.Component {
 
                     <Modal.Body tabIndex="1">
                         <p className="welcome-text">
-                            Hier können Sie barrierefreie Gebäude in Leipzig finden.
-                            Wählen Sie dazu den gewünschten Ort und Kriterien, zum Beispiel einen Fahrstuhl aus.
-                            Oder suchen Sie nach dem Namen einer Einrichtung.
+                            Dies ist ein interaktives Tool um barrierefreie Gebäude in Leipzig zu finden.
+                            Sie können Gebäude auf der Karte finden oder durch Filter nach verschiedenen Kriterien zur Barrierefreieheit auswählen.
+                            Sie können unten eine Vorauswahl der Behinderung treffen.
                         </p>
                         <br />
                         <Form className="global-dissability-form">
