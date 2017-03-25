@@ -15,7 +15,7 @@ import A11yIcon from '../A11yIcon';
 class Entry extends React.Component {
     constructor(props) {
         super();
-        
+
         this.state = {
             stores: props.stores,
             building: props.building
@@ -123,7 +123,7 @@ class Entry extends React.Component {
                             {a11yIcons.getAll().map((entry, id) => {
                                 return (
                                     <Row key={id}>
-                                        <Col xs={3}>{a11yIcons.icon(entry)}</Col>
+                                        <Col xs={3} aria-hidden={true}>{a11yIcons.icon(entry)}</Col>
                                         <Col xs={9} className="a11yIcons-descr">{a11yIcons.descr(entry)}</Col>
                                     </Row>
                                 );
