@@ -32,13 +32,11 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        const sidebarClass = this.state.stores.uiStore.get('globalDisability') === "blind" ? "sidebar sidebar-full" : "sidebar";
-
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible') ? (
             <Swipeable onSwipedLeft={this.handleToggleSidebar}>
-                <div className={sidebarClass}>
+                <div className="sidebar">
                     {this.state.sidebarRoute === 'search' &&
-                        <Search filters={this.state.stores.filterStore.getAll()} />
+                        <Search stores={this.state.stores} />
                     }
                     {this.state.sidebarRoute === 'results' &&
                         <Results stores={this.state.stores} />
@@ -48,6 +46,7 @@ class Sidebar extends React.Component {
                     <Button
                         bsClass="btn btn-lg btn-default pull-right"
                         title="Seitenleiste ausblenden"
+                        aria-hidden={true}
                         onClick={this.handleToggleSidebar}
                     >
                         <i className="fa fa-angle-double-left" aria-hidden={true}></i>
@@ -59,9 +58,9 @@ class Sidebar extends React.Component {
                 <Button
                     bsStyle="default"
                     bsSize="large"
-                    aria-label="Seitenleiste einblenden"
                     title="Seitenleiste einblenden"
                     onClick={this.handleToggleSidebar}
+                    aria-hidden={true}
                 >
                     <i className="fa fa-angle-double-right" aria-hidden={true}></i>
                 </Button>
