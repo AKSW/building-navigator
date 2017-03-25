@@ -9,13 +9,15 @@ import {
     FormControl,
     Clearfix
 } from 'react-bootstrap';
+import {getElement} from '../../utils/GuiUtils'
 
 class Search extends React.Component {
     constructor(props) {
         super();
-        
+
         this.state = {
-            filters: props.filters
+            stores: props.stores,
+            filters: props.stores.filterStore.getAll()
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -24,8 +26,15 @@ class Search extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            filters: nextProps.filters,
+            stores: nextProps.stores,
+            filters: nextProps.stores.filterStore.getAll()
         });
+    }
+
+    componentDidMount() {
+        getElement(this.state.stores.uiStore.get('userConfig').container, '.filter select').then((firstEl) => {
+            firstEl.focus();
+        })
     }
 
     handleSubmit(e) {
@@ -89,7 +98,7 @@ class Search extends React.Component {
                     </Button>
                 </Col>
                 <Clearfix />
-                
+
                 {/*<FormGroup controlId="formFilterSearch">
                     <Col md={12}>
                         <ControlLabel><h3>Gebäudename</h3></ControlLabel>
@@ -111,7 +120,7 @@ class Search extends React.Component {
 
 
                 {selectFilters.map((filter) =>
-                    <div key={filter.id}><FormGroup controlId={`formFilter${filter.id}`} key={filter.id}>
+                    <FormGroup controlId={`formFilter${filter.id}`} key={filter.id} className="filter-wrapper">
                         <Col componentClass={ControlLabel} md={3}>
                             {filter.hasOwnProperty('icon') &&
                                 <span className="filter-icon"><i className={`fi-${filter.icon}`} aria-hidden="true"></i>&nbsp;</span>
@@ -119,7 +128,7 @@ class Search extends React.Component {
                             {filter.title}
                         </Col>
                         <Col md={9}>
-                            <div className="filterSelect">
+                            <div className="filter filterSelect">
                                 <FormControl
                                     componentClass="select"
                                     onChange={this.handleChange}
@@ -127,7 +136,6 @@ class Search extends React.Component {
                                     size={filter.valueSet.length}
                                     name={filter.id}
                                     aria-label={filter.aria}
-                                    className="filterSelect"
                                 >
                                     {filter.valueSet.map((entry, key) => {
                                         return (
@@ -137,7 +145,8 @@ class Search extends React.Component {
                                 </FormControl>
                             </div>
                         </Col>
-                    </FormGroup><hr /></div>
+                        <Col md={12}><hr /></Col>
+                    </FormGroup>
                 )}
 
                 <FormGroup controlId="formFilterEtc">
@@ -147,9 +156,9 @@ class Search extends React.Component {
                 </FormGroup>
 
                 {checkboxFilters.map((filter) =>
-                    <FormGroup controlId={`formFilterEtc${filter.id}`} key={filter.id}>
+                    <FormGroup controlId={`formFilterEtc${filter.id}`} key={filter.id} className="filter-wrapper">
                         <Col md={9} mdOffset={3}>
-                            <div className="checkbox">
+                            <div className="filter checkbox">
                                 <label>
                                     <input
                                         type="checkbox"
