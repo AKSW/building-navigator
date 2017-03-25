@@ -1,4 +1,5 @@
 import React from 'react';
+import {Alert} from 'react-bootstrap';
 import _ from 'lodash';
 import Promise from 'promise-polyfill';
 
@@ -112,7 +113,15 @@ class BuildingNavigator extends React.Component {
         return (
             <div className="building-navigator">
                 {this.logger.hasError() &&
-                    <p>Fehler ...</p>
+                    <Alert bsStyle="danger" className="global-error">
+                        <strong>Fehler bei der Ausführung der Anwendung.</strong>
+                        {this.logger.getErrors().map((error, eid) => {
+                            // @todo may show {error.message.stack} for more information, or point to console?
+                            return (
+                                <p key={eid}>Nachricht: {error.message.toString()}</p>
+                            );
+                        })}
+                    </Alert>
                 }
                 {this.stores.uiStore.get('showWelcome') &&
                     <Welcome />
