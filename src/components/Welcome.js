@@ -88,9 +88,9 @@ class Welcome extends React.Component {
                                     defaultValue="undefined"
                                 >
                                     <option value="undefined">keine Vorauswahl</option>
-                                    <option value="blind">Blind oder Sehbehindert</option>
+                                    <option value="blind">Blind oder Sehbehinderung</option>
                                     <option value="move">Gehbehinderung</option>
-                                    <option value="hear">Hörbehindert</option>
+                                    <option value="hear">Hörbehinderung</option>
                                 </FormControl>
                             </Col>
                             <Clearfix />
