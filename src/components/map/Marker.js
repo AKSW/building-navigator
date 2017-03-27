@@ -89,8 +89,10 @@ class Marker extends React.Component {
                 }
             });
             getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"]`).then((entry) => {
-                entry.scrollIntoView();
-            })
+                getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
+                    sidebar.scrollTop = entry.offsetTop;
+                });
+            });
         });
     }
 
