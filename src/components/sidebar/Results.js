@@ -64,8 +64,12 @@ class Results extends React.Component {
         super.handleEvent({
             action: 'next-results'
         });
+        // scroll top, focus on first result
         getElement(this.state.stores.uiStore.get('userConfig').container, '.sidebar').then((sidebar) => {
             sidebar.scrollTop = 0;
+            getElement(this.state.stores.uiStore.get('userConfig').container, '.entry a').then((firstEl) => {
+                firstEl.focus();
+            })
         })
     }
 
