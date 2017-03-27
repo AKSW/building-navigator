@@ -132,6 +132,9 @@
 .filterSelect select:focus {
     box-shadow: none
 }
+.filterSelect option:checked {
+    background-color: #f0544c;
+}
 .filterSelect option:hover {
     cursor: pointer;
     background-color: #ffe7e7;
