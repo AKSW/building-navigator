@@ -130,17 +130,6 @@ class Entry extends React.Component {
                             })}
                         </div>
 
-                        <Row className="entry-details-prop">
-                            <Col xs={3} className="entry-details-prop-label">
-                                    <i className="fa fa-address-card" title="Adresse"></i>
-                                </Col>
-                            <Col xs={9}>
-                                <address>
-                                    {building.data.strasse}, {building.data.plz} {building.data.ort}
-                                </address>
-                            </Col>
-                        </Row>
-
                         {building.data.beschreibung_hilfestellungen_vor_ort !== "" &&
                             <Row className="entry-details-prop">
                                 <Col xs={3} className="entry-details-prop-label">
@@ -153,6 +142,17 @@ class Entry extends React.Component {
                                 </Col>
                             </Row>
                         }
+
+                        <Row className="entry-details-prop">
+                            <Col xs={3} className="entry-details-prop-label">
+                                    <i className="fa fa-address-card" title="Adresse"></i>
+                                </Col>
+                            <Col xs={9}>
+                                <address>
+                                    {building.data.strasse}, {building.data.plz} {building.data.ort}
+                                </address>
+                            </Col>
+                        </Row>
 
                         {building.data.oeffnungszeiten !== "" &&
                             <Row className="entry-details-prop">
