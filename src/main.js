@@ -38,16 +38,6 @@ const runBuildingNavigator = (config) => {
         payload: {key: 'userConfig', value: config}
     });
 
-    // set isSmallView to uiStore, we need the timout, otherwise offsetWidth is 0
-    /*window.setTimeout(() => {
-        if (appEl.offsetWidth <= stores.uiStore.get('smallViewMax')) {
-            eventHandler.handleEvent({
-                action: 'update-ui-config',
-                payload: {key: 'isSmallView', value: true}
-            });
-        }
-    }, 0);*/
-
     // render the app
     ReactDOM.render( <BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />, appEl );
 }
