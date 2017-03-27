@@ -32,6 +32,7 @@ class Sidebar extends React.Component {
     }
 
     render() {
+        // @todo may implement transparent onSwipeRight overlay over map
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible') ? (
             <Swipeable onSwipedLeft={this.handleToggleSidebar}>
                 <div className="sidebar">

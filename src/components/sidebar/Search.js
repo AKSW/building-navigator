@@ -121,7 +121,7 @@ class Search extends React.Component {
 
                 {selectFilters.map((filter) =>
                     <FormGroup controlId={`formFilter${filter.id}`} key={filter.id} className="filter-wrapper">
-                        <Col componentClass={ControlLabel} md={3}>
+                        <Col componentClass={ControlLabel} md={3} aria-label={filter.aria}>
                             {filter.hasOwnProperty('icon') &&
                                 <span className="filter-icon"><i className={`fi-${filter.icon}`} aria-hidden="true"></i>&nbsp;</span>
                             }

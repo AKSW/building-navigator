@@ -132,7 +132,7 @@ class Entry extends React.Component {
 
                         <Row className="entry-details-prop">
                             <Col xs={3} className="entry-details-prop-label">
-                                    <i className="fa fa-address-card" aria-label="Adresse" title="Adresse"></i>
+                                    <i className="fa fa-address-card" title="Adresse"></i>
                                 </Col>
                             <Col xs={9}>
                                 <address>
@@ -144,7 +144,7 @@ class Entry extends React.Component {
                         {building.data.beschreibung_hilfestellungen_vor_ort !== "" &&
                             <Row className="entry-details-prop">
                                 <Col xs={3} className="entry-details-prop-label">
-                                    <i className="fa fa-info" aria-label="Hinweis" title="Hinweis"></i>
+                                    <i className="fa fa-info" title="Hinweis"></i>
                                 </Col>
                                 <Col xs={9}>
                                     {building.data.beschreibung_hilfestellungen_vor_ort.split("\n").map((p, i) => {
@@ -157,7 +157,7 @@ class Entry extends React.Component {
                         {building.data.oeffnungszeiten !== "" &&
                             <Row className="entry-details-prop">
                                 <Col xs={3} className="entry-details-prop-label">
-                                    <i className="fa fa-clock-o" aria-label="Öffnungszeiten" title="Öffnungszeiten"></i>
+                                    <i className="fa fa-clock-o" title="Öffnungszeiten"></i>
                                 </Col>
                                 <Col xs={9}>
                                     {building.data.oeffnungszeiten.split("\n").map((p, i) => {
