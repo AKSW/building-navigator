@@ -41,15 +41,19 @@
     font-style: normal;
     font-weight: normal;
     text-decoration: inherit;
+    margin-left: 20px;
+}
+.welcome-msg .filterSelect option::before {
+   margin-right: 10px;
 }
 .welcome-msg .filterSelect option[value=blind]::before {
-    content: "\f29d   ";
+    content: "\f2a8";
 }
 .welcome-msg .filterSelect option[value=move]::before {
-    content: "\f193  ";
+    content: "\f193";
 }
 .welcome-msg .filterSelect option[value=hear]::before {
-    content: "\f2a4  ";
+    content: "\f2a4";
 }
 .welcome-text {
 
@@ -64,7 +68,7 @@
     top: 0px;
     background: #f7f7f7;
     z-index: 9999;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     padding: 7px 20px 20px 15px;
     border-bottom: 1px solid #ccc;
@@ -112,11 +116,20 @@
 /**
     Search Form
 **/
-
+.filter-icon {
+    display: inline-block;
+    margin: -10px 0px -5px 0px;
+    width: 70px;
+    height: 70px;
+}
+.filter-icon img {
+    width: 100%;
+    height: auto;
+}
 .filterSelect {
     /*display:inline-block;*/
     vertical-align:top;
-    overflow:hidden;
+    /*overflow:hidden;*/
 }
 .filterSelect select {
     width: auto;
@@ -130,7 +143,10 @@
     overflow: hidden;
 }
 .filterSelect select:focus {
-    box-shadow: none
+    box-shadow: 0 0 8px #f0544c;
+}
+.filterSelect option {
+
 }
 .filterSelect option:checked {
     background-color: #f0544c;
@@ -149,11 +165,32 @@
 .filterSelect option:checked::before {
     content: "✓ ";
 }
+.filter.checkbox:hover {
+    box-shadow: 0 0 8px #f0544c;
+}
+.filter.checkbox .filter-icon {
+    width: 55px;
+    height: 55px;
+}
+.filter.checkbox input[type=checkbox] {
+    margin: 10px 0px 0px 10px;
+}
 div.back-to-search-wrapper {
     padding-left: 0px;
     margin-left: -5px;
 }
-
+@media (max-width: 768px) {
+    .filter-icon {
+        width: 35px;
+        height: 35px;
+        margin: 0px 5px 0px 0px;
+    }
+}
+@media (min-width: 768px) {
+    .filter-wrapper label.control-label {
+        text-align: center;
+    }
+}
 /**
     Results list
 **/
@@ -203,15 +240,21 @@ div.back-to-search-wrapper {
 }
 .a11yIcons-list li {
     display: inline-block;
-    padding: 0px;
+    padding: 5px;
+    width: 14%;
+    min-width: 50px;
 }
 .a11yIcons-detailed {
     text-align: right;
     margin: 10px 0px;
 }
+.a11yIcons-detailed > div {
+    margin-bottom: 7px;
+}
 .a11yIcon {
-    width: 65px;
-    height: 65px;
+    width: 100%;
+    max-width: 65px;
+    height: auto;
 }
 .a11yIcons-descr {
     text-align: left;
@@ -239,7 +282,7 @@ div.back-to-search-wrapper {
     width: 50%;
 }
 @media (max-width: 768px) {
-    .a11yIcon {
+    .a11yIcons-detailed .a11yIcon {
         width: 52px;
     }
     .a11yIcons-descr span {
@@ -276,6 +319,15 @@ div.back-to-search-wrapper {
     margin: 0;
     width: 100%;
 }
+.mapLoader-wrapper {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 15%;
+    padding: 5px;
+    background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
+    z-index: 999;
+}
 .leaflet-control-container .leaflet-control-zoom.leaflet-bar a,
 .leaflet-control-zoom.leaflet-bar a:hover {
     width: 36px;
@@ -303,7 +355,7 @@ div.back-to-search-wrapper {
 }
 .leaflet-popup .leaflet-popup-content {
     margin: 30px 19px 15px;
-    width: 420px !important;
+    width: 455px !important;
 }
 .multi-marker-nav .pager li>span {
     border: none;
