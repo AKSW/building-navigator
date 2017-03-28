@@ -4,7 +4,7 @@ class FilterStore {
         this.filters = [];
 
         /*
-         * Search by Name 
+         * Search by Name
          */
         // this.add({
         //     uniqueKey: 'title',
@@ -20,7 +20,7 @@ class FilterStore {
             id: 'entrance',
             type: 'select-one',
             title: 'Eingang',
-            icon: 'universal-access',
+            icon: 'home',
             aria: 'Aktueller Filter, Anforderungen an den Eingangsbereich',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'entrance-suit-f-wheelchair', value: 0},
@@ -54,7 +54,7 @@ class FilterStore {
             id: 'toilet',
             type: 'select-one',
             title: 'Toilette',
-            icon: 'male-female',
+            icon: 'toilet',
             aria: 'Aktueller Filter, Anforderungen an die Toilette',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'toilet-avail', value: 0},
@@ -72,6 +72,7 @@ class FilterStore {
             id: 'parking',
             type: 'select-one',
             title: 'Parkplatz',
+            icon: 'car',
             aria: 'Aktueller Filter, Anforderungen an den Parkplatz',
             valueSet: [
                 {title: 'keine Einschränkung', key: 'parking-avail', value: 0},
@@ -83,10 +84,11 @@ class FilterStore {
 
         /*
          * Blind help
-         */ 
+         */
         this.add({
             id: 'blind',
             type: 'checkbox',
+            icon: 'low-vision',
             title: 'Hilfestellung für Sehgeschädigte',
             aria: 'Hilfestellung für Sehgeschädigte',
             key: 'help-for-blind',
@@ -94,10 +96,11 @@ class FilterStore {
         });
         /*
          * Hearing help
-         */ 
+         */
         this.add({
             id: 'hearing',
             type: 'checkbox',
+            icon: 'hard-of-hearing',
             title: 'Hilfestellung für Hörgeschädigte',
             aria: 'Hilfestellung für Hörgeschädigte',
             key: 'help-for-hearing-imp',
@@ -105,10 +108,11 @@ class FilterStore {
         });
         /*
          * General help
-         */ 
+         */
         this.add({
             id: 'general',
             type: 'checkbox',
+            icon: 'question',
             title: 'Allgemeine Hilfestellung',
             aria: 'Allgemeine Hilfestellung',
             key: 'general-help',
