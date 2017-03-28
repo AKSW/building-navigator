@@ -16,7 +16,7 @@ import {
 class A11yIcon extends React.Component {
     constructor(props) {
         super();
-        
+
         this.state = {
             building: props.building
         };
@@ -89,7 +89,6 @@ class A11yIcon extends React.Component {
                         src={`./images/icons/${src}`}
                         className="a11yIcon"
                         title={descr}
-                        thumbnail
                         aria-label={descr} />),
             descr: (<span>{descr}</span>)
         }
@@ -170,7 +169,7 @@ class A11yIcon extends React.Component {
 
         // hearing help
         if (building['help-for-hearing-imp'] === 1) {
-            this.add('blindHelp',
+            this.add('hearingHelp',
                 'hearing-help.gif',
                 'Hilfestellung für Hörgeschädigte ist vorhanden'
             );
