@@ -18,7 +18,8 @@ class Entry extends React.Component {
 
         this.state = {
             stores: props.stores,
-            building: props.building
+            building: props.building,
+            isLoading: false
         };
 
         this.handleShowDetails = this.handleShowDetails.bind(this);
@@ -36,6 +37,7 @@ class Entry extends React.Component {
     }
 
     handleShowDetails(e, buildingId, useToggle = true) {
+        this.setState({isLoading: true});
         super.handleEvent({
             action: 'may-load-building-data',
             payload: {
@@ -57,6 +59,7 @@ class Entry extends React.Component {
                     }
                 });
             }
+            this.setState({isLoading: false});
         });
         e.preventDefault();
     }
@@ -111,6 +114,9 @@ class Entry extends React.Component {
                 {!building.showDetails &&
                     <ul className="a11yIcons-list">
                         {a11yIcons.getAll().map((entry, id) => {
+                            if (a11yIcons.icon(entry) == null) {
+                                return (null);
+                            }
                             return (<li key={id}>
                                 {a11yIcons.icon(entry)}
                             </li>);
@@ -172,7 +178,10 @@ class Entry extends React.Component {
                 <ButtonGroup justified className="result-bottom-buttons">
                     {!building.showDetails &&
                         <Button className="btn-lg" aria-label="Mehr Ergebnisdetails" aria-expanded={false} onClick={e => this.handleShowDetails(e, building.id)}>
-                            <i className="fa fa-caret-down" aria-hidden={true}></i> Details
+                            <i className="fa fa-caret-down" aria-hidden={true}></i> Details&nbsp;
+                            {this.state.isLoading &&
+                                <i className='fa fa-circle-o-notch fa-spin' />
+                            }
                         </Button>
                     }
 

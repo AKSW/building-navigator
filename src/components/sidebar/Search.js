@@ -17,7 +17,8 @@ class Search extends React.Component {
 
         this.state = {
             stores: props.stores,
-            filters: props.stores.filterStore.getAll()
+            filters: props.stores.filterStore.getAll(),
+            isLoading: false
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -32,22 +33,27 @@ class Search extends React.Component {
     }
 
     componentDidMount() {
-        getElement(this.state.stores.uiStore.get('userConfig').container, '.filter select').then((firstEl) => {
-            firstEl.focus();
-        })
+        if (!this.state.stores.uiStore.get('showWelcome')) {
+            getElement(this.state.stores.uiStore.get('userConfig').container, '.filter select').then((firstEl) => {
+                firstEl.focus();
+            })
+        }
     }
 
     handleSubmit(e) {
+        this.setState({isLoading: true});
         super.handleEvent({
             action: 'apply-filters',
             payload: { filters: this.state.filters }
-        });
-        super.handleEvent({
-            action: 'update-ui-config',
-            payload: {
-                key: 'sidebarRoute',
-                value: 'results'
-            }
+        }).then(() => {
+            super.handleEvent({
+                action: 'update-ui-config',
+                payload: {
+                    key: 'sidebarRoute',
+                    value: 'results'
+                }
+            });
+            this.setState({isLoading: false});
         });
         e.preventDefault();
     }
@@ -77,6 +83,7 @@ class Search extends React.Component {
     }
 
     render() {
+        const isLoading = this.state.isLoading;
 
         const search = this.state.filters.find((filter) => {
             return filter.type === 'search';
@@ -93,8 +100,13 @@ class Search extends React.Component {
         return (
             <Form horizontal onSubmit={this.handleSubmit}>
                 <Col md={12}>
-                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
-                        <span>Zeige Ergebnisse</span>
+                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right" disabled={isLoading}>
+                        {isLoading &&
+                            <span><i className='fa fa-circle-o-notch fa-spin'></i> Zeige Ergebnisse</span>
+                        }
+                        {!isLoading &&
+                            <span>Zeige Ergebnisse</span>
+                        }
                     </Button>
                 </Col>
                 <Clearfix />
@@ -122,9 +134,7 @@ class Search extends React.Component {
                 {selectFilters.map((filter) =>
                     <FormGroup controlId={`formFilter${filter.id}`} key={filter.id} className="filter-wrapper">
                         <Col componentClass={ControlLabel} md={3} aria-label={filter.aria}>
-                            {filter.hasOwnProperty('icon') &&
-                                <span className="filter-icon"><i className={`fi-${filter.icon}`} aria-hidden="true"></i>&nbsp;</span>
-                            }
+                            <span className="filter-icon"><img src={`./images/${filter.icon}.svg`} aria-hidden="true" /></span>
                             {filter.title}
                         </Col>
                         <Col md={9}>
@@ -157,9 +167,11 @@ class Search extends React.Component {
 
                 {checkboxFilters.map((filter) =>
                     <FormGroup controlId={`formFilterEtc${filter.id}`} key={filter.id} className="filter-wrapper">
-                        <Col md={9} mdOffset={3}>
-                            <div className="filter checkbox">
+                        <Col md={9}>
+                            <div className={Boolean(filter.value) ? "filter checkbox checked" : "filter checkbox"}>
                                 <label>
+                                    <span className="filter-icon"><img src={`./images/${filter.icon}.svg`} aria-hidden="true" /></span>
+                                    {filter.title}
                                     <input
                                         type="checkbox"
                                         name={filter.id}
@@ -167,7 +179,6 @@ class Search extends React.Component {
                                         checked={Boolean(filter.value)}
                                         aria-label={filter.aria}
                                     />
-                                    {filter.title}
                                 </label>
                             </div>
                         </Col>
@@ -177,8 +188,13 @@ class Search extends React.Component {
                 <hr />
 
                 <Col md={12}>
-                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right">
-                        <span>Zeige Ergebnisse</span>
+                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right" disabled={isLoading}>
+                        {isLoading &&
+                            <span><i className='fa fa-circle-o-notch fa-spin'></i> Zeige Ergebnisse</span>
+                        }
+                        {!isLoading &&
+                            <span>Zeige Ergebnisse</span>
+                        }
                     </Button>
                 </Col>
             </Form>

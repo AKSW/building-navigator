@@ -12,7 +12,8 @@ class Map extends React.Component {
         this.state = {
             stores: props.stores,
             markers: [],
-            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible')
+            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible'),
+            isLoading: false
         }
 
         this.handleZoomend = this.handleZoomend.bind(this);
@@ -21,6 +22,7 @@ class Map extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleLocationFound = this.handleLocationFound.bind(this);
         this.handleMoveend = this.handleMoveend.bind(this);
+        this.setMapLoader = this.setMapLoader.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -92,6 +94,16 @@ class Map extends React.Component {
         return true;
     }
 
+    /**
+     * Set locale isLoading state
+     *
+     * @param Boolean
+     */
+    setMapLoader(value) {
+        console.log('setMapLoader: ', value);
+        this.setState({isLoading: value});
+    }
+
     updateMapConfig() {
         if (this.mapNode == null) return;
         const osmap = this.mapNode.leafletElement;
@@ -134,7 +146,6 @@ class Map extends React.Component {
         if (this.mapNode != null) {
             this.mapNode.leafletElement.closePopup();
         }
-
     }
 
     handleDragend(e) {
@@ -161,6 +172,7 @@ class Map extends React.Component {
         if (this.mapNode == null) return;
         // pan to users location if found
         this.mapNode.leafletElement.panTo(e.latlng, {duration: 0.25});
+        // set new map config and apply bounds after paning
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
@@ -176,6 +188,11 @@ class Map extends React.Component {
         const hideZoomControl = this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible');
         return (
             <div className={mapClass}>
+                {this.state.isLoading &&
+                    <div className="mapLoader-wrapper">
+                        <i className='fa fa-circle-o-notch fa-spin' />
+                    </div>
+                }
                 <OSMap
                     ref={(node) => this.mapNode = node}
                     className="map"
@@ -198,7 +215,12 @@ class Map extends React.Component {
                     }
                     {this.state.markers.map((marker, mid) => {
                         return (
-                            <Marker key={mid} marker={marker} zoom={this.state.stores.mapStore.get('zoom')} stores={this.state.stores} />
+                            <Marker key={mid}
+                                marker={marker}
+                                zoom={this.state.stores.mapStore.get('zoom')}
+                                stores={this.state.stores}
+                                setMapLoader={this.setMapLoader}
+                            />
                         );
                     })}
                 </OSMap>

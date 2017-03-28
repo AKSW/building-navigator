@@ -37,8 +37,11 @@ class Marker extends React.Component {
             stores: props.stores,
             marker: props.marker,
             currentBuildingId: 0,
-            zoom: props.zoom
+            zoom: props.zoom,
+            isLoading: false,
         };
+
+        this.setMapLoader = props.setMapLoader;
 
         this.handleShowDetails = this.handleShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
@@ -63,6 +66,8 @@ class Marker extends React.Component {
     }
 
     handleShowDetails(e, buildingId) {
+        this.setMapLoader(true);
+        this.setState({isLoading: true});
         super.handleEvent({
             action: 'may-load-building-data',
             payload: {
@@ -93,6 +98,8 @@ class Marker extends React.Component {
                     sidebar.scrollTop = entry.offsetTop;
                 });
             });
+            this.setState({isLoading: false});
+            this.setMapLoader(false);
         });
     }
 
@@ -176,6 +183,9 @@ class Marker extends React.Component {
 
                                 <ul className="a11yIcons-list">
                                     {a11yIcons.getAll().map((entry, id) => {
+                                        if (a11yIcons.icon(entry) == null) {
+                                            return (null);
+                                        }
                                         return (<li key={id}>
                                             {a11yIcons.icon(entry)}
                                         </li>);
@@ -183,7 +193,10 @@ class Marker extends React.Component {
                                 </ul>
 
                                 <Button className="btn-lg" onClick={e => this.handleShowDetails(e, currentBuilding.id)}>
-                                    <i className="fa fa-th-list"></i> Details
+                                    <i className="fa fa-th-list"></i> Details&nbsp;
+                                    {this.state.isLoading &&
+                                        <i className='fa fa-circle-o-notch fa-spin' />
+                                    }
                                 </Button>
 
                                 {marker.buildings.length > 1 &&
