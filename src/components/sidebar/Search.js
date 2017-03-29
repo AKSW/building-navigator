@@ -59,6 +59,7 @@ class Search extends React.Component {
     }
 
     handleChange(e) {
+        const filterId = e.target.getAttribute('name');
         const type = e.target.type;
         let value = e.target.value;
 
@@ -69,10 +70,20 @@ class Search extends React.Component {
             value = Number(e.target.checked);
         }
 
+        // set local state, fixes jittering
+        this.state.filters.forEach((filter, fid) => {
+            if (filterId == filter.id) {
+                filter.value = value;
+                return;
+            }
+        });
+        this.setState({filters: this.state.filters});
+
+        // set global filters state and apply to buildings
         super.handleEvent({
             action: 'update-filter',
             payload: {
-                filterId: e.target.getAttribute('name'),
+                filterId: filterId,
                 value: value,
             }
         }).then(() => {
