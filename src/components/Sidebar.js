@@ -10,7 +10,6 @@ class Sidebar extends React.Component {
         super();
 
         this.state = {
-            sidebarRoute: 'search',
             stores: props.stores,
         };
 
@@ -24,7 +23,6 @@ class Sidebar extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            sidebarRoute: nextProps.stores.uiStore.get('sidebarRoute'),
             stores: nextProps.stores,
         });
     }

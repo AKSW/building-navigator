@@ -15,8 +15,6 @@ class UIStore {
             globalDisability: undefined,
             // show or hide welcome message, if cookie showWelcome doe not exist, its true
             showWelcome: Cookies.get('showWelcome') !== 'false',
-            // route (component) of the sidebar
-            sidebarRoute: 'search',
             // sidebar is visible flag
             sidebarIsVisible: true,
             // results start index
