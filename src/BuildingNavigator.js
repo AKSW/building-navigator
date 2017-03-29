@@ -4,11 +4,11 @@ import _ from 'lodash';
 import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
+import {isMobileBrowser} from './utils/DetectMobile';
 import EventHandler from './EventHandler';
 import Sidebar from './components/Sidebar';
 import Map from './components/Map';
 import Welcome from './components/Welcome';
-import {isMobileBrowser} from './utils/DetectMobile';
 
 /**
  * Main class, holds stores, logger, eventHandler and renders all other components
@@ -50,8 +50,15 @@ class BuildingNavigator extends React.Component {
     */
     componentDidMount() {
         this._isMounted = true;
+        // add resize event listener
         window.addEventListener('resize', this._handleWindowResize);
 
+        // add popstate listener (if user presses browsers back/forward button, get new current route)
+        window.addEventListener("popstate", () => {
+            this.handleEvent({action: 'get-current-route'});
+        }, false);
+
+        // may set if is small view
         if (isMobileBrowser()) {
             this.handleEvent({action: 'update-ui-config',
                 payload: {key: 'isSmallView', value: true}
@@ -89,6 +96,9 @@ class BuildingNavigator extends React.Component {
         });
     }
 
+    /**
+     * Window resize event handler
+     */
     _handleWindowResize () {
         // test if its a small view, write to state
         if (this._isMounted) {
@@ -111,7 +121,7 @@ class BuildingNavigator extends React.Component {
 
     render() {
         return (
-            <div className="building-navigator">
+            <div role="main" className="building-navigator">
                 {this.logger.hasError() &&
                     <Alert bsStyle="danger" className="global-error">
                         <strong>Fehler bei der Ausführung der Anwendung.</strong>

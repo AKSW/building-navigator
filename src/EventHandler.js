@@ -126,6 +126,17 @@ class EventHandler {
                     break;
                 default:
                     reject('Unkown action given: ' + action);
+                /*
+                RouterStore() events
+                */
+                case 'set-current-route':
+                    this.stores.routerStore.setCurrentRoute(payload.path);
+                    resolve(true);
+                    break;
+                case 'get-current-route':
+                    this.stores.routerStore.getCurrentRoute();
+                    resolve(true);
+                    break;
             }
             this.logger.log('Current stores: ', this.stores);
         });

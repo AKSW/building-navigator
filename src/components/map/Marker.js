@@ -87,11 +87,8 @@ class Marker extends React.Component {
                 action: 'apply-filters'
             });
             super.handleEvent({
-                action: 'update-ui-config',
-                payload: {
-                    key: 'sidebarRoute',
-                    value: 'results'
-                }
+                action: 'set-current-route',
+                payload: {path: 'results'}
             });
             getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"]`).then((entry) => {
                 getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
@@ -123,6 +120,7 @@ class Marker extends React.Component {
                 buildingId: building.id,
             }
         });
+        e.preventDefault();
     }
 
     handleSetCurrentBuildingId(e, value) {

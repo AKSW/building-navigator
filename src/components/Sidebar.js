@@ -14,6 +14,11 @@ class Sidebar extends React.Component {
             stores: props.stores,
         };
 
+        super.handleEvent({
+            action: 'set-current-route',
+            payload: {path: 'search'}
+        });
+
         this.handleToggleSidebar = this.handleToggleSidebar.bind(this);
     }
 
@@ -32,14 +37,15 @@ class Sidebar extends React.Component {
     }
 
     render() {
+        const currentRoute = this.state.stores.routerStore.getCurrentRoute().component;
         // @todo may implement transparent onSwipeRight overlay over map
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible') ? (
             <Swipeable onSwipedLeft={this.handleToggleSidebar}>
                 <div className="sidebar">
-                    {this.state.sidebarRoute === 'search' &&
+                    {currentRoute === 'Search' &&
                         <Search stores={this.state.stores} />
                     }
-                    {this.state.sidebarRoute === 'results' &&
+                    {currentRoute === 'Results' &&
                         <Results stores={this.state.stores} />
                     }
                 </div>

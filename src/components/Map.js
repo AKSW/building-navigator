@@ -100,7 +100,6 @@ class Map extends React.Component {
      * @param Boolean
      */
     setMapLoader(value) {
-        console.log('setMapLoader: ', value);
         this.setState({isLoading: value});
     }
 

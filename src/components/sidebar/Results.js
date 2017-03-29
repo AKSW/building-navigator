@@ -46,18 +46,17 @@ class Results extends React.Component {
 
     handleBackToSearch(e) {
         super.handleEvent({
-            action: 'update-ui-config',
-            payload: {
-                key: 'sidebarRoute',
-                value: 'search'
-            }
+            action: 'set-current-route',
+            payload: {path: 'search'}
         });
+        e.preventDefault();
     }
 
     handlePrevResults(e) {
         super.handleEvent({
             action: 'prev-results'
         });
+        e.preventDefault();
     }
 
     handleNextResults(e) {
@@ -71,6 +70,7 @@ class Results extends React.Component {
                 firstEl.focus();
             })
         })
+        e.preventDefault();
     }
 
     render() {

@@ -27,7 +27,8 @@ const runBuildingNavigator = (config) => {
         buildingStore: new Store.BuildingStore(logger),
         filterStore: new Store.FilterStore(logger),
         mapStore: new Store.MapStore(logger),
-        uiStore: new Store.UIStore(logger)
+        uiStore: new Store.UIStore(logger),
+        routerStore: new Store.RouterStore(logger)
     };
     // init event handler
     const eventHandler = new EventHandler(stores, logger);

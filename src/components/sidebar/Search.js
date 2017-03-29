@@ -47,11 +47,8 @@ class Search extends React.Component {
             payload: { filters: this.state.filters }
         }).then(() => {
             super.handleEvent({
-                action: 'update-ui-config',
-                payload: {
-                    key: 'sidebarRoute',
-                    value: 'results'
-                }
+                action: 'set-current-route',
+                payload: {path: 'results'}
             });
             this.setState({isLoading: false});
         });
@@ -91,6 +88,7 @@ class Search extends React.Component {
                 action: 'apply-filters'
             });
         });
+        e.preventDefault();
     }
 
     render() {
