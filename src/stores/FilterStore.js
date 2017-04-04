@@ -21,11 +21,11 @@ class FilterStore {
             type: 'select-one',
             title: 'Eingang',
             icon: 'home',
-            aria: 'Aktueller Filter, Anforderungen an den Eingangsbereich',
+            aria: 'Filter, Anforderungen an den Eingangsbereich',
             valueSet: [
-                {title: 'keine Einschränkung', key: 'entrance-suit-f-wheelchair', value: 0},
-                {title: 'ist teilweise rollstuhlgerecht', key: 'entrance-suit-f-wheelchair', value: 1},
-                {title: 'ist rollstuhlgerecht', key: 'entrance-suit-f-wheelchair', value: 2},
+                {key: 'entrance-suit-f-wheelchair', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Eingangsbereich'},
+                {key: 'entrance-suit-f-wheelchair', value: 1, title: 'ist teilweise rollstuhlgerecht', aria: 'Eingang ist teilweise rollstuhlgerecht'},
+                {key: 'entrance-suit-f-wheelchair', value: 2, title: 'ist rollstuhlgerecht', aria: 'Eingang ist rollstuhlgerecht'},
             ],
             value: 0,
         });
@@ -38,11 +38,11 @@ class FilterStore {
             type: 'select-one',
             title: 'Aufzug',
             icon: 'elevator',
-            aria: 'Aktueller Filter, Anforderungen an den Aufzug',
+            aria: 'Filter, Anforderungen an den Aufzug',
             valueSet: [
-                {title: 'keine Einschränkung', key: 'lift-avail', value: 0},
-                {title: 'ist vorhanden', key: 'lift-avail', value: 1},
-                {title: 'ist barrierefrei', key: 'lift-suit-f-wheelchair', value: 1},
+                {key: 'lift-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Aufzug'},
+                {key: 'lift-avail', value: 1, title: 'ist vorhanden', aria: 'Aufzug is vorhanden'},
+                {key: 'lift-suit-f-wheelchair', value: 1, title: 'ist rollstuhlgerecht', aria: 'Aufzug is rollstuhlgerecht'},
             ],
             value: 0,
         });
@@ -55,12 +55,12 @@ class FilterStore {
             type: 'select-one',
             title: 'Toilette',
             icon: 'toilet',
-            aria: 'Aktueller Filter, Anforderungen an die Toilette',
+            aria: 'Filter, Anforderungen an die Toilette',
             valueSet: [
-                {title: 'keine Einschränkung', key: 'toilet-avail', value: 0},
-                {title: 'ist vorhanden', key: 'toilet-avail', value: 1},
-                {title: 'ist teilweise rollstuhlgerecht', key: 'toilet-suit-f-wheelchair', value: 1},
-                {title: 'ist rollstuhlgerecht', key: 'toilet-suit-f-wheelchair', value: 2},
+                {key: 'toilet-avail', value: 0, title: 'keine Einschränkung', arai: 'Keine Anforderungen an die Toilette'},
+                {key: 'toilet-avail', value: 1, title: 'ist vorhanden', aria: 'Toilette ist vorhanden'},
+                {key: 'toilet-suit-f-wheelchair', value: 1, title: 'ist teilweise rollstuhlgerecht', aria: 'Toilette ist teilweise rollstuhlgerecht'},
+                {key: 'toilet-suit-f-wheelchair', value: 2, title: 'ist rollstuhlgerecht', aria: 'Toilette ist rollstuhlgerecht'},
             ],
             value: 0,
         });
@@ -73,11 +73,11 @@ class FilterStore {
             type: 'select-one',
             title: 'Parkplatz',
             icon: 'car',
-            aria: 'Aktueller Filter, Anforderungen an den Parkplatz',
+            aria: 'Filter, Anforderungen an den Parkplatz',
             valueSet: [
-                {title: 'keine Einschränkung', key: 'parking-avail', value: 0},
-                {title: 'ist vorhanden', key: 'parking-avail', value: 1},
-                {title: 'ist behindertengerecht', key: 'parking-f-disabled-avail', value: 1},
+                {key: 'parking-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Parkplatz'},
+                {key: 'parking-avail', value: 1, title: 'ist vorhanden', aria: 'Parkplatz ist vorhanden'},
+                {key: 'parking-f-disabled-avail', value: 1, title: 'ist behindertengerecht', aria: 'Parkplatz ist behindertengerecht'},
             ],
             value: 0,
         });
@@ -90,7 +90,7 @@ class FilterStore {
             type: 'checkbox',
             icon: 'low-vision',
             title: 'Hilfestellung für Sehgeschädigte',
-            aria: 'Hilfestellung für Sehgeschädigte',
+            aria: 'Filter, Hilfestellung für Sehgeschädigte',
             key: 'help-for-blind',
             value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
@@ -102,7 +102,7 @@ class FilterStore {
             type: 'checkbox',
             icon: 'hard-of-hearing',
             title: 'Hilfestellung für Hörgeschädigte',
-            aria: 'Hilfestellung für Hörgeschädigte',
+            aria: 'Filter, Hilfestellung für Hörgeschädigte',
             key: 'help-for-hearing-imp',
             value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
@@ -114,7 +114,7 @@ class FilterStore {
             type: 'checkbox',
             icon: 'question',
             title: 'Allgemeine Hilfestellung',
-            aria: 'Allgemeine Hilfestellung',
+            aria: 'Filter, Allgemeine Hilfestellung',
             key: 'general-help',
             value: 0, // 0 - nicht vorhanden, 1 - vorhanden
         });
@@ -157,7 +157,6 @@ class FilterStore {
      * Reset all filters und set to default values (see constructor)
      */
     resetAll() {
-        // @todo this is may bad code?
         const filterStore = new FilterStore();
         this.filters = filterStore.getAll();
     }
