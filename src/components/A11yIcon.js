@@ -10,9 +10,6 @@ import {
     Image
 } from 'react-bootstrap';
 
-/**
- * @todo change a11y template: should just return the icon not the list of icons!
- */
 class A11yIcon extends React.Component {
     constructor(props) {
         super();
@@ -55,16 +52,26 @@ class A11yIcon extends React.Component {
         this.initIcons();
     }
 
-    // get object
-    get(type) {
-        if (this.icons.hasOwnProperty(type)) {
-            return this.icons[type];
+    /**
+     * Get specific icon and description
+     *
+     * @param {String} Name id of the icon
+     * @returns {Object}
+     */
+    get(name) {
+        if (this.icons.hasOwnProperty(name)) {
+            return this.icons[name];
         } else {
-            super.logger.log('a11y icon not found', type, 'error');;
+            super.logger.log('a11y icon not found', name, 'error');;
             return {icon: (null), descr: (null)};
         }
     }
 
+    /**
+     * Get all icons
+     *
+     * @returns {Object}
+     */
     getAll() {
         let ks = [];
         Object.keys(this.icons).forEach((key) => {
@@ -73,20 +80,37 @@ class A11yIcon extends React.Component {
         return ks;
     }
 
-    // get icon
-    icon(type) {
-        return this.get(type).icon;
+    /**
+     * Get specific icon
+     *
+     * @param {String} Name of the icon
+     * @returns {Object}
+     */
+    icon(name) {
+        return this.get(name).icon;
     }
 
-    // get description
-    descr(type) {
-        return this.get(type).descr;
+    /**
+     * Get specific description
+     *
+     * @param {String} Name of the icon
+     * @returns {Object}
+     */
+    descr(name) {
+        return this.get(name).descr;
     }
 
-    add(type, src, descr) {
-        this.icons[type] = {
+    /**
+     * New icon, adds to local icons variable
+     *
+     * @param {String} Id of the icon
+     * @param {String} Path to icon image
+     * @param {String} Description of the icon
+     */
+    add(name, src, descr) {
+        this.icons[name] = {
             icon: (<Image
-                        src={`./images/icons/${src}`}
+                        src={`./images/bvl/${src}`}
                         className="a11yIcon"
                         title={descr}
                         aria-label={descr} />),
@@ -94,19 +118,22 @@ class A11yIcon extends React.Component {
         }
     }
 
+    /**
+     * Init all icons
+     */
     initIcons() {
         const building = this.state.building;
 
         // entrance
         if (building['entrance-suit-f-wheelchair'] === 2) {
             this.add('entrance',
-                'entrance-wheelchair.gif',
+                'entrance-wheelchair.svg',
                 'Eingang ist vollständig rollstuhlgerecht'
             );
         }
         else if (building['entrance-suit-f-wheelchair'] === 1) {
             this.add('entrance',
-                'entrance-wheelchair-restr.gif',
+                'entrance-wheelchair-restr.svg',
                 'Eingang ist teilweise rollstuhlgerecht'
             );
         }
@@ -114,13 +141,13 @@ class A11yIcon extends React.Component {
         // lift
         if (building['lift-suit-f-wheelchair'] === 1) {
             this.add('lift',
-                'elevator-wheelchair.gif',
+                'elevator-wheelchair.svg',
                 'Aufzug ist vorhanden und rollstuhlgerecht'
             );
         }
         else if (building['lift-avail'] === 1) {
             this.add('lift',
-                'elevator.gif',
+                'elevator.svg',
                 'Aufzug ist vorhanden'
             );
         }
@@ -128,19 +155,19 @@ class A11yIcon extends React.Component {
         // toilet
         if (building['toilet-suit-f-wheelchair'] === 2) {
             this.add('toilet',
-                'toilet-wheelchair.gif',
+                'toilet-wheelchair.svg',
                 'Toilette ist vorhanden und rollstuhlgerecht'
             );
         }
         else if (building['toilet-suit-f-wheelchair'] === 1) {
             this.add('toilet',
-                'toilet-wheelchair-restr.gif',
+                'toilet-wheelchair-restr.svg',
                 'Toilette ist vorhanden und teilweise rollstuhlgerecht'
             );
         }
         else if (building['toilet-avail'] === 1) {
             this.add('toilet',
-                'toilet-wheelchair-restr.gif',
+                'toilet.svg',
                 'Toilette ist vorhanden'
             );
         }
@@ -148,13 +175,13 @@ class A11yIcon extends React.Component {
         // parking
         if (building['parking-f-disabled-avail'] === 1) {
             this.add('parking',
-                'parking-wheelchair.gif',
+                'parking-wheelchair.svg',
                 'Parkplatz ist vorhanden und rollstuhlgerecht'
             );
         }
-        else if (building['parking-avail'] == false) {
+        else if (building['parking-avail'] === 1) {
             this.add('parking',
-                'parking.gif',
+                'parking.svg',
                 'Parkplatz ist vorhanden'
             );
         }
@@ -162,7 +189,7 @@ class A11yIcon extends React.Component {
         // blind help
         if (building['help-for-blind'] === 1) {
             this.add('blindHelp',
-                'blind-help.gif',
+                'blind-help.svg',
                 'Hilfestellung für Sehgeschädigte ist vorhanden'
             );
         }
@@ -170,7 +197,7 @@ class A11yIcon extends React.Component {
         // hearing help
         if (building['help-for-hearing-imp'] === 1) {
             this.add('hearingHelp',
-                'hearing-help.gif',
+                'hearing-help.svg',
                 'Hilfestellung für Hörgeschädigte ist vorhanden'
             );
         }
@@ -178,12 +205,13 @@ class A11yIcon extends React.Component {
         // general help
         if (building['general-help'] === 1) {
             this.add('generalHelp',
-                'general-help.gif',
+                'general-help.svg',
                 'Allgemeine Hilfestellung ist vorhanden'
             );
         }
     }
 
+    // Required for React.Component
     render() {
         return (null);
     }
