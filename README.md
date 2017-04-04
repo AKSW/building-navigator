@@ -1,4 +1,4 @@
-# Building Navigator Rebuild
+# Der Gebäude-Navigator (Building Navigator)
 
 This tool provides an interactive map with accessible information about places in Leipzig. You can move on the map or search buildings with certain filters. The filters provide restrictions such as accessibility requirements for the entrances, the lift or the toilet.
 
