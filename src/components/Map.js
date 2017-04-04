@@ -20,6 +20,7 @@ class Map extends React.Component {
         this.handleDragstart= this.handleDragstart.bind(this);
         this.handleDragend = this.handleDragend.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleClickGeolocate = this.handleClickGeolocate.bind(this);
         this.handleLocationFound = this.handleLocationFound.bind(this);
         this.handleMoveend = this.handleMoveend.bind(this);
         this.setMapLoader = this.setMapLoader.bind(this);
@@ -32,7 +33,7 @@ class Map extends React.Component {
             nextProps.stores.uiStore.get('resultsStart') + nextProps.stores.uiStore.get('resultsSteps')
         );
 
-        // @todo only update marker groups if bounds/buildings changed
+        // @todo may only update marker groups if bounds/buildings changed
         const mayGroupBuildings = () => {
             const markers = [];
             buildings.map((building, bid) => {
@@ -88,7 +89,7 @@ class Map extends React.Component {
     }
 
     /**
-     * @todo Map should only update if visible buildings changed
+     * @todo May only update map if visible buildings/map-bounds changed
      */
     shouldComponentUpdate(nextProps, nextState) {
         return true;
@@ -153,7 +154,6 @@ class Map extends React.Component {
     }
 
     handleClick(e) {
-        // @todo may first test if any building is selected
         super.handleEvent({
             action: 'set-selected-on-map',
             payload: {
@@ -181,6 +181,10 @@ class Map extends React.Component {
     handleMoveend(e) {
     }
 
+    handleClickGeolocate(e) {
+        this.mapNode.leafletElement.locate();
+    }
+
     render() {
         const mapClass = this.state.stores.uiStore.get('sidebarIsVisible') ? "map-wrapper" : "map-wrapper map-wrapper-full";
         const mapCenter = [this.state.stores.mapStore.get('center').latitude, this.state.stores.mapStore.get('center').longitude];
@@ -192,6 +196,19 @@ class Map extends React.Component {
                         <i className='fa fa-circle-o-notch fa-spin' />
                     </div>
                 }
+                <div className="leaflet-control-container">
+                    <div className="leaflet-bottom leaflet-right">
+                        {!hideZoomControl &&
+                            <button className="btn btn-default btn-lg leaflet-bar leaflet-control btn-map-geolocate"
+                                title="Deinen Standort anzeigen"
+                                onClick={this.handleClickGeolocate}
+                                aria-hidden={true}
+                            >
+                                    <i className="fa fa-crosshairs" aria-hidden={true}></i>
+                            </button>
+                        }
+                    </div>
+                </div>
                 <OSMap
                     ref={(node) => this.mapNode = node}
                     className="map"
