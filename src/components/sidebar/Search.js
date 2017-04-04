@@ -158,7 +158,7 @@ class Search extends React.Component {
                                 >
                                     {filter.valueSet.map((entry, key) => {
                                         return (
-                                            <option key={key} value={key}>{entry.title}</option>
+                                            <option key={key} value={key} aria-label={entry.aria}>{entry.title}</option>
                                         );
                                     })}
                                 </FormControl>
@@ -170,7 +170,7 @@ class Search extends React.Component {
 
                 <FormGroup controlId="formFilterEtc">
                     <Col componentClass={ControlLabel} md={3}>
-                        Sonstiges
+                        <span aria-hidden={true}>Sonstiges</span>
                     </Col>
                 </FormGroup>
 
