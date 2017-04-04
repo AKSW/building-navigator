@@ -185,6 +185,22 @@ div.back-to-search-wrapper {
         height: 35px;
         margin: 0px 5px 0px 0px;
     }
+    .filter.checkbox {
+        text-align: center;
+    }
+    .filter.checkbox label {
+        padding-left: 0px;
+    }
+    .filter.checkbox .filter-icon {
+        display: block;
+        margin-left: 50%;
+    }
+    .filter.checkbox .filter-icon img {
+        margin-left: -35px;
+    }
+    .filter.checkbox input[type=checkbox] {
+        top: 50%;
+    }
 }
 @media (min-width: 768px) {
     .filter-wrapper label.control-label {
@@ -194,10 +210,6 @@ div.back-to-search-wrapper {
 /**
     Results list
 **/
-.results .pager {
-    margin-left: -10px;
-    margin-right: -15px;
-}
 .results .pager a {
     padding: 10px 15px;
 }
@@ -290,11 +302,21 @@ div.back-to-search-wrapper {
     }
 }
 @media (max-width: 420px) {
+    .a11yIcons-list li {
+        width: 25%;
+    }
     .result-bottom-buttons button:first-child {
         width: 100%;
     }
     .result-bottom-buttons button:last-child {
         width: 100%;
+    }
+    .results .pager li {
+        display: block;
+    }
+    .results .pager .previous>a,
+    .results .pager .next>a {
+        float: none;
     }
 }
 
@@ -361,6 +383,9 @@ div.back-to-search-wrapper {
     border: none;
     background: transparent;
     padding-top: 10px;
+}
+.leaflet-bottom .leaflet-control.btn-map-geolocate {
+    margin-bottom: 50px;
 }
 @media (max-width: 992px) {
     .map-wrapper {
