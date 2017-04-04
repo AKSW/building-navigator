@@ -12,6 +12,8 @@ import {
 } from 'react-bootstrap'
 import A11yIcon from '../A11yIcon';
 
+import {getElement} from '../../utils/GuiUtils'
+
 class Entry extends React.Component {
     constructor(props) {
         super();
@@ -60,6 +62,9 @@ class Entry extends React.Component {
                 });
             }
             this.setState({isLoading: false});
+            getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"] a`).then((entry) => {
+                entry.focus();
+            });
         });
         e.preventDefault();
     }
@@ -75,7 +80,7 @@ class Entry extends React.Component {
     }
 
     handleMouseOver(e) {
-        // @todo may show entry on map
+        // @todo may show this entry on map
     }
 
     handleShowOnMap(e, building) {
