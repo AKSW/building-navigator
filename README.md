@@ -12,6 +12,18 @@ This tool provides an interactive map with accessible information about places i
 
 ![](https://github.com/AKSW/building-navigator/raw/rebuild/assets/screenshot-3.png)
 
+## Some experiences with screenreaders
+
+- **TalkBack** for Android with ChromeMobile
+    + Tab-Control with swipe left/right for next element
+    + Change tab-filigranity with swipe up or down
+    + Apply selected element with double-tab (somewhere on the screen)
+- **ChromeVox** Extension for Chrome
+    + Control with Tabulator (next sibling element) and Str+Arrow-Keys (next child element)
+    + Change select-filter with arrow keys, checkboxes with space
+    + Select Links Enter, Buttons Space or Enter
+    + Scroll with two fingers (a quite sound gives the position by a pitch level)
+- **TODO:** Windows and iOS Screenreader
 
 ## The team behind the scene
 
