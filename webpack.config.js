@@ -9,7 +9,7 @@ module.exports = {
     devtool: 'eval',
     debug: true,
     context: path.resolve(__dirname),
-    entry: './src/main.js',    
+    entry: './src/main.js',
     output: {
         library: 'BuildingNavigator',
         path: PATHS.dist,
@@ -36,5 +36,12 @@ module.exports = {
             include: __dirname + '/src'
           }
        ]
-    }
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          'NODE_ENV': JSON.stringify('development')
+        }
+      })
+    ],
 };

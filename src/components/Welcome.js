@@ -30,18 +30,22 @@ class Welcome extends React.Component {
         });
         super.handleEvent({action: 'reset-all-filters'});
         if (e.target.value === 'move') {
-            super.handleEvent({action: 'update-filter',
+            super.handleEvent({
+                action: 'update-filter',
                 payload: {filterId: 'entrance', value: 1}
             });
-            super.handleEvent({action: 'update-filter',
+            super.handleEvent({
+                action: 'update-filter',
                 payload: {filterId: 'lift', value: 2}
             });
-            super.handleEvent({action: 'update-filter',
+            super.handleEvent({
+                action: 'update-filter',
                 payload: {filterId: 'toilet', value: 2}
             });
         }
         else if (e.target.value === 'hear') {
-            super.handleEvent({action: 'update-filter',
+            super.handleEvent({
+                action: 'update-filter',
                 payload: {filterId: 'hearing', value: 1}
             });
         }

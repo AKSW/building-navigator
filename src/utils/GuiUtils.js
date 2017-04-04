@@ -34,7 +34,7 @@ export const getElement = (rootNodeId, elementSelector) => {
     });
 };
 
-/*
+/**
     From http://stackoverflow.com/a/25574313
     Smoothly scroll element to the given target (element.scrollTop)
     for the given duration

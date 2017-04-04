@@ -120,6 +120,7 @@ class Search extends React.Component {
                 </Col>
                 <Clearfix />
 
+                {/* @todo decide how to implement a fulltext search */}
                 {/*<FormGroup controlId="formFilterSearch">
                     <Col md={12}>
                         <ControlLabel><h3>Gebäudename</h3></ControlLabel>

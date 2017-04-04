@@ -1,3 +1,7 @@
+/**
+ * Detect which browser the user is using.
+ * For more information see: http://detectmobilebrowser.com/mobile
+ */
 export const isMobileBrowser = () => {
     let isMobile = false;
     (

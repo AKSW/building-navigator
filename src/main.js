@@ -20,9 +20,11 @@ const runBuildingNavigator = (config) => {
     const appEl = document.getElementById(config.container);
 
     // init logger
-    const loggerMode = process.env.NODE_ENV !== 'production' ? 'development' : 'production';
+    const loggerMode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
+
     // init stores
     const logger = new Logger(loggerMode);
+
     const stores = {
         buildingStore: new Store.BuildingStore(logger),
         filterStore: new Store.FilterStore(logger),

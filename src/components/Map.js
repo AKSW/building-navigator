@@ -186,9 +186,18 @@ class Map extends React.Component {
     }
 
     render() {
-        const mapClass = this.state.stores.uiStore.get('sidebarIsVisible') ? "map-wrapper" : "map-wrapper map-wrapper-full";
-        const mapCenter = [this.state.stores.mapStore.get('center').latitude, this.state.stores.mapStore.get('center').longitude];
-        const hideZoomControl = this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible');
+        const mapClass = this.state.stores.uiStore.get('sidebarIsVisible')
+            ? "map-wrapper"
+            : "map-wrapper map-wrapper-full";
+
+        const mapCenter = [
+            this.state.stores.mapStore.get('center').latitude,
+            this.state.stores.mapStore.get('center').longitude
+        ];
+
+        const hideZoomControl = this.state.stores.uiStore.get('isSmallView')
+            && this.state.stores.uiStore.get('sidebarIsVisible');
+
         return (
             <div className={mapClass}>
                 {this.state.isLoading &&

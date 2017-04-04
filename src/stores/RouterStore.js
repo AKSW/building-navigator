@@ -2,10 +2,6 @@ class RouterStore {
     constructor(logger) {
         this.logger = logger;
         this.routes = [];
-
-        //history.replaceState(null, document.title, location.pathname+"#Index");
-        //history.pushState(null, document.title, location.pathname+"#Index");
-
         this.addRoutes([
             {path: 'Index', component: 'Search'},
             {path: 'search', component: 'Search'},
@@ -13,14 +9,6 @@ class RouterStore {
         ]);
 
         this.setCurrentRoute('Index');
-
-        /*window.onhashchange = () => {
-            console.log('hash changed...');
-        }
-
-        window.addEventListener("popstate", function() {
-            console.log('popstate...', window.location.hash);
-        }, false);*/
     }
 
     addRoute(route) {
@@ -34,7 +22,6 @@ class RouterStore {
     }
 
     setCurrentRoute(path) {
-        //history.replaceState(null, document.title, `${location.pathname}#/${path}`);
         history.pushState(null, document.title, `${location.pathname}#/${path}`);
     }
 

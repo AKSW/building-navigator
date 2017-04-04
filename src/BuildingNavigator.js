@@ -69,7 +69,6 @@ class BuildingNavigator extends React.Component {
         this.handleEvent({action: 'init-buildings'});
     }
 
-
     componentWillUnmount() {
         window.removeEventListener('resize', this._handleWindowResize);
     }
@@ -144,9 +143,9 @@ class BuildingNavigator extends React.Component {
 }
 
 BuildingNavigator.propTypes = {
-  stores: React.PropTypes.object.isRequired,
-  logger: React.PropTypes.instanceOf(Logger).isRequired,
-  eventHandler: React.PropTypes.instanceOf(EventHandler).isRequired,
+    stores: React.PropTypes.object.isRequired,
+    logger: React.PropTypes.instanceOf(Logger).isRequired,
+    eventHandler: React.PropTypes.instanceOf(EventHandler).isRequired,
 };
 
 export default BuildingNavigator;

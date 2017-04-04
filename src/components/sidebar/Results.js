@@ -24,11 +24,6 @@ class Results extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         let buildings = nextProps.stores.buildingStore.getVisibles();
-        /*buildings = nextProps.stores.buildingStore.sortByDistance({
-            buildings: buildings,
-            latitude: nextProps.stores.mapStore.get('center').latitude,
-            longitude: nextProps.stores.mapStore.get('center').longitude
-        });*/
         this.setState({
             stores: nextProps.stores,
             buildings: buildings.slice(

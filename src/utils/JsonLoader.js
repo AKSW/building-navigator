@@ -13,13 +13,7 @@ class JsonLoader {
     loadJson(file) {
         return new Promise(
             (resolve, reject) => {
-                fetch(this.dataDir + file, {
-                    /*mode: 'no-cors',
-                    headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Content-Type': 'application/json'
-                    }*/
-                })
+                fetch(this.dataDir + file, {})
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(response.statusText);
