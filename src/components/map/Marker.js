@@ -8,27 +8,9 @@ import {
 import A11yIcon from '../A11yIcon';
 import {getElement} from '../../utils/GuiUtils'
 
-const normalIcon = L.icon({
-    iconUrl: './images/marker-icon.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor:  [0, -45]
-});
-
-const smallIcon = L.icon({
-    iconUrl: './images/small-marker-icon.png',
-    iconSize: [15, 16],
-    iconAnchor: [7, 16],
-    popupAnchor:  [0, -46]
-});
-
-const selectedIcon = L.icon({
-    iconUrl: './images/selected-marker-icon.png',
-    iconSize: [31, 51],
-    iconAnchor: [15, 51],
-    popupAnchor:  [0, -45]
-});
-
+/**
+ * Marker component for the map
+ */
 class Marker extends React.Component {
     constructor(props) {
         super();
@@ -41,12 +23,33 @@ class Marker extends React.Component {
             isLoading: false,
         };
 
+        // init marker icons
+        this.icons = {};
+        this.icons.normalIcon = L.icon({
+            iconUrl: './images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor:  [0, -45]
+        });
+        this.icons.smallIcon = L.icon({
+            iconUrl: './images/small-marker-icon.png',
+            iconSize: [15, 16],
+            iconAnchor: [7, 16],
+            popupAnchor:  [0, -46]
+        });
+        this.icons.selectedIcon = L.icon({
+            iconUrl: './images/selected-marker-icon.png',
+            iconSize: [31, 51],
+            iconAnchor: [15, 51],
+            popupAnchor:  [0, -45]
+        });
+
         this.setMapLoader = props.setMapLoader;
 
         this.handleShowDetails = this.handleShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
-        this.handleSetCurrentBuildingId = this.handleSetCurrentBuildingId.bind(this);
-        this.handleSetSelectedOnMap = this.handleSetSelectedOnMap.bind(this);
+        this.handleClickNextEntry = this.handleClickNextEntry.bind(this);
+        this.handleClickPrevEntry = this.handleClickPrevEntry.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -65,6 +68,9 @@ class Marker extends React.Component {
         });
     }
 
+    /**
+     * Show details of a building. May load building data first
+     */
     handleShowDetails(e, buildingId) {
         this.setMapLoader(true);
         this.setState({isLoading: true});
@@ -100,56 +106,71 @@ class Marker extends React.Component {
         });
     }
 
+    /**
+     * On click marker, set as selected on map
+     */
     handleClickMarker(e, building) {
         // for small devices: immediately open building details in sidebar
         if (this.state.stores.uiStore.get('isSmallView')) {
             this.handleShowDetails(e, building.id);
         }
-        super.handleEvent({
-            action: 'set-selected-on-map',
-            payload: {
-                buildingId: building.id,
-            }
-        });
+        this.setSelectedOnMap(building);
     }
 
-    handleSetSelectedOnMap(e, building) {
-        super.handleEvent({
-            action: 'set-selected-on-map',
-            payload: {
-                buildingId: building.id,
-            }
-        });
+    /**
+     * Next entry for multi-marker
+     */
+    handleClickPrevEntry(e) {
+        const building = this.state.marker.buildings[this.state.currentBuildingId-1];
+        this.setSelectedOnMap(building);
         e.preventDefault();
     }
 
-    handleSetCurrentBuildingId(e, value) {
-        this.setState({
-            currentBuildingId: value
+    /**
+     * Previous entry for multi-marker
+     */
+    handleClickNextEntry(e) {
+        const building = this.state.marker.buildings[this.state.currentBuildingId+1];
+        this.setSelectedOnMap(building);
+        e.preventDefault();
+    }
+
+    setSelectedOnMap(building) {
+        super.handleEvent({
+            action: 'set-selected-on-map',
+            payload: {
+                buildingId: building.id,
+            }
         });
     }
 
+    /**
+     * Render marker on specific position with icon, and popup content
+     */
     render() {
         const isSmallView = this.state.stores.uiStore.get('isSmallView');
         const marker = this.state.marker;
         const currentBuilding = marker.buildings[this.state.currentBuildingId];
         const position = [currentBuilding.latitude, currentBuilding.longitude];
 
-        let icon = normalIcon;
+        // marker icon is normal, small or selected
+        let icon = this.icons.normalIcon;
         if (currentBuilding.selectOnMap === true) {
-            icon = selectedIcon;
+            icon = this.icons.selectedIcon;
         }
         else if (this.state.zoom < 15) {
-            icon = smallIcon
+            icon = this.icons.smallIcon;
         }
 
+        // create accessibility icons class
         const a11yIcons = new A11yIcon({building: currentBuilding});
 
+        // navigation for markers with multiple entries in the same location
         const multiMarkerNav = (
             <ul className="pager">
                 {this.state.currentBuildingId > 0 &&
                     <li className="previous">
-                        <a role="button" href="#" onClick={e => this.handleSetSelectedOnMap(e, marker.buildings[this.state.currentBuildingId-1])}>
+                        <a role="button" href="#" onClick={this.handleClickPrevEntry}>
                             <i className="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; vorheriges
                         </a>
                     </li>
@@ -159,7 +180,7 @@ class Marker extends React.Component {
                 }
                 {marker.buildings.length > 1 && (this.state.currentBuildingId+1) < marker.buildings.length &&
                     <li className="next">
-                        <a role="button" href="#" onClick={e => this.handleSetSelectedOnMap(e, marker.buildings[this.state.currentBuildingId+1])}>
+                        <a role="button" href="#" onClick={this.handleClickNextEntry}>
                             nächstes <i className="fa fa-chevron-right" aria-hidden="true"></i>
                         </a>
                     </li>
