@@ -22,6 +22,9 @@ class JsonLoader {
                 }).then((json) => {
                     resolve(json);
                 }).catch((ex) => {
+                    if (ex.toString() == 'Error: Not Found') {
+                        reject(`Datei ${this.dataDir + file} nicht gefunden (${ex})`);
+                    }
                     reject(ex);
                 });
             }
