@@ -1,28 +1,78 @@
+import _ from 'lodash';
+
+/**
+ * Store for routes and browser history
+ */
 class RouterStore {
     constructor(logger) {
         this.logger = logger;
         this.routes = [];
+
+        // init basetitle
+        this.basetitle = document.title;
+        // title seperator
+        this.seperator = '-';
+
+        // init all default routes
+        // @todo add 404 route
         this.addRoutes([
-            {path: 'Index', component: 'Search'},
-            {path: 'search', component: 'Search'},
-            {path: 'results', component: 'Results'}
+            {stores: null, path: 'index', component: 'Search', title: ''},
+            {stores: null, path: 'search', component: 'Search', title: 'Suche'},
+            {stores: null, path: 'results', component: 'Results', title: 'Ergebnisse'},
         ]);
 
-        this.setCurrentRoute('Index');
+        // set index with Search as first default route
+        this.setCurrentRoute(null, 'index');
     }
 
-    addRoute(route) {
-        this.routes.push(route);
+    /**
+     * Add a route to local routes
+     *
+     * @param {Object} Stores state of the application for the current route
+     * @param {String} Unique path of the route
+     * @param {String} Used component for the route
+     * @param {String} Title for the route
+     */
+    addRoute(stores = null, path, component, title = '') {
+        this.routes.push({stores, path, component, title});
     }
 
+    /**
+     * Add multiple routes
+     *
+     * @param {Array} Array of routes
+     */
     addRoutes(routes) {
         routes.forEach((route, id) => {
-            this.addRoute(route);
+            this.addRoute(route.stores, route.path, route.component, route.title);
         });
     }
 
-    setCurrentRoute(path) {
-        history.pushState(null, document.title, `${location.pathname}#/${path}`);
+    /**
+     * Set current route in browser history
+     *
+     * @param {Object} Store state
+     * @param {String} Route path
+     */
+    setCurrentRoute(currentStores, routePath) {
+        // get route from path
+        // @todo what if route is undefined? May use 404 component
+        const route = this.getRoute(routePath);
+
+        // write deep copy of current store state into previous route
+        const prevRoute = this.getCurrentRoute();
+        if (prevRoute !== undefined) {
+            prevRoute.stores = _.cloneDeep(route.stores);
+        }
+
+        // create browser title
+        if (route.title != '') {
+            route.title = `${route.title} ${this.seperator} ${this.basetitle}`;
+        }
+        document.title = route.title;
+
+        // add route to browsers history
+        history.pushState(null, route.title, `${location.pathname}#/${route.path}`);
     }
 
     getCurrentRoute() {
@@ -30,29 +80,42 @@ class RouterStore {
     }
 
     getIndexRoute() {
-        return this.getRoute('Index');
+        return this.getRoute('index');
     }
 
     get404Route() {
         return this.getRoute('404');
     }
 
+    /**
+     * Get specific route. If path is null, get path from browser url hash
+     *
+     * @return {Object} Route object
+     */
     getRoute(path = null) {
         if (path == null) {
             path = this.getPathFromLocation();
         }
+
         return this.routes.find((route) => {
             return route.path == path;
         });
     }
 
+    /**
+     * Get all routes
+     *
+     * @returns {Array} Array of routes
+     */
     getRoutes() {
         return this.routes;
     }
 
     /**
      * Get current path from hash in location:
-     * e.g. get Index from following: #, #foo, #/, #/Index, #foo/Index, #foo/Index/bar, #/Index?param
+     * e.g. get index from following: #, #foo, #/, #/index, #foo/index, #foo/index/bar, #/index?param
+     *
+     * @return {String}
      */
     getPathFromLocation() {
         const hash = window.location.hash;
@@ -60,7 +123,7 @@ class RouterStore {
         if (path !== null) {
             return path[1];
         }
-        return 'Index';
+        return 'index';
     }
 }
 
