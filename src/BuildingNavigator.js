@@ -1,6 +1,5 @@
 import React from 'react';
 import {Alert} from 'react-bootstrap';
-import _ from 'lodash';
 import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
@@ -18,18 +17,20 @@ class BuildingNavigator extends React.Component {
     constructor(props) {
         super();
 
+        // init store state
         this.state = {
             stores: props.stores,
         };
+        // set local variables
         this.logger = props.logger;
-        this.stores = this.state.stores;
         this.eventHandler = props.eventHandler;
         this.handleEvent = this.handleEvent.bind(this);
+        this.compMounted = false;
 
-        /*
-        * Extend Rect.Component with some helper functions from this class,
-        * allows components to acces them by calling: super.handleEvent()
-        */
+        /**
+         * Extend Rect.Component with some helper functions from this class,
+         * allows components to acces them by calling: super.handleEvent()
+         */
         React.Component.prototype.handleEvent = (event) => {
             return new Promise((resolve, reject) => {
                 this.handleEvent(event).then(
@@ -39,23 +40,22 @@ class BuildingNavigator extends React.Component {
             });
         };
         React.Component.prototype.logger = this.logger;
-        React.Component.prototype.stores = this.stores;
 
-        this._isMounted = false;
-        this._handleWindowResize = this._handleWindowResize.bind(this);
+        this.handleWindowResize = this.handleWindowResize.bind(this);
     }
 
-    /*
-    * Componented mounted, do some initial things
-    */
     componentDidMount() {
-        this._isMounted = true;
+        this.compMounted = true;
         // add resize event listener
-        window.addEventListener('resize', this._handleWindowResize);
+        window.addEventListener('resize', this.handleWindowResize);
 
         // add popstate listener (if user presses browsers back/forward button, get new current route)
         window.addEventListener("popstate", () => {
-            this.handleEvent({action: 'get-current-route'});
+            this.handleEvent({action: 'get-current-route'}).then((route) => {
+                if (route.stores !== null) {
+                    this.setState({stores: route.stores});
+                }
+            });
         }, false);
 
         // may set if is small view
@@ -70,7 +70,8 @@ class BuildingNavigator extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this._handleWindowResize);
+        window.removeEventListener('resize', this.handleWindowResize);
+        window.removeEventListener('popstate');
     }
 
     /**
@@ -83,12 +84,12 @@ class BuildingNavigator extends React.Component {
         return new Promise((resolve, reject) => {
             this.eventHandler.handleEvent(event).then(
                 response => {
-                    this.setState( this.state );
+                    this.setState(this.state);
                     resolve(response);
                 },
                 error => {
                     this.logger.log(error, event, 'error');
-                    this.setState( this.state );
+                    this.setState(this.state);
                     reject(error);
                 }
             );
@@ -98,19 +99,23 @@ class BuildingNavigator extends React.Component {
     /**
      * Window resize event handler
      */
-    _handleWindowResize () {
-        // test if its a small view, write to state
-        if (this._isMounted) {
+    handleWindowResize () {
+        const isSmallView = this.state.stores.uiStore.get('isSmallView');
+
+        // test if its a small view and write to state (after this app was mounted)
+        if (this.compMounted) {
             const appEl = document.getElementById(this.state.stores.uiStore.get('userConfig').container);
-            if (appEl.offsetWidth <= this.stores.uiStore.get('smallViewMax')) {
-                if (!this.stores.uiStore.get('isSmallView')) {
-                    this.handleEvent({action: 'update-ui-config',
+            if (appEl.offsetWidth <= this.state.stores.uiStore.get('smallViewMax')) {
+                if (!isSmallView) {
+                    this.handleEvent({
+                        action: 'update-ui-config',
                         payload: {key: 'isSmallView', value: true}
                     });
                 }
             } else {
-                if (this.stores.uiStore.get('isSmallView')) {
-                    this.handleEvent({action: 'update-ui-config',
+                if (isSmallView) {
+                    this.handleEvent({
+                        action: 'update-ui-config',
                         payload: {key: 'isSmallView', value: false}
                     });
                 }
@@ -123,20 +128,22 @@ class BuildingNavigator extends React.Component {
             <div role="main" className="building-navigator">
                 {this.logger.hasError() &&
                     <Alert bsStyle="danger" className="global-error">
-                        <strong>Fehler bei der Ausführung der Anwendung.</strong>
+                        <p><h3>Fehler bei der Ausführung der Anwendung</h3></p>
                         {this.logger.getErrors().map((error, eid) => {
-                            // @todo may show {error.message.stack} for more information, or point to console?
                             return (
-                                <p key={eid}>Nachricht: {error.message.toString()}</p>
+                                <p key={eid}>
+                                    <strong>Nachricht:</strong><br />{error.message.toString()}<br /><br />
+                                    <strong>Details:</strong><br />{error.message.stack}
+                                </p>
                             );
                         })}
                     </Alert>
                 }
-                {this.stores.uiStore.get('showWelcome') &&
+                {this.state.stores.uiStore.get('showWelcome') &&
                     <Welcome />
                 }
-                <Sidebar stores={this.stores} />
-                <Map aria-hidden={true} stores={this.stores} />
+                <Sidebar stores={this.state.stores} />
+                <Map aria-hidden={true} stores={this.state.stores} />
             </div>
         );
     }

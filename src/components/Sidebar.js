@@ -13,6 +13,7 @@ class Sidebar extends React.Component {
             stores: props.stores,
         };
 
+        // set initial route search
         super.handleEvent({
             action: 'set-current-route',
             payload: {path: 'search'}
@@ -34,43 +35,51 @@ class Sidebar extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Render sidebar, search or result component with hide-button. Or if its hidden a show-button
+     */
     render() {
-        const currentRoute = this.state.stores.routerStore.getCurrentRoute().component;
+        // get current for the sidebar
+        const currentRoute = this.state.stores.routerStore.getCurrentRoute();
+
+        if (currentRoute === undefined) {
+            return (null);
+        }
+
         // @todo may implement transparent onSwipeRight overlay over map
-        const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible') ? (
-            <Swipeable onSwipedLeft={this.handleToggleSidebar}>
-                <div className="sidebar">
-                    {currentRoute === 'Search' &&
-                        <Search stores={this.state.stores} />
-                    }
-                    {currentRoute === 'Results' &&
-                        <Results stores={this.state.stores} />
-                    }
-                </div>
-                <div className="btn-toggle-sidebar btn-hide-sidebar">
+        const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible')
+            ? (<Swipeable onSwipedLeft={this.handleToggleSidebar}>
+                    <div className="sidebar">
+                        {currentRoute.component === 'Search' &&
+                            <Search stores={this.state.stores} />
+                        }
+                        {currentRoute.component === 'Results' &&
+                            <Results stores={this.state.stores} />
+                        }
+                    </div>
+                    <div className="btn-toggle-sidebar btn-hide-sidebar">
+                        <Button
+                            bsClass="btn btn-lg btn-default pull-right"
+                            title="Seitenleiste ausblenden"
+                            aria-hidden={true}
+                            onClick={this.handleToggleSidebar}
+                        >
+                            <i className="fa fa-angle-double-left" aria-hidden={true}></i>
+                        </Button>
+                    </div>
+                </Swipeable>)
+            : (<div className="btn-toggle-sidebar btn-show-sidebar">
                     <Button
-                        bsClass="btn btn-lg btn-default pull-right"
-                        title="Seitenleiste ausblenden"
-                        aria-hidden={true}
+                        bsStyle="default"
+                        bsSize="large"
+                        title="Seitenleiste einblenden"
                         onClick={this.handleToggleSidebar}
+                        aria-hidden={true}
                     >
-                        <i className="fa fa-angle-double-left" aria-hidden={true}></i>
+                        <i className="fa fa-angle-double-right" aria-hidden={true}></i>
                     </Button>
                 </div>
-            </Swipeable>
-        ) : (
-            <div className="btn-toggle-sidebar btn-show-sidebar">
-                <Button
-                    bsStyle="default"
-                    bsSize="large"
-                    title="Seitenleiste einblenden"
-                    onClick={this.handleToggleSidebar}
-                    aria-hidden={true}
-                >
-                    <i className="fa fa-angle-double-right" aria-hidden={true}></i>
-                </Button>
-            </div>
-        );
+            );
 
         return (sidebarHtml);
     }

@@ -9,8 +9,8 @@ class EventHandler {
     /**
      * Handle events
      *
-     * @param Object event with action and payload
-     * @return Promise
+     * @param {Object} Event with action and payload
+     * @return {Promise} Resolve or reject (on error) new promise
      * @todo may split into stores if action list grows too long
      */
     handleEvent(event) {
@@ -124,19 +124,22 @@ class EventHandler {
                     this.stores.mapStore.updateZoom(payload.zoom);
                     resolve(true);
                     break;
-                default:
-                    reject('Unkown action given: ' + action);
                 /*
                 RouterStore() events
                 */
                 case 'set-current-route':
-                    this.stores.routerStore.setCurrentRoute(payload.path);
+                    // create deep copy of stores without references
+                    this.stores.routerStore.setCurrentRoute(this.stores, payload.path);
                     resolve(true);
                     break;
                 case 'get-current-route':
-                    this.stores.routerStore.getCurrentRoute();
-                    resolve(true);
+                    const currRoute = this.stores.routerStore.getCurrentRoute();
+                    resolve(currRoute);
                     break;
+
+                default:
+                    // reject promise if unkwon action was given
+                    reject(`Unkown action to ${this.constructor.name} given: ` + action);
             }
             this.logger.log('Current stores: ', this.stores);
         });
