@@ -44,6 +44,10 @@ class BuildingNavigator extends React.Component {
         this.handleWindowResize = this.handleWindowResize.bind(this);
     }
 
+    /**
+     * Do some initial work:
+     * add event listeners, may set if is mobile browser, init buildings, set route
+     */
     componentDidMount() {
         this.compMounted = true;
         // add resize event listener
@@ -54,19 +58,27 @@ class BuildingNavigator extends React.Component {
             this.handleEvent({action: 'get-current-route'}).then((route) => {
                 if (route.stores !== null) {
                     this.setState({stores: route.stores});
+                    this.eventHandler.stores = route.stores;
                 }
             });
         }, false);
 
         // may set if is small view
         if (isMobileBrowser()) {
-            this.handleEvent({action: 'update-ui-config',
+            this.handleEvent({
+                action: 'update-ui-config',
                 payload: {key: 'isSmallView', value: true}
             });
         }
 
         // load initial buildind data
-        this.handleEvent({action: 'init-buildings'});
+        // and set search as initial route
+        this.handleEvent({action: 'init-buildings'}).then(() => {
+            super.handleEvent({
+                action: 'set-current-route',
+                payload: {path: 'search'}
+            });
+        });
     }
 
     componentWillUnmount() {

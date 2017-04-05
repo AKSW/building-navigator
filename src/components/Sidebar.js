@@ -13,12 +13,6 @@ class Sidebar extends React.Component {
             stores: props.stores,
         };
 
-        // set initial route search
-        super.handleEvent({
-            action: 'set-current-route',
-            payload: {path: 'search'}
-        });
-
         this.handleToggleSidebar = this.handleToggleSidebar.bind(this);
     }
 
@@ -39,12 +33,8 @@ class Sidebar extends React.Component {
      * Render sidebar, search or result component with hide-button. Or if its hidden a show-button
      */
     render() {
-        // get current for the sidebar
+        // get current route for the sidebar
         const currentRoute = this.state.stores.routerStore.getCurrentRoute();
-
-        if (currentRoute === undefined) {
-            return (null);
-        }
 
         // @todo may implement transparent onSwipeRight overlay over map
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible')

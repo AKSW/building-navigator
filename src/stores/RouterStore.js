@@ -20,9 +20,6 @@ class RouterStore {
             {stores: null, path: 'search', component: 'Search', title: 'Suche'},
             {stores: null, path: 'results', component: 'Results', title: 'Ergebnisse'},
         ]);
-
-        // set index with Search as first default route
-        this.setCurrentRoute(null, 'index');
     }
 
     /**
@@ -62,7 +59,7 @@ class RouterStore {
         // write deep copy of current store state into previous route
         const prevRoute = this.getCurrentRoute();
         if (prevRoute !== undefined) {
-            prevRoute.stores = _.cloneDeep(route.stores);
+            prevRoute.stores = _.cloneDeep(currentStores);
         }
 
         // create browser title
