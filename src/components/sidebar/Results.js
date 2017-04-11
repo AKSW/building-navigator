@@ -4,18 +4,16 @@ import {Grid, Row, Col, Button, Pager} from 'react-bootstrap';
 import ResultsEntry from './ResultsEntry';
 import {getElement} from '../../utils/GuiUtils'
 
+/**
+ * Result component, renders results list with result entries
+ */
 class Results extends React.Component {
     constructor(props) {
         super();
 
-        let buildings = props.stores.buildingStore.getVisibles();
-
         this.state = {
             stores: props.stores,
-            buildings: buildings.slice(
-                props.stores.uiStore.get('resultsStart'),
-                props.stores.uiStore.get('resultsStart') + props.stores.uiStore.get('resultsSteps')
-            )
+            buildings: this.getBuildingsSlice(props.stores)
         }
 
         this.handleBackToSearch = this.handleBackToSearch.bind(this);
@@ -23,13 +21,9 @@ class Results extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let buildings = nextProps.stores.buildingStore.getVisibles();
         this.setState({
             stores: nextProps.stores,
-            buildings: buildings.slice(
-                nextProps.stores.uiStore.get('resultsStart'),
-                nextProps.stores.uiStore.get('resultsStart') + nextProps.stores.uiStore.get('resultsSteps')
-            )
+            buildings: this.getBuildingsSlice(nextProps.stores)
         });
     }
 
@@ -39,6 +33,23 @@ class Results extends React.Component {
         })
     }
 
+    /**
+     * Get slice (resultsStart to resultsSteps) ob buildings
+     *
+     * @param {Object} Stores
+     * @return {Array}
+     */
+    getBuildingsSlice(stores) {
+        const buildings = stores.buildingStore.getVisibles();
+        return buildings.slice(
+            stores.uiStore.get('resultsStart'),
+            stores.uiStore.get('resultsStart') + stores.uiStore.get('resultsSteps')
+        );
+    }
+
+    /**
+     * Click on back to search button
+     */
     handleBackToSearch(e) {
         super.handleEvent({
             action: 'set-current-route',
@@ -47,6 +58,9 @@ class Results extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Goto previous results
+     */
     handlePrevResults(e) {
         super.handleEvent({
             action: 'prev-results'
@@ -54,6 +68,9 @@ class Results extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Goto next results
+     */
     handleNextResults(e) {
         super.handleEvent({
             action: 'next-results'
@@ -68,11 +85,15 @@ class Results extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Render results list, may paginated (pager)
+     */
     render() {
         const visiblesLength = this.state.stores.buildingStore.getVisibles().length;
         const resultsStart = this.state.stores.uiStore.get('resultsStart');
         const resultsSteps = this.state.stores.uiStore.get('resultsSteps');
 
+        // get pagination navigation
         const resultsPager = (
             <ul className="pager">
                 {resultsStart > 0 &&
