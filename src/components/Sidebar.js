@@ -33,7 +33,7 @@ class Sidebar extends React.Component {
      * Render sidebar, search or result component with hide-button. Or if its hidden a show-button
      */
     render() {
-        // get current route for the sidebar
+        // get current route (search or results) for the sidebar
         const currentRoute = this.state.stores.routerStore.getCurrentRoute();
 
         // @todo may implement transparent onSwipeRight overlay over map

@@ -128,7 +128,6 @@ class EventHandler {
                 RouterStore() events
                 */
                 case 'set-current-route':
-                    // create deep copy of stores without references
                     this.stores.routerStore.setCurrentRoute(this.stores, payload.path);
                     resolve(true);
                     break;

@@ -3,12 +3,17 @@ import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet'
 
 import Marker from './map/Marker';
 
+/**
+ * Map component
+ */
 class Map extends React.Component {
     constructor(props) {
         super();
 
+        // node of the map
         this.mapNode = null;
 
+        // local state
         this.state = {
             stores: props.stores,
             markers: [],
@@ -16,6 +21,7 @@ class Map extends React.Component {
             isLoading: false
         }
 
+        // local event handlers
         this.handleZoomend = this.handleZoomend.bind(this);
         this.handleDragstart= this.handleDragstart.bind(this);
         this.handleDragend = this.handleDragend.bind(this);
@@ -26,6 +32,9 @@ class Map extends React.Component {
         this.setMapLoader = this.setMapLoader.bind(this);
     }
 
+    /**
+     * Receive props, create markersm set local state, ...
+     */
     componentWillReceiveProps(nextProps) {
         let buildings = nextProps.stores.buildingStore.getVisibles();
         buildings = buildings.slice(
@@ -33,7 +42,10 @@ class Map extends React.Component {
             nextProps.stores.uiStore.get('resultsStart') + nextProps.stores.uiStore.get('resultsSteps')
         );
 
-        // @todo may only update marker groups if bounds/buildings changed
+        /**
+         * May group markers (buildings on some location)
+         * @todo may only update marker groups if bounds/buildings changed
+        */
         const mayGroupBuildings = () => {
             const markers = [];
             buildings.map((building, bid) => {
@@ -62,17 +74,19 @@ class Map extends React.Component {
             return markers;
         }
 
+        // write local state with new props
         this.setState({
             stores: nextProps.stores,
             markers: mayGroupBuildings(),
             sidebarIsVisible: nextProps.stores.uiStore.get('sidebarIsVisible')
         });
 
+        // write mapNode to mapStore
         if (this.mapNode !== null) {
             this.state.stores.mapStore.setNode(this.mapNode.leafletElement);
         }
 
-        // revalidate map size if sidebar was toggled, prevents grey areas
+        // revalidate map size if sidebar was toggled, prevents grey areas in map
         if (this.mapNode !== null &&
             this.state.sidebarIsVisible != nextProps.stores.uiStore.get('sidebarIsVisible')
         ) {
@@ -95,6 +109,61 @@ class Map extends React.Component {
         return true;
     }
 
+    handleZoomend(e) {
+        this.updateMapConfig();
+        this.applyBounds();
+    }
+
+    handleDragstart() {
+        if (this.mapNode != null) {
+            this.mapNode.leafletElement.closePopup();
+        }
+    }
+
+    handleDragend(e) {
+        this.updateMapConfig();
+        this.applyBounds();
+    }
+
+    handleMoveend(e) {
+        // we ca do something here after each moving (pan, drag, zoom, ...)
+    }
+
+    /**
+     * Click somewhere on the map
+     */
+    handleClick(e) {
+        super.handleEvent({
+            action: 'set-selected-on-map',
+            payload: {
+                buildingId: null,
+            }
+        });
+        if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
+            super.handleEvent({
+                action: 'hide-sidebar'
+            });
+        }
+    }
+
+    /**
+     * On users location found, pan to location, update map config and apply bounds
+     */
+    handleLocationFound(e) {
+        if (this.mapNode == null) return;
+        // pan to users location if found
+        this.mapNode.leafletElement.panTo(e.latlng, {duration: 0.25});
+        // set new map config and apply bounds after paning
+        window.setTimeout(() => {
+            this.updateMapConfig();
+            this.applyBounds();
+        }, 500);
+    }
+
+    handleClickGeolocate(e) {
+        this.mapNode.leafletElement.locate();
+    }
+
     /**
      * Set locale isLoading state
      *
@@ -104,9 +173,13 @@ class Map extends React.Component {
         this.setState({isLoading: value});
     }
 
+    /**
+     * Update bounds, center and zoom in map store from this map node
+     */
     updateMapConfig() {
         if (this.mapNode == null) return;
         const osmap = this.mapNode.leafletElement;
+
         // get bounds of map and decrease size with mapPadding
         const bounds = osmap.getBounds().pad(this.state.stores.uiStore.get('mapPadding'));
         super.handleEvent({
@@ -131,70 +204,31 @@ class Map extends React.Component {
         });
     }
 
+    /**
+     * Apply bounds to map store
+     */
     applyBounds() {
         super.handleEvent({
             action: 'apply-bounds'
         });
     }
 
-    handleZoomend(e) {
-        this.updateMapConfig();
-        this.applyBounds();
-    }
-
-    handleDragstart() {
-        if (this.mapNode != null) {
-            this.mapNode.leafletElement.closePopup();
-        }
-    }
-
-    handleDragend(e) {
-        this.updateMapConfig();
-        this.applyBounds();
-    }
-
-    handleClick(e) {
-        super.handleEvent({
-            action: 'set-selected-on-map',
-            payload: {
-                buildingId: null,
-            }
-        });
-        if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
-            super.handleEvent({
-                action: 'hide-sidebar'
-            });
-        }
-    }
-
-    handleLocationFound(e) {
-        if (this.mapNode == null) return;
-        // pan to users location if found
-        this.mapNode.leafletElement.panTo(e.latlng, {duration: 0.25});
-        // set new map config and apply bounds after paning
-        window.setTimeout(() => {
-            this.updateMapConfig();
-            this.applyBounds();
-        }, 500);
-    }
-
-    handleMoveend(e) {
-    }
-
-    handleClickGeolocate(e) {
-        this.mapNode.leafletElement.locate();
-    }
-
+    /**
+     * Render map with control buttons and markers
+     */
     render() {
+        // map class depends if sidebar is visible
         const mapClass = this.state.stores.uiStore.get('sidebarIsVisible')
             ? "map-wrapper"
             : "map-wrapper map-wrapper-full";
 
+        // map center from map store
         const mapCenter = [
             this.state.stores.mapStore.get('center').latitude,
             this.state.stores.mapStore.get('center').longitude
         ];
 
+        // hide control buttons on mobile views, if sidebar is visible
         const hideZoomControl = this.state.stores.uiStore.get('isSmallView')
             && this.state.stores.uiStore.get('sidebarIsVisible');
 
@@ -220,7 +254,7 @@ class Map extends React.Component {
                 </div>
                 <OSMap
                     ref={(node) => this.mapNode = node}
-                    className="map"
+                    className="osmap"
                     center={mapCenter}
                     zoom={this.state.stores.mapStore.get('zoom')}
                     zoomControl={false}

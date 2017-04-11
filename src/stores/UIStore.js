@@ -1,5 +1,8 @@
 import Cookies from 'js-cookie';
 
+/**
+ * Store for general interface settings
+ */
 class UIStore {
     constructor(logger) {
         this.logger = logger;

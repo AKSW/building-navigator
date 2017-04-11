@@ -14,6 +14,9 @@ import A11yIcon from '../A11yIcon';
 
 import {getElement} from '../../utils/GuiUtils'
 
+/**
+ * Results entry component, renders a result with title, a11y icons and details
+ */
 class Entry extends React.Component {
     constructor(props) {
         super();
@@ -38,8 +41,15 @@ class Entry extends React.Component {
         });
     }
 
+    /**
+     * Toggle details of a entry
+     *
+     * @param {Boolean} useToggle, if false force show building details (instead toggle it)
+     */
     handleShowDetails(e, buildingId, useToggle = true) {
         this.setState({isLoading: true});
+
+        // first we may need to load the building details
         super.handleEvent({
             action: 'may-load-building-data',
             payload: {
@@ -61,6 +71,7 @@ class Entry extends React.Component {
                     }
                 });
             }
+            // finished, focus on the result
             this.setState({isLoading: false});
             getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"] a`).then((entry) => {
                 entry.focus();
@@ -69,6 +80,9 @@ class Entry extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Hide entry details (call toggle-show-building-details)
+     */
     handleHideDetails(e, buildingId) {
         super.handleEvent({
             action: 'toggle-show-building-details',
@@ -83,6 +97,9 @@ class Entry extends React.Component {
         // @todo may show this entry on map
     }
 
+    /**
+     * Show entry on map (call set-selected-on-map)
+     */
     handleShowOnMap(e, building) {
         // close may prev opened popups
         const mapNode = this.state.stores.mapStore.getNode();
@@ -98,6 +115,9 @@ class Entry extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Hide sidebar if is small view
+     */
     handleMayHideSidebar(e) {
         if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
             super.handleEvent({
@@ -107,10 +127,14 @@ class Entry extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Render entry, with title, icons and may details (address, note, ...)
+     */
     render() {
         const building = this.state.building;
         const entryClass = building.selectOnMap ? "entry current-entry" : "entry";
 
+        // get all a11y icons
         const a11yIcons = new A11yIcon({building: building});
 
         return (
@@ -182,7 +206,7 @@ class Entry extends React.Component {
                 }
                 <ButtonGroup justified className="result-bottom-buttons">
                     {!building.showDetails &&
-                        <Button className="btn-lg" aria-label="Mehr Ergebnisdetails" aria-expanded={false} onClick={e => this.handleShowDetails(e, building.id)}>
+                        <Button className="btn-lg btn-toogle-result-details" aria-label="Mehr Ergebnisdetails" aria-expanded={false} onClick={e => this.handleShowDetails(e, building.id)}>
                             <i className="fa fa-caret-down" aria-hidden={true}></i> Details&nbsp;
                             {this.state.isLoading &&
                                 <i className='fa fa-circle-o-notch fa-spin' />
@@ -191,11 +215,11 @@ class Entry extends React.Component {
                     }
 
                     {building.showDetails &&
-                        <Button className="btn-lg" aria-label="Weniger Ergebnisdetails" aria-expanded={true} onClick={e => this.handleHideDetails(e, building.id)}>
+                        <Button className="btn-lg btn-toogle-result-details" aria-label="Weniger Ergebnisdetails" aria-expanded={true} onClick={e => this.handleHideDetails(e, building.id)}>
                             <i className="fa fa-caret-up" aria-hidden={true}></i> Details
                         </Button>
                     }
-                    <Button className="btn-lg" aria-hidden={true} onClick={e => {this.handleMayHideSidebar(e); this.handleShowOnMap(e, building)}}>
+                    <Button className="btn-lg btn-show-result-on-map" aria-hidden={true} onClick={e => {this.handleMayHideSidebar(e); this.handleShowOnMap(e, building)}}>
                         <i className="fa fa-map-marker"></i> zeige auf Karte
                     </Button>
                 </ButtonGroup>

@@ -140,7 +140,7 @@ class BuildingNavigator extends React.Component {
             <div role="main" className="building-navigator">
                 {this.logger.hasError() &&
                     <Alert bsStyle="danger" className="global-error">
-                        <p><h3>Fehler bei der Ausführung der Anwendung</h3></p>
+                        <h3>Fehler bei der Ausführung der Anwendung</h3>
                         {this.logger.getErrors().map((error, eid) => {
                             return (
                                 <p key={eid}>

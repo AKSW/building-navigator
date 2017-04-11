@@ -12,6 +12,10 @@ import {
 
 import Cookies from 'js-cookie';
 
+/**
+ * Welcome message on first visiting.
+ * Contains short intro text and global dissability settings
+ */
 class Welcome extends React.Component {
     constructor(props) {
         super();
@@ -20,7 +24,11 @@ class Welcome extends React.Component {
         this.handleOk = this.handleOk.bind(this);
     }
 
+    /**
+     * Changed dissability selection, update and apply filters
+     */
     handleGlobalDisab(e) {
+        // set global disabiliy in ui store
         super.handleEvent({
             action: 'update-ui-config',
             payload: {
@@ -28,7 +36,9 @@ class Welcome extends React.Component {
                 value: e.target.value
             }
         });
+        // first rest all filters
         super.handleEvent({action: 'reset-all-filters'});
+        // updates filter for move-impaired
         if (e.target.value === 'move') {
             super.handleEvent({
                 action: 'update-filter',
@@ -43,17 +53,29 @@ class Welcome extends React.Component {
                 payload: {filterId: 'toilet', value: 2}
             });
         }
+        // activate help for blind
+        else if (e.target.value === 'blind') {
+            super.handleEvent({
+                action: 'update-filter',
+                payload: {filterId: 'blind', value: 1}
+            });
+        }
+        // activate gelp for hearing
         else if (e.target.value === 'hear') {
             super.handleEvent({
                 action: 'update-filter',
                 payload: {filterId: 'hearing', value: 1}
             });
         }
+        // apply filters to buildings
         super.handleEvent({
             action: 'apply-filters'
         });
     }
 
+    /**
+     * Close welcome message, store in cookie
+     */
     handleOk(e) {
         Cookies.set('showWelcome', false);
         super.handleEvent({
@@ -65,6 +87,9 @@ class Welcome extends React.Component {
         });
     }
 
+    /**
+     * Render welcome message with selection for dissability
+     */
     render() {
         return (
             <div>

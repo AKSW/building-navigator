@@ -15,7 +15,7 @@ import BuildingNavigator from './BuildingNavigator';
  */
 const runBuildingNavigator = (config) => {
     if (! ('container' in config)) {
-        throw new Error('Error: "container" id not found');
+        throw new Error('Wrong initialization of this application, "container" in config not found.');
     }
     const appEl = document.getElementById(config.container);
 
@@ -42,7 +42,7 @@ const runBuildingNavigator = (config) => {
     });
 
     // render the app
-    ReactDOM.render( <BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />, appEl );
+    ReactDOM.render(<BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />, appEl);
 }
 
 module.exports = runBuildingNavigator;

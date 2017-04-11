@@ -130,6 +130,18 @@ class FilterStore {
     }
 
     /**
+     * Get filter by its id
+     *
+     * @param {String}
+     * @return {Objekt}
+     */
+    getFilter(id) {
+        return this.getAll().find((filter) => {
+            return filter.id == id;
+        });
+    }
+
+    /**
      * Add new filter
      *
      * @param {Object}

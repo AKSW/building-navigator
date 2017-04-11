@@ -10,6 +10,17 @@ import {
     Image
 } from 'react-bootstrap';
 
+/**
+ * Accessibility icons for entrance, lift, toilet, ...
+ *
+ * Can be used in components like:
+ *  render() {
+ *      const a11yIcons = new A11yIcon({building: buildingObj});
+ *      return (
+ *          {a11yIcons.icon('entrance')}
+ *      );
+ *  }
+ */
 class A11yIcon extends React.Component {
     constructor(props) {
         super();
@@ -18,6 +29,7 @@ class A11yIcon extends React.Component {
             building: props.building
         };
 
+        // init all icons with null values
         this.icons = {
             entrance: {
                 icon: (null),
@@ -49,7 +61,7 @@ class A11yIcon extends React.Component {
             }
         };
 
-        this.initIcons();
+        this.createIcons();
     }
 
     /**
@@ -119,9 +131,9 @@ class A11yIcon extends React.Component {
     }
 
     /**
-     * Init all icons
+     * Create all icons
      */
-    initIcons() {
+    createIcons() {
         const building = this.state.building;
 
         // entrance

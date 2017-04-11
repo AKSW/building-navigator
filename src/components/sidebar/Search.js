@@ -33,6 +33,7 @@ class Search extends React.Component {
     }
 
     componentDidMount() {
+        // set focus on first filter (if welcome message closed)
         if (!this.state.stores.uiStore.get('showWelcome')) {
             getElement(this.state.stores.uiStore.get('userConfig').container, '.filter select').then((firstEl) => {
                 firstEl.focus();
@@ -40,26 +41,35 @@ class Search extends React.Component {
         }
     }
 
+    /**
+     * Search form submitted, apply filters and go to results
+     */
     handleSubmit(e) {
+        // set local is loading state
         this.setState({isLoading: true});
+
+        // apply filters and set new route
         super.handleEvent({
             action: 'apply-filters',
-            payload: { filters: this.state.filters }
+            payload: {filters: this.state.filters}
         }).then(() => {
             super.handleEvent({
                 action: 'set-current-route',
                 payload: {path: 'results'}
             });
-            this.setState({isLoading: false});
         });
         e.preventDefault();
     }
 
+    /**
+     * Filter changed, update filterStore and apply filters to buildings
+     */
     handleChange(e) {
         const filterId = e.target.getAttribute('name');
         const type = e.target.type;
         let value = e.target.value;
 
+        // value depends on input type (select or checkbox)
         if (type == 'select-one') {
             value = parseInt(value);
         }
@@ -91,6 +101,9 @@ class Search extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Render search filter
+     */
     render() {
         const isLoading = this.state.isLoading;
 
