@@ -98,6 +98,15 @@ class MapStore {
     get(key) {
         return this.config[key];
     }
+
+    /**
+     * Close previous opened popup on map
+     */
+    closePopup() {
+        if (this.node === null) return;
+
+        this.node.closePopup();
+    }
 }
 
 export default MapStore;

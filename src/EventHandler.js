@@ -124,6 +124,10 @@ class EventHandler {
                     this.stores.mapStore.updateZoom(payload.zoom);
                     resolve(true);
                     break;
+                case 'close-map-popup':
+                    this.stores.mapStore.closePopup();
+                    resolve(true);
+                    break;
                 /*
                 RouterStore() events
                 */
