@@ -20,7 +20,7 @@ class Marker extends React.Component {
             marker: props.marker,
             currentBuildingId: 0,
             zoom: props.zoom,
-            isLoading: false,
+            isLoading: false
         };
 
         // init marker icons
@@ -44,6 +44,7 @@ class Marker extends React.Component {
             popupAnchor:  [0, -45]
         });
 
+        // handler to set map loader
         this.setMapLoader = props.setMapLoader;
 
         this.handleShowDetails = this.handleShowDetails.bind(this);
@@ -64,7 +65,7 @@ class Marker extends React.Component {
             stores: nextProps.stores,
             currentBuildingId: currentBuildingId,
             marker: nextProps.marker,
-            zoom: nextProps.zoom,
+            zoom: nextProps.zoom
         });
     }
 
@@ -72,8 +73,13 @@ class Marker extends React.Component {
      * Show details of a building. May load building data first
      */
     handleShowDetails(e, buildingId) {
+        // call map loader and click handler
         this.setMapLoader(true);
+
+        // set local loading stsate
         this.setState({isLoading: true});
+
+        // may load building data and show details in sidebar
         super.handleEvent({
             action: 'may-load-building-data',
             payload: {
@@ -96,11 +102,13 @@ class Marker extends React.Component {
                 action: 'set-current-route',
                 payload: {path: 'results'}
             });
+            // scroll to element entry in sidebar
             getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"]`).then((entry) => {
                 getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
                     sidebar.scrollTop = entry.offsetTop;
                 });
             });
+            // disable local and map loading state
             this.setState({isLoading: false});
             this.setMapLoader(false);
         });
@@ -194,7 +202,7 @@ class Marker extends React.Component {
                 icon={icon}
                 onClick={e => this.handleClickMarker(e, currentBuilding)}
                 >
-                <Popup>
+                <Popup id={`popup-wrapper-${currentBuilding.id}`}>
                     <span>
                         {!isSmallView &&
                             <div id={`popup-${currentBuilding.id}`} className="popup">

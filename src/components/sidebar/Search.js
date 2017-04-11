@@ -86,6 +86,11 @@ class Search extends React.Component {
         });
         this.setState({filters: this.state.filters});
 
+        // may close any popup
+        super.handleEvent({
+            action: 'close-map-popup'
+        });
+
         // set global filters state and apply to buildings
         super.handleEvent({
             action: 'update-filter',

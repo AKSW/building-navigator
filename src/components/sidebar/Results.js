@@ -62,6 +62,16 @@ class Results extends React.Component {
      * Goto previous results
      */
     handlePrevResults(e) {
+        // may close any popup
+        super.handleEvent({
+            action: 'close-map-popup'
+        });
+        // reset selected building
+        super.handleEvent({
+            action: 'set-selected-on-map',
+            payload: {buildingId: null}
+        });
+
         super.handleEvent({
             action: 'prev-results'
         });
@@ -72,6 +82,16 @@ class Results extends React.Component {
      * Goto next results
      */
     handleNextResults(e) {
+        // may close any popup
+        super.handleEvent({
+            action: 'close-map-popup'
+        });
+        // reset selected building
+        super.handleEvent({
+            action: 'set-selected-on-map',
+            payload: {buildingId: null}
+        });
+
         super.handleEvent({
             action: 'next-results'
         });

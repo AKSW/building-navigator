@@ -102,10 +102,8 @@ class Entry extends React.Component {
      */
     handleShowOnMap(e, building) {
         // close may prev opened popups
-        const mapNode = this.state.stores.mapStore.getNode();
-        if (mapNode != null) {
-            mapNode.closePopup();
-        }
+        this.state.stores.mapStore.closePopup();
+
         super.handleEvent({
             action: 'set-selected-on-map',
             payload: {

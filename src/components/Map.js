@@ -22,13 +22,13 @@ class Map extends React.Component {
         }
 
         // local event handlers
+        this.handleZoomstart = this.handleZoomstart.bind(this);
         this.handleZoomend = this.handleZoomend.bind(this);
         this.handleDragstart= this.handleDragstart.bind(this);
         this.handleDragend = this.handleDragend.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleClickGeolocate = this.handleClickGeolocate.bind(this);
         this.handleLocationFound = this.handleLocationFound.bind(this);
-        this.handleMoveend = this.handleMoveend.bind(this);
         this.setMapLoader = this.setMapLoader.bind(this);
     }
 
@@ -94,6 +94,7 @@ class Map extends React.Component {
                 this.mapNode.leafletElement.invalidateSize();
             }, 0);
         }
+
     }
 
     componentDidMount() {
@@ -102,11 +103,8 @@ class Map extends React.Component {
         this.mapNode.leafletElement.locate();
     }
 
-    /**
-     * @todo May only update map if visible buildings/map-bounds changed
-     */
-    shouldComponentUpdate(nextProps, nextState) {
-        return true;
+    handleZoomstart(e) {
+        this.closePopup();
     }
 
     handleZoomend(e) {
@@ -115,18 +113,12 @@ class Map extends React.Component {
     }
 
     handleDragstart() {
-        if (this.mapNode != null) {
-            this.mapNode.leafletElement.closePopup();
-        }
+        this.closePopup();
     }
 
     handleDragend(e) {
         this.updateMapConfig();
         this.applyBounds();
-    }
-
-    handleMoveend(e) {
-        // we ca do something here after each moving (pan, drag, zoom, ...)
     }
 
     /**
@@ -157,10 +149,16 @@ class Map extends React.Component {
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
+            this.setMapLoader(false);
         }, 500);
     }
 
+    /**
+     * Click on button show own location
+     */
     handleClickGeolocate(e) {
+        this.closePopup();
+        this.setMapLoader(true);
         this.mapNode.leafletElement.locate();
     }
 
@@ -171,6 +169,14 @@ class Map extends React.Component {
      */
     setMapLoader(value) {
         this.setState({isLoading: value});
+    }
+
+    /**
+     * Closes all may previous opened popups
+     */
+    closePopup() {
+        if (this.mapNode == null) return;
+        this.mapNode.leafletElement.closePopup();
     }
 
     /**
@@ -232,6 +238,14 @@ class Map extends React.Component {
         const hideZoomControl = this.state.stores.uiStore.get('isSmallView')
             && this.state.stores.uiStore.get('sidebarIsVisible');
 
+        // tiles url (http or https)
+        const tilesUrl = document.location.protocol === 'https'
+            ? 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+            : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+
+        // maps current zoom state
+        const zoom = this.state.stores.mapStore.get('zoom');
+
         return (
             <div className={mapClass}>
                 {this.state.isLoading &&
@@ -256,16 +270,16 @@ class Map extends React.Component {
                     ref={(node) => this.mapNode = node}
                     className="osmap"
                     center={mapCenter}
-                    zoom={this.state.stores.mapStore.get('zoom')}
+                    zoom={zoom}
                     zoomControl={false}
                     onClick={this.handleClick}
                     onLocationfound={this.handleLocationFound}
+                    onZoomstart={this.handleZoomstart}
                     onZoomend={this.handleZoomend}
                     onDragstart={this.handleDragstart}
                     onDragend={this.handleDragend}
-                    onMoveend={this.handleMoveend}
                 >
-                    <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>' url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+                    <TileLayer attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>' url={tilesUrl} />
                     {!hideZoomControl &&
                         <ZoomControl position="topright"/>
                     }
