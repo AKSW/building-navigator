@@ -6,11 +6,11 @@ This tool provides an interactive map with accessible information about places i
 
 **Screenshot:**
 
-![](https://github.com/AKSW/building-navigator/raw/rebuild/assets/screenshot-1.png)
+![](https://github.com/AKSW/building-navigator/raw/master/assets/screenshot-1.png)
 
 **Mobile:**
 
-![](https://github.com/AKSW/building-navigator/raw/rebuild/assets/screenshot-3.png)
+![](https://github.com/AKSW/building-navigator/raw/master/assets/screenshot-3.png)
 
 ## Experiences with screenreaders
 
