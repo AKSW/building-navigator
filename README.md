@@ -85,7 +85,7 @@ After changing data in a store the `BuildingNavigator` re-renders all components
 
 ### Developing environment
 
-As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/Dockerizing/NodeJS-NPM-ECMA6-Stack
+As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/k00ni/Docker-Nodejs-environment
 
 Mount this project into the container and access http://localhost:8080.
 
