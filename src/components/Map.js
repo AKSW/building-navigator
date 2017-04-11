@@ -240,8 +240,8 @@ class Map extends React.Component {
 
         // tiles url (http or https)
         const tilesUrl = document.location.protocol === 'https'
-            ? 'https://{s}.tile.osm.org/{z}/{x}/{y}.png'
-            : 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+            ? 'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'
+            : 'http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png';
 
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
