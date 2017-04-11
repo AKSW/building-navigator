@@ -1,58 +1,86 @@
 import React from 'react';
+import sinon from 'sinon';
 import Promise from 'promise-polyfill';
 import {shallow, mount} from 'enzyme';
 
-//jest.unmock('../src/utils/JsonLoader');
 import {_10buildings} from './assets/10buildings';
-import {fetch} from './fetch';
+import {getLogger, getStores, getEventHandler} from './utils/utils';
+import {fetch} from './utils/fetch';
 
+// get mount or shallow object if BuildingNavigator
+import {wrapBuildingNavigator} from './utils/wrapComponents';
+
+import runBuildingNavigator from '../src/main'
+import * as Store from '../src/stores';
+import EventHandler from '../src/EventHandler';
 import Logger from '../src/utils/Logger';
 
-import * as Store from '../src/stores';
-
 import BuildingNavigator from '../src/BuildingNavigator';
+import Welcome from '../src/components/Welcome';
 import Sidebar from '../src/components/Sidebar';
 import Map from '../src/components/Map';
 
-
-fetch(_10buildings);
-
+// test-environment for BuildingNavigator component
 describe('<BuildingNavigator />', () => {
 
-    const logger = new Logger();
-    const stores = {
-        buildingStore: new Store.BuildingStore(logger),
-        filterStore: new Store.FilterStore(logger),
-        mapStore: new Store.MapStore(logger),
-        uiStore: new Store.UIStore(logger)
-    };
+    it('test if main rendered class .building-navigator', () => {
+        fetch(_10buildings);
+
+        const div = global.document.createElement('div');
+        div.setAttribute('id', 'building-navigator');
+        global.document.body.appendChild(div);
+
+        runBuildingNavigator({container: 'building-navigator'});
+        expect(document.querySelectorAll('.building-navigator').length).toBe(1);
+    });
+
+    it('renders <Welcome /> component', () => {
+        const buildingNavigator = wrapBuildingNavigator();
+        expect(buildingNavigator.find(Welcome).length).toBe(1);
+    });
+
+    it('closes <Welcome /> after clicking ok', () => {
+        const buildingNavigator = wrapBuildingNavigator('mount');
+
+        buildingNavigator.find(Welcome).find('button').simulate('click');
+
+        // wait for states update
+        buildingNavigator.update();
+        expect(buildingNavigator.find(Welcome).length).toBe(0);
+    });
 
     it('renders <Sidebar /> and <Map /> components', () => {
-        const wrapper = shallow(<BuildingNavigator stores={stores} logger={logger} />);
-        expect(wrapper.find(Sidebar).length).toBe(1);
-        expect(wrapper.find(Map).length).toBe(1);
+        const buildingNavigator = wrapBuildingNavigator();
+        expect(buildingNavigator.find(Sidebar).length).toBe(1);
+        expect(buildingNavigator.find(Map).length).toBe(1);
     });
 
-    it('expects inital empty buildings in buildingStore', () => {
-        const wrapper = mount(<BuildingNavigator stores={stores} logger={logger} />);
-        expect(wrapper.state().stores.buildingStore.getAll().length).toBe(0);
+    it('expects inital no buildings in state.stores.buildingStore', () => {
+        const buildingNavigator = wrapBuildingNavigator();
+        expect(buildingNavigator.state().stores.buildingStore.getAll().length).toBe(0);
     });
 
-    const buildingStore = new Store.BuildingStore();
+    it('expects 10 buildings after \'init-buildings\' event in buildingStore', () => {
+        const buildingNavigator = wrapBuildingNavigator();
 
-    it('inits 10 buildings', () => {
-        return buildingStore.initAll();
-    });
+        const eventHandler = buildingNavigator.instance().eventHandler;
 
-    it('expects 10 buildings in buildingStore', () => {
-        stores.buildingStore = buildingStore
-        const wrapper = mount(<BuildingNavigator stores={stores} logger={logger} />);
-        
-        wrapper.update();
+        // create promise for initall()
+        const promise = buildingNavigator.state().stores.buildingStore.initAll();
 
-        expect(wrapper.state().stores.buildingStore.getAll().length).toBe(10);
+        // fake handleEvent()
+        sinon.stub(eventHandler, 'handleEvent').callsFake((event) => {
+            if (event.action === 'init-buildings') {
+                return promise;
+            } else {
+                return Promise.resolve();
+            }
+        });
 
-        //console.log(wrapper.find('li').length);
+        // initAll() is an async method, so we test after promise resolves
+        return promise.then(() => {
+            expect(buildingNavigator.state().stores.buildingStore.getAll().length).toBe(10);
+        });
     });
 
 });

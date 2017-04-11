@@ -1,3 +1,4 @@
+// response header for fetch
 const mockResponse = (status, statusText, response) => {
   return new window.Response(response, {
     status: status,
@@ -8,7 +9,8 @@ const mockResponse = (status, statusText, response) => {
   });
 };
 
-export const fetch = (buildings) => {
+// create windows.fetch method, overwrites whatwg-fetch method on load json
+export const fetch = (data) => {
     window.fetch = jest.fn().mockImplementation(() =>
-        Promise.resolve(mockResponse(200, null, buildings)));
+        Promise.resolve(mockResponse(200, null, data)));
 };
