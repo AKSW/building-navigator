@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert} from 'react-bootstrap';
+import {Alert, Image} from 'react-bootstrap';
 import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
@@ -154,6 +154,20 @@ class BuildingNavigator extends React.Component {
                 {this.state.stores.uiStore.get('showWelcome') &&
                     <Welcome />
                 }
+                <div className="header">
+                    <div className="leds-log-wrapper pull-left">
+                        <a href="http://www.leds-projekt.de/index.html" target="_blank">
+                            <Image src='./images/leds-projekt-logo.png' />
+                        </a>
+                    </div>
+                    <div className="pull-right header-text-wrapper text-muted">
+                        <a href="http://www.leds-projekt.de/de/aktuelles/2017/Treffen-mit-Interessenvertretern-zur-Vorstellung-des-Gebaeude-Navigators.html"
+                            target="_blank"
+                            className="text-muted btn btn-lg">
+                            Über
+                        </a>
+                    </div>
+                </div>
                 <Sidebar stores={this.state.stores} />
                 <Map aria-hidden={true} stores={this.state.stores} />
             </div>
