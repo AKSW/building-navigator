@@ -12,7 +12,7 @@ This tool provides an interactive map with accessible information about places i
 
 ![](https://github.com/AKSW/building-navigator/raw/rebuild/assets/screenshot-3.png)
 
-## Some experiences with screenreaders
+## Experiences with screenreaders
 
 - **TalkBack** for Android with ChromeMobile
     + Tab-Control with swipe left/right for next element
@@ -23,7 +23,11 @@ This tool provides an interactive map with accessible information about places i
     + Change select-filter with arrow keys, checkboxes with space
     + Select Links Enter, Buttons Space or Enter
     + Scroll with two fingers (a quite sound gives the position by a pitch level)
-- **TODO:** Windows and iOS Screenreader
+- **COBRA** (Windows), **NVDA** (Windows), **Orca** (Linux with eSpeak)
+    + Control with Tabulator to select links or headings
+    + Selecgt links or buttons with Space or Enter
+    + Use Arrow-Keys to read content
+- **TODO:** iOS Screenreader
 
 ## The team behind the scene
 
@@ -87,7 +91,12 @@ Mount this project into the container and access http://localhost:8080.
 
 Code documentation is done in JSDoc style.
 
-Testing is made with Jest (run `npm test`).
+#### Test
+
+We use Jest and Enzyme for React GUI tests, and Sinon for asynchronous tests. All current tests are in `./tests` and could started in the Docker container with:
+
+    npm test
+
 
 ### Create Production
 
