@@ -33,9 +33,9 @@ class Marker extends React.Component {
         });
         this.icons.smallIcon = L.icon({
             iconUrl: './images/small-marker-icon.png',
-            iconSize: [15, 16],
-            iconAnchor: [7, 16],
-            popupAnchor:  [0, -46]
+            iconSize: [22, 22],
+            iconAnchor: [11, 22],
+            popupAnchor:  [0, -45]
         });
         this.icons.selectedIcon = L.icon({
             iconUrl: './images/selected-marker-icon.png',
