@@ -58,16 +58,19 @@ class Sidebar extends React.Component {
                         </Button>
                     </div>
                 </Swipeable>)
-            : (<div className="btn-toggle-sidebar btn-show-sidebar">
-                    <Button
-                        bsStyle="default"
-                        bsSize="large"
-                        title="Seitenleiste einblenden"
-                        onClick={this.handleToggleSidebar}
-                        aria-hidden={true}
-                    >
-                        <i className="fa fa-angle-double-right" aria-hidden={true}></i>
-                    </Button>
+            : (<div>
+                    <Swipeable onSwipedRight={this.handleToggleSidebar} className="btn-toggle-sidebar wiper-show-sidebar"></Swipeable>
+                    <div className="btn-toggle-sidebar btn-show-sidebar">
+                        <Button
+                            bsStyle="default"
+                            bsSize="large"
+                            title="Seitenleiste einblenden"
+                            onClick={this.handleToggleSidebar}
+                            aria-hidden={true}
+                        >
+                            <i className="fa fa-angle-double-right" aria-hidden={true}></i>
+                        </Button>
+                    </div>
                 </div>
             );
 
