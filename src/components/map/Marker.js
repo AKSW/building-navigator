@@ -47,7 +47,7 @@ class Marker extends React.Component {
         // handler to set map loader
         this.setMapLoader = props.setMapLoader;
 
-        this.handleShowDetails = this.handleShowDetails.bind(this);
+        this.handleClickShowDetails = this.handleClickShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
         this.handleClickNextEntry = this.handleClickNextEntry.bind(this);
         this.handleClickPrevEntry = this.handleClickPrevEntry.bind(this);
@@ -70,59 +70,46 @@ class Marker extends React.Component {
     }
 
     /**
-     * Show details of a building. May load building data first
+     * Click on show details button in popup may loads building data
+     * and show building with loaded details in sidebar
      */
-    handleShowDetails(e, buildingId) {
-        // call map loader and click handler
-        this.setMapLoader(true);
-
-        // set local loading stsate
+    handleClickShowDetails(e, building) {
         this.setState({isLoading: true});
 
         // may load building data and show details in sidebar
         super.handleEvent({
             action: 'may-load-building-data',
             payload: {
-                buildingId: buildingId,
+                buildingId: building.id,
             }
         }).then(() => {
+            this.sidebarWithBuilding(building);
+
+            // show building details flag
             super.handleEvent({
                 action: 'show-building-details',
                 payload: {
-                    buildingId: buildingId,
+                    buildingId: building.id,
                 }
             });
-            super.handleEvent({
-                action: 'show-sidebar'
-            });
-            super.handleEvent({
-                action: 'apply-filters'
-            });
-            super.handleEvent({
-                action: 'set-current-route',
-                payload: {path: 'results'}
-            });
-            // scroll to element entry in sidebar
-            getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${buildingId}"]`).then((entry) => {
-                getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
-                    sidebar.scrollTop = entry.offsetTop;
-                });
-            });
-            // disable local and map loading state
-            this.setState({isLoading: false});
-            this.setMapLoader(false);
         });
     }
 
     /**
      * On click marker, set as selected on map
+     * For small devices: show building entry in sidebar
      */
     handleClickMarker(e, building) {
-        // for small devices: immediately open building details in sidebar
-        if (this.state.stores.uiStore.get('isSmallView')) {
-            this.handleShowDetails(e, building.id);
-        }
+        // building as selected
         this.setSelectedOnMap(building);
+
+        // for small devices, show in sidebar
+        if (this.state.stores.uiStore.get('isSmallView')) {
+            // enable loader on the map
+            // (local loader is only visible in popup for desktop devices)
+            this.setMapLoader(true);
+            this.sidebarWithBuilding(building);
+        }
     }
 
     /**
@@ -143,6 +130,31 @@ class Marker extends React.Component {
         e.preventDefault();
     }
 
+    /**
+     * Show sidebar and scroll to the building entry
+     * Set local loader and map loader to false after scrolling
+     */
+    sidebarWithBuilding(building) {
+        super.handleEvent({
+            action: 'set-current-route',
+            payload: {path: 'results'}
+        });
+        super.handleEvent({
+            action: 'show-sidebar'
+        });
+        // scroll to element entry in sidebar
+        getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${building.id}"]`).then((entry) => {
+            getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
+                sidebar.scrollTop = entry.offsetTop;
+                this.setState({isLoading: false});
+                this.setMapLoader(false);
+            });
+        });
+    }
+
+    /**
+     * Call event to set biulding as selected on map
+     */
     setSelectedOnMap(building) {
         super.handleEvent({
             action: 'set-selected-on-map',
@@ -219,7 +231,7 @@ class Marker extends React.Component {
                                     })}
                                 </ul>
 
-                                <Button className="btn-lg" onClick={e => this.handleShowDetails(e, currentBuilding.id)}>
+                                <Button className="btn-lg" onClick={e => this.handleClickShowDetails(e, currentBuilding)}>
                                     <i className="fa fa-th-list"></i> Details&nbsp;
                                     {this.state.isLoading &&
                                         <i className='fa fa-circle-o-notch fa-spin' />
