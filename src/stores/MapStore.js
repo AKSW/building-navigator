@@ -5,21 +5,26 @@ class MapStore {
         this.node = null;
 
         this.config = {
+            // center of the map (51.3412, 12.3747 is center of Leipzig)
+            center: {
+                latitude: 51.3412,
+                longitude: 12.3747
+            },
+            // zoom value, the greater the value, the closer the zoom
+            zoom: 14,
+            // bounds of the map from upper right to bottom left, will initiated after loading the map
+            // and applies the visible buildings
+            // the init values 99 and 999 just ensure that all buildings are visible on start
             bounds: {
                 northEast: {
-                    latitude: 999,
+                    latitude: 99,
                     longitude: 999
                 },
                 southWest: {
                     latitude: 0,
                     longitude: 0
                 }
-            },
-            center: {
-                latitude: 51.3412,
-                longitude: 12.3747
-            },
-            zoom: 14
+            }
         }
     }
 
