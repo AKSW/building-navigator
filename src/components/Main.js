@@ -1,0 +1,84 @@
+import React from 'react'
+import {Alert, Image} from 'react-bootstrap';
+
+import NotFound from './NotFound';
+import Welcome from './Welcome';
+import Sidebar from './Sidebar';
+import Map from './Map';
+
+/**
+ * Main root component, renders sub-components like Welcome, Sidebar and Map
+ *
+ * Renders global error messages if existing
+ */
+class Main extends React.Component {
+    constructor(props) {
+        super();
+
+        this.state = {
+            stores: props.stores,
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            stores: nextProps.stores,
+        });
+    }
+
+    render() {
+        const currentRoute = this.state.stores.routerStore.getCurrentRoute();
+
+        return (
+            <div role="main" className="building-navigator">
+                <div className="header">
+                    <div className="leds-log-wrapper pull-left">
+                        <a href="http://www.leds-projekt.de/index.html" target="_blank">
+                            <Image src='./images/leds-projekt-logo.png' />
+                        </a>
+                    </div>
+                    <div className="pull-right header-text-wrapper text-muted">
+                        <a href="http://www.leds-projekt.de/de/aktuelles/2017/Treffen-mit-Interessenvertretern-zur-Vorstellung-des-Gebaeude-Navigators.html"
+                            target="_blank"
+                            className="text-muted btn btn-lg">
+                            Über
+                        </a>
+                    </div>
+                </div>
+
+                {super.logger.hasError() &&
+                    <Alert bsStyle="danger" className="global-error">
+                        <h1>Fehler bei der Ausführung der Anwendung</h1>
+                        {super.logger.getErrors().map((error, eid) => {
+                            return (
+                                <p key={eid}>
+                                    <strong>Nachricht:</strong><br />{error.message.toString()}<br /><br />
+                                    <strong>Details:</strong><br />{error.message.stack}
+                                </p>
+                            );
+                        })}
+                    </Alert>
+                }
+
+                {this.state.stores.uiStore.get('showWelcome') &&
+                    <Welcome />
+                }
+
+                {(currentRoute.component === 'Search' || currentRoute.component === 'Results') &&
+                    <div className="content">
+                        <Sidebar stores={this.state.stores} />
+                        <Map stores={this.state.stores} />
+                    </div>
+                }
+
+                {currentRoute.component === 'NotFound' &&
+                    <div className="content">
+                        <NotFound />
+                    </div>
+                }
+            </div>
+        );
+    }
+}
+
+export default Main;
