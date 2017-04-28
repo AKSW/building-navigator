@@ -1,7 +1,11 @@
 import _ from 'lodash';
 
 /**
- * Store for routes and browser history
+ * Store for routes and update the browser history
+ * All available routes needs to created here.
+ *
+ * Usage:
+ *  get current route: RouterStore.getCurrentRoute()
  */
 class RouterStore {
     constructor(logger) {
@@ -14,11 +18,11 @@ class RouterStore {
         this.seperator = '-';
 
         // init all default routes
-        // @todo add 404 route
         this.addRoutes([
             {stores: null, path: 'index', component: 'Search', title: ''},
             {stores: null, path: 'search', component: 'Search', title: 'Suche'},
             {stores: null, path: 'results', component: 'Results', title: 'Ergebnisse'},
+            {stores: null, path: '404', component: 'NotFound', title: 'Not found'},
         ]);
     }
 
@@ -53,7 +57,6 @@ class RouterStore {
      */
     setCurrentRoute(currentStores, routePath) {
         // get route from path
-        // @todo what if route is undefined? May use 404 component
         const route = this.getRoute(routePath);
 
         // write deep copy of current store state into previous route
@@ -73,7 +76,12 @@ class RouterStore {
     }
 
     getCurrentRoute() {
-        return this.getRoute(null);
+        const route = this.getRoute(null);
+
+        if (route === undefined) {
+            return this.get404Route();
+        }
+        return route;
     }
 
     getIndexRoute() {
