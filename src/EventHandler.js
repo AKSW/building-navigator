@@ -1,5 +1,13 @@
 import Promise from 'promise-polyfill';
 
+/**
+ * Handles events by passing them to the stores and resolves the promise
+ *
+ * Usage in components:
+ *  super.handleEvent({
+ *          action: '...', payload: {...}
+ *      }).then(() => ...))
+ */
 class EventHandler {
     constructor(stores, logger) {
         this.logger = logger;
@@ -7,16 +15,19 @@ class EventHandler {
     }
 
     /**
-     * Handle events
+     * Handle events.
+     * Each event is identificated with its unique action id and calls a specific method in a store
      *
-     * @param {Object} Event with action and payload
+     * @param {object} event Event object with action and payload
+     * @param {String} event.action Unique action id
+     * @param {String=} event.payload Optional payload object with some data
      * @return {Promise} Resolve or reject (on error) new promise
-     * @todo may split into stores if action list grows too long
      */
     handleEvent(event) {
-        this.logger.log('Handle event: ', event);
         const action = event.action;
         const payload = event.payload;
+        // log current event
+        this.logger.log('Handle event: ', event);
 
         return new Promise((resolve, reject) => {
             switch(action) {
@@ -144,6 +155,7 @@ class EventHandler {
                     // reject promise if unkwon action was given
                     reject(`Unkown action to ${this.constructor.name} given: ` + action);
             }
+            // log new store state
             this.logger.log('Current stores: ', this.stores);
         });
     }

@@ -2,6 +2,12 @@ import Promise from 'promise-polyfill';
 import JsonLoader from '../utils/JsonLoader';
 import {getDistance} from '../utils/GeoUtils';
 
+/**
+ * Stores all buildings
+ *
+ * Init all initial buildings data and load all data of a building
+ * Applies filter and map-boundings to buildings (flag building.visible)
+ */
 class BuildingStore {
     constructor(logger) {
         this.logger = logger;

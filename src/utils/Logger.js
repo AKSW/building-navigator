@@ -1,3 +1,9 @@
+/**
+ * Store log messages and printout to console if mode is 'development'
+ *
+ * Usage in components:
+ *  super.logger.log('Error message', {}, 'info|warn|error')
+ */
 class Logger {
     constructor(mode = 'production', standardLevel = 'info')
     {

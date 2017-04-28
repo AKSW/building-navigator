@@ -5,6 +5,10 @@ import {Button} from 'react-bootstrap';
 import Search from './sidebar/Search';
 import Results from './sidebar/Results';
 
+/**
+ * Sidebar components, render the search form or results list (depends on current route)
+ * with toggle sidebar button
+ */
 class Sidebar extends React.Component {
     constructor(props) {
         super();
@@ -36,7 +40,6 @@ class Sidebar extends React.Component {
         // get current route (search or results) for the sidebar
         const currentRoute = this.state.stores.routerStore.getCurrentRoute();
 
-        // @todo may implement transparent onSwipeRight overlay over map
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible')
             ? (<Swipeable onSwipedLeft={this.handleToggleSidebar}>
                     <div className="sidebar">
@@ -66,7 +69,6 @@ class Sidebar extends React.Component {
                             bsSize="large"
                             title="Seitenleiste einblenden"
                             onClick={this.handleToggleSidebar}
-                            aria-hidden={true}
                         >
                             <i className="fa fa-angle-double-right" aria-hidden={true}></i>
                         </Button>

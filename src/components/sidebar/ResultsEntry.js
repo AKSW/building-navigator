@@ -94,7 +94,7 @@ class Entry extends React.Component {
     }
 
     handleMouseOver(e) {
-        // @todo may show this entry on map
+        // @todo may show current hovered entry on map
     }
 
     /**

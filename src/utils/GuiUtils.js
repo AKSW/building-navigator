@@ -1,27 +1,24 @@
 import Promise from 'promise-polyfill';
 import ReactDOM from 'react-dom';
 
-/*
-    Set focus on given node
-*/
-export const focusOnNode = (node) => {
-    const el = ReactDOM.findDOMNode(node);
-    if (el !== null) {
-        el.focus();
-    }
-};
-
-/*
-    Get an element in the root node
-    Returns a Promise with the element, or rejected if element not found
-*/
+/**
+ * Get an element, from the subtree of our root node
+ * Returns a Promise with the element, or rejected if element not found
+ *
+ * @param {string} rootNodeId Id of the root note (e.g. building-navigator)
+ * @param {string} elementSelector CSS selector of the element (see https://www.w3schools.com/cssref/css_selectors.asp)
+ *
+ */
 export const getElement = (rootNodeId, elementSelector) => {
+    // get root element in document
     const rootEl = document.getElementById(rootNodeId);
 
+    // return promise with the element
     return new Promise((resolve, reject) => {
         if (rootEl === null) {
             reject(`Root-Node "${rootNodeId}" not found`);
         }
+        // we need the next-step timeout to wait for reacts DOM nodes
         window.setTimeout(() => {
             const el = rootEl.querySelector(elementSelector);
             if (el === null) {
@@ -35,11 +32,11 @@ export const getElement = (rootNodeId, elementSelector) => {
 };
 
 /**
-    From http://stackoverflow.com/a/25574313
-    Smoothly scroll element to the given target (element.scrollTop)
-    for the given duration
-    Returns a promise that's fulfilled when done, or rejected if
-    interrupted
+ * From http://stackoverflow.com/a/25574313
+ * Smoothly scroll element to the given target (element.scrollTop)
+ * for the given duration
+ * Returns a promise that's fulfilled when done, or rejected if
+ * interrupted
  */
 export const scrollTo = function(element, target, duration) {
     target = Math.round(target);

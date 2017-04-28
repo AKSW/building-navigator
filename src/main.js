@@ -7,8 +7,10 @@ import EventHandler from './EventHandler';
 import BuildingNavigator from './BuildingNavigator';
 
 /**
- * Initial create Logger and stores.
- * Render BuildingNavigator and pass Logger and stores
+ * Entry file to init and render the app.
+ *
+ * Initial create logger, stores and event handler.
+ * Render main class BuildingNavigator and pass some props.
  *
  * @param {Object} config Configuration object which has key 'container' set to target ID.
  * @throws Container id not given
@@ -19,12 +21,12 @@ const runBuildingNavigator = (config) => {
     }
     const appEl = document.getElementById(config.container);
 
-    // init logger
+    // init logger with logger mode from NODE_ENV variable from webpack config
+    // For production usage it should be 'production' to hide unintended log messages
     const loggerMode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
-
-    // init stores
     const logger = new Logger(loggerMode);
 
+    // init stores with prev created logger
     const stores = {
         buildingStore: new Store.BuildingStore(logger),
         filterStore: new Store.FilterStore(logger),
@@ -32,10 +34,11 @@ const runBuildingNavigator = (config) => {
         uiStore: new Store.UIStore(logger),
         routerStore: new Store.RouterStore(logger)
     };
-    // init event handler
+
+    // init event handler with prev created logger and stores
     const eventHandler = new EventHandler(stores, logger);
 
-    // add userconfig to uiStore
+    // add userconfig to uiStore, e.g. to allow access to the root node container id
     eventHandler.handleEvent({
         action: 'update-ui-config',
         payload: {key: 'userConfig', value: config}

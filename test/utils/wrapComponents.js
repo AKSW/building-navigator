@@ -8,12 +8,14 @@ import {getLogger, getStores, getEventHandler} from './utils';
 
 import BuildingNavigator from '../../src/BuildingNavigator';
 
-// return BuildingNavigator wrapper
-// type (String) is: mount or shallow
-// mount: full mount of component
-// shallow: mounts to first sub-component
-// see: http://airbnb.io/enzyme/#basic-usage
-export const wrapBuildingNavigator = (type) => {
+/**
+ * Get wrap of BuildingNavigator component
+ *
+ * @param {string} (type = 'shallow') Type of wrap.
+ *      'shallow' mounts only to first sub-component (see: http://airbnb.io/enzyme/#basic-usage)
+ *      'mount' full mount of component
+ */
+export const wrapBuildingNavigator = (type = 'shallow') => {
     fetch(_10buildings);
     const div = global.document.createElement('div');
     global.document.body.appendChild(div);
@@ -27,12 +29,18 @@ export const wrapBuildingNavigator = (type) => {
         payload: {key: 'userConfig', value: {container: 'building-navigator'}}
     });
 
-    if (type === 'mount') {
-        return mount(
-            <BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />,
-            { attachTo: div }
-        );
-    } else {
-        return shallow(<BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />);
+    switch (type) {
+        case 'shallow':
+            return shallow(<BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />);
+            break;
+        case 'mount':
+            return mount(
+                <BuildingNavigator stores={stores} logger={logger} eventHandler={eventHandler} />,
+                { attachTo: div }
+            );
+            break;
+
+        default:
+            return null;
     }
 };

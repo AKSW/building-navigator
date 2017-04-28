@@ -2,11 +2,16 @@ import * as Store from '../../src/stores';
 import EventHandler from '../../src/EventHandler';
 import Logger from '../../src/utils/Logger';
 
-// return logger
+/**
+ * Get new Logger
+ */
 export const getLogger = () => new Logger();
 
-// return stores
-// @param logger
+/**
+ * Get stores (buildingStore, filterStore, ...) object
+ *
+ * @param logger Optional Logger
+ */
 export const getStores = (logger = undefined) => {
     if (logger === undefined) {
         logger = getLogger();
@@ -20,10 +25,12 @@ export const getStores = (logger = undefined) => {
     };
 };
 
-
-// return eventHandler
-// @param stores
-// @param logger
+/**
+ * Get EventHandler
+ *
+ * @param stores Optional stores
+ * @param logger Optional logger
+ */
 export const getEventHandler = (stores = undefined, logger = undefined) => {
     if (logger === undefined) {
         logger = getLogger();

@@ -1,3 +1,7 @@
+/**
+ * Stores settings for the map like current zoom state, the center
+ * Also contains the leaflet node (this.noe) to retrieve leaflet functions
+ */
 class MapStore {
     constructor(logger) {
         this.logger = logger;

@@ -4,7 +4,7 @@ import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet'
 import Marker from './map/Marker';
 
 /**
- * Map component
+ * Map component, renders Leaflet map with buildings as markers
  */
 class Map extends React.Component {
     constructor(props) {
@@ -43,10 +43,10 @@ class Map extends React.Component {
         );
 
         /**
-         * May group markers (buildings on some location)
-         * @todo may only update marker groups if bounds/buildings changed
+         * Create markers from buildings
+         * Buildgins on the some location comes into a multi-marker
         */
-        const mayGroupBuildings = () => {
+        const createMarkers = () => {
             const markers = [];
             buildings.map((building, bid) => {
                 let newMarkerType = 'normal';
@@ -77,7 +77,7 @@ class Map extends React.Component {
         // write local state with new props
         this.setState({
             stores: nextProps.stores,
-            markers: mayGroupBuildings(),
+            markers: createMarkers(),
             sidebarIsVisible: nextProps.stores.uiStore.get('sidebarIsVisible')
         });
 
