@@ -39,6 +39,7 @@ describe('<Sidebar />', () => {
         const stores = getStores();
 
         const resultRoute = stores.routerStore.getRoute('results');
+        // overwrite routerStore.getCurrentRoute(), to return result route
         stores.routerStore.getCurrentRoute = () => {
             return resultRoute;
         }

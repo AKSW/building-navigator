@@ -16,9 +16,7 @@ import EventHandler from '../src/EventHandler';
 import Logger from '../src/utils/Logger';
 
 import BuildingNavigator from '../src/BuildingNavigator';
-import Welcome from '../src/components/Welcome';
-import Sidebar from '../src/components/Sidebar';
-import Map from '../src/components/Map';
+import Main from '../src/components/Main';
 
 // test-environment for BuildingNavigator component
 describe('<BuildingNavigator />', () => {
@@ -34,25 +32,9 @@ describe('<BuildingNavigator />', () => {
         expect(document.querySelectorAll('.building-navigator').length).toBe(1);
     });
 
-    it('renders <Welcome /> component', () => {
+    it('renders <Main /> component', () => {
         const buildingNavigator = wrapBuildingNavigator();
-        expect(buildingNavigator.find(Welcome).length).toBe(1);
-    });
-
-    it('closes <Welcome /> after clicking ok', () => {
-        const buildingNavigator = wrapBuildingNavigator('mount');
-
-        buildingNavigator.find(Welcome).find('button').simulate('click');
-
-        // wait for states update
-        buildingNavigator.update();
-        expect(buildingNavigator.find(Welcome).length).toBe(0);
-    });
-
-    it('renders <Sidebar /> and <Map /> components', () => {
-        const buildingNavigator = wrapBuildingNavigator();
-        expect(buildingNavigator.find(Sidebar).length).toBe(1);
-        expect(buildingNavigator.find(Map).length).toBe(1);
+        expect(buildingNavigator.find(Main).length).toBe(1);
     });
 
     it('expects inital no buildings in state.stores.buildingStore', () => {
