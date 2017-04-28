@@ -1,17 +1,21 @@
 import React from 'react';
-import {Alert, Image} from 'react-bootstrap';
 import Promise from 'promise-polyfill';
 
 import Logger from './utils/Logger';
 import {isMobileBrowser} from './utils/DetectMobile';
 import EventHandler from './EventHandler';
-import Sidebar from './components/Sidebar';
-import Map from './components/Map';
-import Welcome from './components/Welcome';
+import Main from './components/Main';
 
 /**
- * Main class, holds stores, logger, eventHandler and renders all other components
- * @class
+ * Logical main class of the app, controls dataflow between components and stores
+ *
+ * Holds stores, logger and event handler
+ * Passes events with handleEvent from components to the event handler and updates its state after the event
+ *      Updated state will be passed to the components
+ * Extends super class React.Component with logger and handleEvent method
+ *      This allows components to call then with:
+ *      super.logger.log() and super.handleEvent(event)
+ * Do some initial work, like loading building data and if small window
  */
 class BuildingNavigator extends React.Component {
     constructor(props) {
@@ -25,12 +29,10 @@ class BuildingNavigator extends React.Component {
         this.logger = props.logger;
         this.eventHandler = props.eventHandler;
         this.handleEvent = this.handleEvent.bind(this);
-        this.compMounted = false;
+        this.compMounted = false; // requiered to test initial window size
 
-        /**
-         * Extend Rect.Component with some helper functions from this class,
-         * allows components to acces them by calling: super.handleEvent()
-         */
+        // Extend Rect.Component with handleEvent() method
+        // allows components to call events with: super.handleEvent(...)
         React.Component.prototype.handleEvent = (event) => {
             return new Promise((resolve, reject) => {
                 this.handleEvent(event).then(
@@ -39,8 +41,10 @@ class BuildingNavigator extends React.Component {
                 );
             });
         };
+        // Write logger into React.Component, allows components to access it with: super.logger.log(...)
         React.Component.prototype.logger = this.logger;
 
+        // bind local handlers
         this.handleWindowResize = this.handleWindowResize.bind(this);
     }
 
@@ -87,13 +91,14 @@ class BuildingNavigator extends React.Component {
     }
 
     /**
-     * Pass event to EventHandler and update this state
+     * Pass event to EventHandler and update my own state
      *
-     * @param Object event with action and data object
+     * @param Object event with action and data object (see EventHandler)
      * @return Promise with response or error
      */
     handleEvent(event) {
         return new Promise((resolve, reject) => {
+            // handle event and resolve promise or reject on error
             this.eventHandler.handleEvent(event).then(
                 response => {
                     this.setState(this.state);
@@ -136,42 +141,7 @@ class BuildingNavigator extends React.Component {
     }
 
     render() {
-        return (
-            <div role="main" className="building-navigator">
-                {this.logger.hasError() &&
-                    <Alert bsStyle="danger" className="global-error">
-                        <h3>Fehler bei der Ausführung der Anwendung</h3>
-                        {this.logger.getErrors().map((error, eid) => {
-                            return (
-                                <p key={eid}>
-                                    <strong>Nachricht:</strong><br />{error.message.toString()}<br /><br />
-                                    <strong>Details:</strong><br />{error.message.stack}
-                                </p>
-                            );
-                        })}
-                    </Alert>
-                }
-                {this.state.stores.uiStore.get('showWelcome') &&
-                    <Welcome />
-                }
-                <div className="header">
-                    <div className="leds-log-wrapper pull-left">
-                        <a href="http://www.leds-projekt.de/index.html" target="_blank">
-                            <Image src='./images/leds-projekt-logo.png' />
-                        </a>
-                    </div>
-                    <div className="pull-right header-text-wrapper text-muted">
-                        <a href="http://www.leds-projekt.de/de/aktuelles/2017/Treffen-mit-Interessenvertretern-zur-Vorstellung-des-Gebaeude-Navigators.html"
-                            target="_blank"
-                            className="text-muted btn btn-lg">
-                            Über
-                        </a>
-                    </div>
-                </div>
-                <Sidebar stores={this.state.stores} />
-                <Map aria-hidden={true} stores={this.state.stores} />
-            </div>
-        );
+        return <Main stores={this.state.stores} />;
     }
 }
 
