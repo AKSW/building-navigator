@@ -1,16 +1,19 @@
 import React from 'react';
 import {
     Button,
-    Glyphicon,
     Col,
     Form,
     FormGroup,
     ControlLabel,
+    InputGroup,
     FormControl,
     Clearfix
 } from 'react-bootstrap';
 import {getElement} from '../../utils/GuiUtils'
 
+/**
+ * Search and filter form component. Renders the form for all filters from FilterStore
+ */
 class Search extends React.Component {
     constructor(props) {
         super();
@@ -107,19 +110,23 @@ class Search extends React.Component {
     }
 
     /**
-     * Render search filter
+     * Render filters (search, select, checkbox ...)
      */
     render() {
+        // flag is true if form is submitted and filters applies to all buildings
         const isLoading = this.state.isLoading;
 
+        // search inout field
         const search = this.state.filters.find((filter) => {
             return filter.type === 'search';
         });
 
+        // filters with type 'select-one'
         const selectFilters = this.state.filters.filter((filter) => {
             return filter.type === 'select-one';
         });
 
+        // filters with type 'checkbox'
         const checkboxFilters = this.state.filters.filter((filter) => {
             return filter.type === 'checkbox';
         });
@@ -139,16 +146,20 @@ class Search extends React.Component {
                 <Clearfix />
 
                 {/* @todo decide how to implement a fulltext search */}
-                {/*<FormGroup controlId="formFilterSearch">
+                {/*<FormGroup controlId="test" bsSize="large">
                     <Col md={12}>
-                        <ControlLabel><h3>Gebäudename</h3></ControlLabel>
-                        <FormControl
-                            type="search"
-                            name={search.uniqueKey}
-                            defaultValue={search.value}
-                            onChange={this.handleChange}
-                            aria-label="Hier können Sie Gebäude über ihren Namen suchen"
-                        />
+                        <ControlLabel><h3>{search.title}</h3></ControlLabel>
+                        <InputGroup>
+                            <InputGroup.Addon><i className="fa fa-search" aria-hidden={true}></i></InputGroup.Addon>
+                            <FormControl
+                                type="search"
+                                name={search.id}
+                                defaultValue={search.value}
+                                onChange={this.handleChange}
+                                aria-label={search.aria}
+                                placeholder={search.aria}
+                            />
+                        </InputGroup>
                     </Col>
                 </FormGroup>*/}
 

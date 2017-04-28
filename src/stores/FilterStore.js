@@ -1,17 +1,39 @@
+/**
+ * Add filters to filter buildings by a values of their keys
+ * Each filter is stores as an object in this.filters
+ * Support a search field, select-boxes and checkboxes
+ */
 class FilterStore {
     constructor(logger) {
         this.logger = logger;
         this.filters = [];
 
+        // Add default filters with the following properties:
+        //  id      (String) unique id for the filter
+        //  type    (String) search|select-one|checkbox
+        //  title   (String)
+        //  icon    (Sring) Name of the SVG icon in dist/images/[name].svg
+        //  aria    (String)
+        //  valueSet (Array of Objects) Only if type is 'select-one', keys:
+        //      key     (String) Key to filter
+        //      value   (Integer|String) Value to filter
+        //      title   (String)
+        //      aria    (String)
+        //  key     (String) (not for 'select-one') Key to filter (e.g. title, lift-avail)
+        //  value   (Integer|String) Value of the filter, for 'select-one' its the number of the selected entry
+
         /*
          * Search by Name
          */
-        // this.add({
-        //     uniqueKey: 'title',
-        //     title: 'Suche',
-        //     type: 'search'
-        //     value: ''
-        // })
+        this.add({
+            id: 'search',
+            type: 'search',
+            title: 'Suche Gebäude',
+            icon: 'search',
+            aria: 'Gebäude nach Namen suchen',
+            key: 'title',
+            value: '',
+        });
 
         /*
          * Entrance accessible
