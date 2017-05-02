@@ -77,7 +77,7 @@ class Welcome extends React.Component {
      * Close welcome message, store in cookie
      */
     handleOk(e) {
-        Cookies.set('showWelcome', false);
+        Cookies.set('showWelcome', false, { expires: 30 });
         super.handleEvent({
             action: 'update-ui-config',
             payload: {
