@@ -31,21 +31,6 @@ class Main extends React.Component {
 
         return (
             <div role="main" className="building-navigator">
-                <div className="header">
-                    <div className="leds-log-wrapper pull-left">
-                        <a href="http://www.leds-projekt.de/index.html" target="_blank">
-                            <Image src='./images/leds-projekt-logo.png' />
-                        </a>
-                    </div>
-                    <div className="pull-right header-text-wrapper text-muted">
-                        <a href="http://www.leds-projekt.de/de/aktuelles/2017/Treffen-mit-Interessenvertretern-zur-Vorstellung-des-Gebaeude-Navigators.html"
-                            target="_blank"
-                            className="text-muted btn btn-lg">
-                            Über
-                        </a>
-                    </div>
-                </div>
-
                 {super.logger.hasError() &&
                     <Alert bsStyle="danger" className="global-error">
                         <h1>Fehler bei der Ausführung der Anwendung</h1>
