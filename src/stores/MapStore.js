@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 /**
  * Stores settings for the map like current zoom state, the center
  * Also contains the leaflet node (this.noe) to retrieve leaflet functions
@@ -9,11 +11,13 @@ class MapStore {
         this.node = null;
 
         this.config = {
-            // center of the map (51.3412, 12.3747 is center of Leipzig)
-            center: {
-                latitude: 51.3412,
-                longitude: 12.3747
-            },
+            // center of the map, get from cookie or use center of leipzig (51.3412, 12.3747)
+            center: Cookies.get('mapCenter') !== undefined
+                ? JSON.parse(Cookies.get('mapCenter'))
+                : {
+                    latitude: 51.3412,
+                    longitude: 12.3747
+                },
             // zoom value, the greater the value, the closer the zoom
             zoom: 14,
             // bounds of the map from upper right to bottom left, will initiated after loading the map
@@ -83,6 +87,10 @@ class MapStore {
      * @param {Float} New longitude value
      */
     updateCenter(newLatitude, newLongitude) {
+        Cookies.set('mapCenter', {
+            latitude: newLatitude,
+            longitude: newLongitude
+        }, { expires: 30 });
         this.update('center', {
             latitude: newLatitude,
             longitude: newLongitude
