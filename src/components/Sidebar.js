@@ -1,7 +1,8 @@
 import React from 'react'
 import Swipeable from 'react-swipeable';
-import {Button} from 'react-bootstrap';
+import {Button, Clearfix} from 'react-bootstrap';
 
+import Sponsors from './Sponsors'
 import Search from './sidebar/Search';
 import Results from './sidebar/Results';
 
@@ -49,6 +50,9 @@ class Sidebar extends React.Component {
                         {currentRoute.component === 'Results' &&
                             <Results stores={this.state.stores} />
                         }
+                        <Clearfix />
+                        <Sponsors />
+
                     </div>
                     <div className="btn-toggle-sidebar btn-hide-sidebar">
                         <Button

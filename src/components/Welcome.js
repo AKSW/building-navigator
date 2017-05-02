@@ -7,10 +7,11 @@ import {
     FormGroup,
     ControlLabel,
     FormControl,
-    Clearfix
+    Clearfix,
 } from 'react-bootstrap';
 
 import Cookies from 'js-cookie';
+import Sponsors from './Sponsors'
 
 /**
  * Welcome message on first visiting.
@@ -77,7 +78,7 @@ class Welcome extends React.Component {
      * Close welcome message, store in cookie
      */
     handleOk(e) {
-        Cookies.set('showWelcome', false, { expires: 30 });
+        Cookies.set('showWelcome', false, { expires: 1 });
         super.handleEvent({
             action: 'update-ui-config',
             payload: {
@@ -130,6 +131,8 @@ class Welcome extends React.Component {
                         <Button bsStyle="primary" className="btn-lg" onClick={this.handleOk}>
                             OK, beginnen
                         </Button>
+                        <hr />
+                        <Sponsors />
                     </Modal.Footer>
                 </Modal.Dialog>
             </div>
