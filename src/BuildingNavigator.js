@@ -50,10 +50,11 @@ class BuildingNavigator extends React.Component {
 
     /**
      * Do some initial work:
-     * add event listeners, may set if is mobile browser, init buildings, set route
+     * add event listeners, may set if is mobile browser, init buildings, may set route
      */
     componentDidMount() {
         this.compMounted = true;
+
         // add resize event listener
         window.addEventListener('resize', this.handleWindowResize);
 
@@ -75,32 +76,42 @@ class BuildingNavigator extends React.Component {
             });
         }
 
-        // load initial buildind data, apply map bounds to the buildings
-        // and set search as initial route
+        // load initial buildind data, apply map bounds to the buildings and set initial route
         this.handleEvent({action: 'init-buildings'}).then(() => {
             // get map bounds with padding
-            const mapBounds = this.state.stores.mapStore.getNode().getBounds()
-                .pad(this.state.stores.uiStore.get('mapPadding'));
-            // update map bounds config
-            super.handleEvent({action: 'update-map-bound',
-                payload: {
-                    northEast: {
-                        latitude: mapBounds._northEast.lat,
-                        longitude: mapBounds._northEast.lng,
-                    },
-                    southWest: {
-                        latitude: mapBounds._southWest.lat,
-                        longitude: mapBounds._southWest.lng
+            const mapNode = this.state.stores.mapStore.getNode();
+            if (mapNode !== null) {
+                const mapBounds = mapNode.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
+                // update map bounds config
+                super.handleEvent({action: 'update-map-bound',
+                    payload: {
+                        northEast: {
+                            latitude: mapBounds._northEast.lat,
+                            longitude: mapBounds._northEast.lng,
+                        },
+                        southWest: {
+                            latitude: mapBounds._southWest.lat,
+                            longitude: mapBounds._southWest.lng
+                        }
                     }
-                }
-            });
-            // apply bounds to the buildings
-            super.handleEvent({action: 'apply-bounds'});
-            // set "search" as route
-            super.handleEvent({
-                action: 'set-current-route',
-                payload: {path: 'search'}
-            });
+                });
+                // apply bounds to the buildings
+                super.handleEvent({action: 'apply-bounds'});
+            }
+        });
+
+        // get current path and set as initial route
+        // e.g. sets Search as index component, or 404 if not found
+        const currentRoute =this.state.stores.routerStore.getCurrentRoute();
+        super.handleEvent({
+            action: 'set-current-route',
+            payload: {path: currentRoute.path}
+        });
+
+        // hide global loader after this component is mounted
+        this.handleEvent({
+            action: 'update-ui-config',
+            payload: {key: 'loader', value: false}
         });
     }
 
