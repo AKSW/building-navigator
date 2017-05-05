@@ -109,6 +109,7 @@ class Results extends React.Component {
      * Render results list, may paginated (pager)
      */
     render() {
+        const initiated = this.state.stores.buildingStore.initiated;
         const visiblesLength = this.state.stores.buildingStore.getVisibles().length;
         const resultsStart = this.state.stores.uiStore.get('resultsStart');
         const resultsSteps = this.state.stores.uiStore.get('resultsSteps');
@@ -143,9 +144,15 @@ class Results extends React.Component {
                         </Button>
                     </Col>
                 </Row>
-                {this.state.buildings.length == 0 &&
+                {initiated == false &&
+                    <div>
+                        <br /><i className='fa fa-circle-o-notch fa-spin' /> Lade Ergebnisse
+                    </div>
+                }
+                {(initiated && this.state.buildings.length == 0) &&
                     <div className="entry not-found">
-                        <h3><i className="fa fa-exclamation" aria-hidden={true}></i> Keine Gebäude gefunden.<br />Ändern sie die Filter der Suche oder den Standpunkt auf der Karte.</h3>
+                        <h3><i className="fa fa-exclamation" aria-hidden={true}></i> Keine Gebäude gefunden.</h3>
+                        <p>Ändern Sie die Filter der Suche oder den Ausschnitt auf der Karte.</p>
                     </div>
                 }
                 {this.state.buildings.map((building, bid) => {
