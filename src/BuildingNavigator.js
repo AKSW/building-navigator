@@ -75,9 +75,28 @@ class BuildingNavigator extends React.Component {
             });
         }
 
-        // load initial buildind data
+        // load initial buildind data, apply map bounds to the buildings
         // and set search as initial route
         this.handleEvent({action: 'init-buildings'}).then(() => {
+            // get map bounds with padding
+            const mapBounds = this.state.stores.mapStore.getNode().getBounds()
+                .pad(this.state.stores.uiStore.get('mapPadding'));
+            // update map bounds config
+            super.handleEvent({action: 'update-map-bound',
+                payload: {
+                    northEast: {
+                        latitude: mapBounds._northEast.lat,
+                        longitude: mapBounds._northEast.lng,
+                    },
+                    southWest: {
+                        latitude: mapBounds._southWest.lat,
+                        longitude: mapBounds._southWest.lng
+                    }
+                }
+            });
+            // apply bounds to the buildings
+            super.handleEvent({action: 'apply-bounds'});
+            // set "search" as route
             super.handleEvent({
                 action: 'set-current-route',
                 payload: {path: 'search'}
