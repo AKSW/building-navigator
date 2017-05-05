@@ -19,10 +19,10 @@ class RouterStore {
 
         // init all default routes
         this.addRoutes([
-            {stores: null, path: 'index', component: 'Search', title: ''},
+            {stores: null, path: 'index', component: 'Search', title: 'Suche'},
             {stores: null, path: 'search', component: 'Search', title: 'Suche'},
             {stores: null, path: 'results', component: 'Results', title: 'Ergebnisse'},
-            {stores: null, path: '404', component: 'NotFound', title: 'Not found'},
+            {stores: null, path: '404', component: 'NotFound', title: '404'},
         ]);
     }
 
