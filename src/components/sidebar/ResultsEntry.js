@@ -205,7 +205,7 @@ class Entry extends React.Component {
                 <ButtonGroup justified className="result-bottom-buttons">
                     {!building.showDetails &&
                         <Button className="btn-lg btn-toogle-result-details" aria-label="Mehr Ergebnisdetails" aria-expanded={false} onClick={e => this.handleShowDetails(e, building.id)}>
-                            <i className="fa fa-caret-down" aria-hidden={true}></i> Details&nbsp;
+                            <i className="fa fa-caret-down" aria-hidden={true}></i> Details anzeigen&nbsp;
                             {this.state.isLoading &&
                                 <i className='fa fa-circle-o-notch fa-spin' />
                             }
@@ -214,7 +214,7 @@ class Entry extends React.Component {
 
                     {building.showDetails &&
                         <Button className="btn-lg btn-toogle-result-details" aria-label="Weniger Ergebnisdetails" aria-expanded={true} onClick={e => this.handleHideDetails(e, building.id)}>
-                            <i className="fa fa-caret-up" aria-hidden={true}></i> Details
+                            <i className="fa fa-caret-up" aria-hidden={true}></i> Details ausblenden
                         </Button>
                     }
                     <Button className="btn-lg btn-show-result-on-map" aria-hidden={true} onClick={e => {this.handleMayHideSidebar(e); this.handleShowOnMap(e, building)}}>
