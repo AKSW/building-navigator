@@ -149,8 +149,7 @@ class Map extends React.Component {
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
-            this.setMapLoader(false);
-        }, panToDuration * 20); // after 2 x panTo in ms
+        }, 2000 * panToDuration); // after 2 x panTo in ms
     }
 
     /**
@@ -158,17 +157,7 @@ class Map extends React.Component {
      */
     handleClickGeolocate(e) {
         this.closePopup();
-        this.setMapLoader(true);
         this.mapNode.leafletElement.locate();
-    }
-
-    /**
-     * Set locale isLoading state
-     *
-     * @param Boolean
-     */
-    setMapLoader(value) {
-        this.setState({isLoading: value});
     }
 
     /**
@@ -187,7 +176,7 @@ class Map extends React.Component {
         const osmap = this.mapNode.leafletElement;
 
         // get bounds of map and decrease size with mapPadding
-        const bounds = osmap.getBounds().pad(this.state.stores.uiStore.get('mapPadding'));
+        const bounds = osmap.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
         super.handleEvent({
             action: 'update-map-config',
             payload: {
@@ -248,11 +237,6 @@ class Map extends React.Component {
 
         return (
             <div className={mapClass}>
-                {this.state.isLoading &&
-                    <div className="mapLoader-wrapper">
-                        <i className='fa fa-circle-o-notch fa-spin' />
-                    </div>
-                }
                 <div className="leaflet-control-container">
                     <div className="leaflet-bottom leaflet-right">
                         {!hideZoomControl &&
@@ -292,7 +276,6 @@ class Map extends React.Component {
                                 marker={marker}
                                 zoom={this.state.stores.mapStore.get('zoom')}
                                 stores={this.state.stores}
-                                setMapLoader={this.setMapLoader}
                             />
                         );
                     })}
