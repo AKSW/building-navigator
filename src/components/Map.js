@@ -94,7 +94,6 @@ class Map extends React.Component {
                 this.mapNode.leafletElement.invalidateSize();
             }, 0);
         }
-
     }
 
     componentDidMount() {
@@ -143,14 +142,15 @@ class Map extends React.Component {
      */
     handleLocationFound(e) {
         if (this.mapNode == null) return;
+        const panToDuration = 0.25; // panTo duration in seconds
         // pan to users location if found
-        this.mapNode.leafletElement.panTo(e.latlng, {duration: 0.25});
+        this.mapNode.leafletElement.panTo(e.latlng, {duration: panToDuration});
         // set new map config and apply bounds after paning
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
             this.setMapLoader(false);
-        }, 500);
+        }, panToDuration * 20); // after 2 x panTo in ms
     }
 
     /**
@@ -211,7 +211,7 @@ class Map extends React.Component {
     }
 
     /**
-     * Apply bounds to map store
+     * Apply map bounds to the buildings
      */
     applyBounds() {
         super.handleEvent({
