@@ -53,8 +53,7 @@ class Search extends React.Component {
 
         // apply filters and set new route
         super.handleEvent({
-            action: 'apply-filters',
-            payload: {filters: this.state.filters}
+            action: 'apply-filters'
         }).then(() => {
             super.handleEvent({
                 action: 'set-current-route',
