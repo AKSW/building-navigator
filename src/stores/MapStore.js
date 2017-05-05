@@ -32,7 +32,9 @@ class MapStore {
                     latitude: 0,
                     longitude: 0
                 }
-            }
+            },
+            // map bounds decreasing factor in (negative!) percent, avoids buildings too close to the border
+            mapPadding: -0.1,
         }
     }
 
