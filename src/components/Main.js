@@ -45,6 +45,12 @@ class Main extends React.Component {
                     </Alert>
                 }
 
+                {this.state.stores.uiStore.get('loader') &&
+                    <div className="global-loader-wrapper">
+                        <i className='fa fa-circle-o-notch fa-spin' />
+                    </div>
+                }
+
                 {this.state.stores.uiStore.get('showWelcome') &&
                     <Welcome />
                 }

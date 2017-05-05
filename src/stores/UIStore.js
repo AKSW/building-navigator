@@ -16,6 +16,8 @@ class UIStore {
             isSmallView: false,
             // preselected and global disability: blind|hear|move
             globalDisability: undefined,
+            // show global loader
+            loader: true,
             // show or hide welcome message, if cookie showWelcome doe not exist, its true
             showWelcome: Cookies.get('showWelcome') !== 'false',
             // sidebar is visible flag
@@ -24,8 +26,6 @@ class UIStore {
             resultsStart: 0,
             // steps for results
             resultsSteps: 20,
-            // map bounds decreasing factor in (negative!) percent, avoids buildings too close to the border
-            mapPadding: -0.1,
         };
     }
 
