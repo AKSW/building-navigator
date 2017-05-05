@@ -17,8 +17,7 @@ class Map extends React.Component {
         this.state = {
             stores: props.stores,
             markers: [],
-            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible'),
-            isLoading: false
+            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible')
         }
 
         // local event handlers
@@ -29,7 +28,6 @@ class Map extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleClickGeolocate = this.handleClickGeolocate.bind(this);
         this.handleLocationFound = this.handleLocationFound.bind(this);
-        this.setMapLoader = this.setMapLoader.bind(this);
     }
 
     /**
