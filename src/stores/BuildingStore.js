@@ -11,7 +11,13 @@ import {getDistance} from '../utils/GeoUtils';
 class BuildingStore {
     constructor(logger) {
         this.logger = logger;
+
+        // flag if all buildings are initiated
+        this.initiated = false;
+
+        // init empty building array
         this.buildings = [];
+        // default properties for each building
         this.buildingDefaults = {
             id: null,
             // is visible after apply filters
@@ -56,6 +62,7 @@ class BuildingStore {
 
         return this.jsonLoader.loadJson('/building-coordinates.json')
             .then((buildings) => {
+                this.initiated = true;
                 const added = addAll(buildings);
                 if (added == 0) {
                     throw new Error('No buildings initiated');
