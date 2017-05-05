@@ -1,9 +1,7 @@
 import React from 'react';
 import L from 'leaflet';
 import {Marker as OSMarker, Icon, Popup} from 'react-leaflet';
-import {
-    Button
-} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 
 import A11yIcon from '../A11yIcon';
 import {getElement} from '../../utils/GuiUtils'
@@ -43,9 +41,6 @@ class Marker extends React.Component {
             iconAnchor: [15, 51],
             popupAnchor:  [0, -45]
         });
-
-        // handler to set map loader
-        this.setMapLoader = props.setMapLoader;
 
         this.handleClickShowDetails = this.handleClickShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
@@ -105,9 +100,11 @@ class Marker extends React.Component {
 
         // for small devices, show in sidebar
         if (this.state.stores.uiStore.get('isSmallView')) {
-            // enable loader on the map
-            // (local loader is only visible in popup for desktop devices)
-            this.setMapLoader(true);
+            // show global loader (local loader is only visible in popup for desktop devices)
+            this.handleEvent({
+                action: 'update-ui-config',
+                payload: {key: 'loader', value: true}
+            });
             this.sidebarWithBuilding(building);
         }
     }
@@ -132,7 +129,9 @@ class Marker extends React.Component {
 
     /**
      * Show sidebar and scroll to the building entry
-     * Set local loader and map loader to false after scrolling
+     * Set local loader and global loader to false after scrolling
+     *
+     * @param {Object} building Building object
      */
     sidebarWithBuilding(building) {
         super.handleEvent({
@@ -146,8 +145,12 @@ class Marker extends React.Component {
         getElement(this.state.stores.uiStore.get('userConfig').container, `[id="result-entry-${building.id}"]`).then((entry) => {
             getElement(this.state.stores.uiStore.get('userConfig').container, `.sidebar`).then((sidebar) => {
                 sidebar.scrollTop = entry.offsetTop;
+                // set loaders state
                 this.setState({isLoading: false});
-                this.setMapLoader(false);
+                this.handleEvent({
+                    action: 'update-ui-config',
+                    payload: {key: 'loader', value: false}
+                });
             });
         });
     }
