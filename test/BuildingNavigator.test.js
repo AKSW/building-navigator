@@ -6,6 +6,7 @@ import {shallow, mount} from 'enzyme';
 import {_10buildings} from './assets/10buildings';
 import {getLogger, getStores, getEventHandler} from './utils/utils';
 import {fetch} from './utils/fetch';
+import {pushState} from './utils/pushState';
 
 // get mount or shallow object if BuildingNavigator
 import {wrapBuildingNavigator} from './utils/wrapComponents';
@@ -22,7 +23,10 @@ import Main from '../src/components/Main';
 describe('<BuildingNavigator />', () => {
 
     it('test if main rendered class .building-navigator', () => {
+        // call the mock of  whatwg fetch buildings
         fetch(_10buildings);
+        // call the mock of history push state for router store
+        pushState();
 
         const div = global.document.createElement('div');
         div.setAttribute('id', 'building-navigator');

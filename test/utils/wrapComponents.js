@@ -3,6 +3,7 @@ import {shallow, mount} from 'enzyme';
 
 import {_10buildings} from '../assets/10buildings';
 import {fetch} from './fetch';
+import {pushState} from './pushState';
 
 import {getLogger, getStores, getEventHandler} from './utils';
 
@@ -23,6 +24,9 @@ export const wrapBuildingNavigator = (type = 'shallow') => {
     const logger = getLogger();
     const stores = getStores(logger);
     const eventHandler = getEventHandler(stores, logger);
+
+    // call the mock of history push state for router store
+    pushState();
 
     eventHandler.handleEvent({
         action: 'update-ui-config',
