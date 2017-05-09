@@ -98,14 +98,23 @@ class Marker extends React.Component {
         // building as selected
         this.setSelectedOnMap(building);
 
-        // for small devices, show in sidebar
+        // for small devices, show entry in sidebar
+        // for normal devices, load building details in backround
         if (this.state.stores.uiStore.get('isSmallView')) {
             // show global loader (local loader is only visible in popup for desktop devices)
             this.handleEvent({
                 action: 'update-ui-config',
                 payload: {key: 'loader', value: true}
             });
+            // show sidebar with the building
             this.sidebarWithBuilding(building);
+        } else {
+            super.handleEvent({
+                action: 'may-load-building-data',
+                payload: {
+                    buildingId: building.id,
+                }
+            });
         }
     }
 
@@ -156,9 +165,11 @@ class Marker extends React.Component {
     }
 
     /**
-     * Call event to set biulding as selected on map
+     * Set building as selected on map, call the event appropriate
      */
     setSelectedOnMap(building) {
+        // immediately set local property
+        building.selectOnMap = true;
         super.handleEvent({
             action: 'set-selected-on-map',
             payload: {
