@@ -20,6 +20,7 @@
     "react-dom": "^15.0.0",
     "react-leaflet": "^0.12.3",
     "react-swipeable": "^3.7.0",
+    "react-tap-event-plugin": "^2.0.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
