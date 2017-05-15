@@ -135,13 +135,17 @@ class Results extends React.Component {
             </ul>
         );
 
+        const backToSearchBtn = (
+            <Button bsStyle="primary" bsSize="large" title="Zurück zur Suche" onClick={this.handleBackToSearch}>
+                <span><i className="fa fa-search" aria-hidden={true}></i> Zur Suche</span>
+            </Button>
+        );
+
         return (
             <div className="results" lang="de">
                 <Row>
                     <Col xs={6} className="back-to-search-wrapper">
-                        <Button className="btn btn-primary btn-lg" title="Zurück zur Suche" onClick={this.handleBackToSearch}>
-                            <span><i className="fa fa-search" aria-hidden={true}></i> Zur Suche</span>
-                        </Button>
+                        {backToSearchBtn}
                     </Col>
                 </Row>
                 {initiated == false &&
@@ -171,9 +175,7 @@ class Results extends React.Component {
                     <Row>
                         <br />
                         <Col md={12} className="back-to-search-wrapper">
-                            <Button className="btn btn-primary btn-lg" title="Zurück zur Suche" onClick={this.handleBackToSearch}>
-                                <span><i className="fa fa-search" aria-hidden={true}></i> Zur Suche</span>
-                            </Button>
+                            {backToSearchBtn}
                         </Col>
                     </Row>
                 }

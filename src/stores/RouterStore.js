@@ -18,6 +18,13 @@ class RouterStore {
         this.seperator = '-';
 
         // init all default routes
+        // each route should be an object with the folliwing proerties:
+        //  stores: null, path: '...', component: '...', title: '...'
+        //  while   stores is the current state for the stores
+        //          path is a unique path-string for browsers locatiuon
+        //          component is the component in /src/components
+        //          title is the tutle for the browser
+        // mainly it should created a route for 'index' and '404'
         this.addRoutes([
             {stores: null, path: 'index', component: 'Search', title: 'Suche'},
             {stores: null, path: 'search', component: 'Search', title: 'Suche'},
@@ -75,6 +82,12 @@ class RouterStore {
         history.pushState(null, route.title, `${location.pathname}#/${route.path}`);
     }
 
+    /**
+     * Get current the route (from browsers location)
+     * If route is undefined, returns  404 route
+     *
+     * @return {Object} Route object
+     */
     getCurrentRoute() {
         const route = this.getRoute(null);
 
@@ -84,10 +97,20 @@ class RouterStore {
         return route;
     }
 
+    /**
+     * Get the index route
+     *
+     * @return {Object} Route object
+     */
     getIndexRoute() {
         return this.getRoute('index');
     }
 
+    /**
+     * Get the route for 404
+     *
+     * @return {Object} Route object
+     */
     get404Route() {
         return this.getRoute('404');
     }

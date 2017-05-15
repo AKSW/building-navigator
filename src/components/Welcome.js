@@ -128,7 +128,7 @@ class Welcome extends React.Component {
                     </Modal.Body>
 
                     <Modal.Footer>
-                        <Button bsStyle="primary" className="btn-lg" onClick={this.handleOk}>
+                        <Button bsStyle="primary" bsSize="large" block onClick={this.handleOk}>
                             OK, beginnen
                         </Button>
                         <hr />

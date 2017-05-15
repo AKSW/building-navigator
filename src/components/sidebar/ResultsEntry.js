@@ -2,13 +2,8 @@ import React from 'react';
 import {
     Row,
     Col,
-    Panel,
-    PanelGroup,
-    Glyphicon,
-    Table,
     Button,
-    ButtonGroup,
-    Image
+    ButtonGroup
 } from 'react-bootstrap'
 import A11yIcon from '../A11yIcon';
 

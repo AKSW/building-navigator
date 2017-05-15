@@ -130,18 +130,20 @@ class Search extends React.Component {
             return filter.type === 'checkbox';
         });
 
+        const submitBtn = (
+            <Button type="submit" bsStyle="primary" bsSize="large" className="pull-right" disabled={isLoading}>
+                {isLoading &&
+                    <span><i className='fa fa-circle-o-notch fa-spin'></i> Zeige Ergebnisse</span>
+                }
+                {!isLoading &&
+                    <span>Zeige Ergebnisse</span>
+                }
+            </Button>
+        );
+
         return (
             <Form horizontal onSubmit={this.handleSubmit}>
-                <Col md={12}>
-                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right" disabled={isLoading}>
-                        {isLoading &&
-                            <span><i className='fa fa-circle-o-notch fa-spin'></i> Zeige Ergebnisse</span>
-                        }
-                        {!isLoading &&
-                            <span>Zeige Ergebnisse</span>
-                        }
-                    </Button>
-                </Col>
+                {submitBtn}
                 <Clearfix />
 
                 {/* @todo decide how to implement a fulltext search */}
@@ -225,16 +227,7 @@ class Search extends React.Component {
 
                 <hr />
 
-                <Col md={12}>
-                    <Button type="submit" bsClass="btn btn-primary btn-lg pull-right" disabled={isLoading}>
-                        {isLoading &&
-                            <span><i className='fa fa-circle-o-notch fa-spin'></i> Zeige Ergebnisse</span>
-                        }
-                        {!isLoading &&
-                            <span>Zeige Ergebnisse</span>
-                        }
-                    </Button>
-                </Col>
+                {submitBtn}
             </Form>
         );
     }

@@ -42,7 +42,7 @@ class Map extends React.Component {
 
         /**
          * Create markers from buildings
-         * Buildgins on the some location comes into a multi-marker
+         * Put buildings on same location into a multi-marker
         */
         const createMarkers = () => {
             const markers = [];

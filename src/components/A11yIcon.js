@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-    Row,
-    Col,
-    Panel,
-    PanelGroup,
-    Glyphicon,
-    Table,
-    Button,
-    Image
-} from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 
 /**
  * Accessibility icons for entrance, lift, toilet, ...
@@ -125,6 +116,7 @@ class A11yIcon extends React.Component {
                         src={`./images/bvl/${src}`}
                         className="a11yIcon"
                         title={descr}
+                        alt={name}
                         aria-label={descr} />),
             descr: (<span>{descr}</span>)
         }
