@@ -1,5 +1,6 @@
 import React from 'react';
 import Promise from 'promise-polyfill';
+import PropTypes from 'prop-types';
 
 import Logger from './utils/Logger';
 import {isMobileBrowser} from './utils/DetectMobile';
@@ -114,6 +115,7 @@ class BuildingNavigator extends React.Component {
             action: 'update-ui-config',
             payload: {key: 'loader', value: false}
         });
+
     }
 
     componentWillUnmount() {
@@ -177,9 +179,9 @@ class BuildingNavigator extends React.Component {
 }
 
 BuildingNavigator.propTypes = {
-    stores: React.PropTypes.object.isRequired,
-    logger: React.PropTypes.instanceOf(Logger).isRequired,
-    eventHandler: React.PropTypes.instanceOf(EventHandler).isRequired,
+    stores: PropTypes.object.isRequired,
+    logger: PropTypes.instanceOf(Logger).isRequired,
+    eventHandler: PropTypes.instanceOf(EventHandler).isRequired,
 };
 
 export default BuildingNavigator;
