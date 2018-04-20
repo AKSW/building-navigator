@@ -146,8 +146,7 @@ class Search extends React.Component {
                 {submitBtn}
                 <Clearfix />
 
-                {/* @todo decide how to implement a fulltext search */}
-                {/*<FormGroup controlId="test" bsSize="large">
+                <FormGroup controlId="test" bsSize="large">
                     <Col md={12}>
                         <ControlLabel><h3>{search.title}</h3></ControlLabel>
                         <InputGroup>
@@ -162,7 +161,7 @@ class Search extends React.Component {
                             />
                         </InputGroup>
                     </Col>
-                </FormGroup>*/}
+                </FormGroup>
 
                 <FormGroup>
                     <Col md={12}>
