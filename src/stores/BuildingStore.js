@@ -2,6 +2,7 @@ import Promise from 'promise-polyfill';
 import HttpRequest from '../utils/HttpRequest';
 import {getDistance} from '../utils/GeoUtils';
 import {getGraphUri, getPrefix} from '../utils/RDF';
+import LocalCache from '../utils/LocalCache';
 
 /**
  * Stores all buildings
@@ -34,7 +35,10 @@ class BuildingStore {
             // object for loading data
             data: {}
         }
+        // http request interface to the triple store
         this.httpRequest = new HttpRequest();
+        // local cache class
+        this.localCache = new LocalCache();
     }
 
     /**
@@ -133,13 +137,21 @@ class BuildingStore {
             return self.buildings.length;
         };
 
+        const cachedBuildings = this.localCache.get("buildings");
+        if (cachedBuildings !== null && cachedBuildings.length > 0) {
+            this.buildings = cachedBuildings;
+            this.initiated = true;
+            return new Promise((resolve) => {resolve(cachedBuildings.length)});
+        }
+
         return this.httpRequest.request(query)
             .then(function (response) {
-                self.initiated = true;
                 const added = addAll(response.data.results.bindings);
                 if (added == 0) {
                     throw new Error('No buildings initiated');
                 }
+                self.initiated = true;
+                self.localCache.set("buildings", self.buildings);
                 return added;
             })
             .catch(function (error) {
