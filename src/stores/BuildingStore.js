@@ -211,6 +211,7 @@ class BuildingStore {
                         break;
                     default:
                         // save all other properties with the hash of the uri
+                        const keyUrl = new URL(entry.p.value);
                         building.data[keyUrl.hash.substr(1)] = entry.o.value;
                 }
             });
