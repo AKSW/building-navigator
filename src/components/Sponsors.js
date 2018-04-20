@@ -34,7 +34,14 @@ class Sponsors extends React.Component {
                     </a>
                 </div>
                 <Clearfix />
-                <p>Made with ♥ and NodeJS, React, Leaflet, Font Awesome and Bootstrap</p>
+                <p>
+                    Made with ♥ and <a href="https://nodejs.org/" target="_blank" aria-hidden={true}>NodeJS</a>,&nbsp;
+                    <a href="https://reactjs.org/" target="_blank" aria-hidden={true}>React</a>,&nbsp;
+                    <a href="http://leafletjs.com/" target="_blank" aria-hidden={true}>Leaflet</a>,&nbsp;
+                    <a href="https://getbootstrap.com/" target="_blank" aria-hidden={true}>Bootstrap</a> and&nbsp;
+                    <a href="https://fontawesome.com/" target="_blank" aria-hidden={true}>Font Awesome</a>.
+
+                </p>
             </div>
         );
     }
