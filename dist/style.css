@@ -148,7 +148,7 @@
     width: 100%;
     left: 0px;
     margin-top: 20px;
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #fff;
     border-top: 1px solid #808080;
 }
@@ -441,7 +441,7 @@ div.back-to-search-wrapper {
         left: 0px;
         width: 100%;
     }
-    /*.leaflet-control-container {
+    /*.leaflet-contrgetFilterol-container {
         right: 140px;
     }*/
     .leaflet-popup {
@@ -457,8 +457,7 @@ div.back-to-search-wrapper {
 }
 .sponsor-entry-wrapper {
     float: left;
-    width: 130px;
-    height: 70px;
+    width: 85px;
     padding: 5px;
 }
 .sponsor-entry-wrapper img {
