@@ -1,5 +1,5 @@
 import React from 'react'
-import {Image} from 'react-bootstrap';
+import {Image, Clearfix} from 'react-bootstrap';
 
 /**
  * Show the list of sponsors
@@ -33,6 +33,8 @@ class Sponsors extends React.Component {
                         <Image src="./images/logos/aksw.png" />
                     </a>
                 </div>
+                <Clearfix />
+                <p>Made with ♥ and NodeJS, React, Leaflet, Font Awesome and Bootstrap</p>
             </div>
         );
     }
