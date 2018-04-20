@@ -47,7 +47,7 @@ class Main extends React.Component {
 
                 {this.state.stores.uiStore.get('loader') &&
                     <div className="global-loader-wrapper">
-                        <i className='fa fa-circle-o-notch fa-spin' />
+                        <i className='fa fa-circle-o-notch fa-spin' /> Loading Buildings...
                     </div>
                 }
 

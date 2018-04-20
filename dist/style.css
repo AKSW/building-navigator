@@ -19,15 +19,14 @@
 }
 .global-loader-wrapper {
     position: absolute;
-    z-index: 99999;
+    z-index: 99993;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
     background-color: white;
     font-size: 30px;
-    padding-top: 10%;
-    text-align: center;
+    padding: 20px;
     opacity: 0.7;
 }
 
