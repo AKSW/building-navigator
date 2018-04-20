@@ -18,7 +18,6 @@ class BuildingStore {
 
         // init empty building array
         this.buildings = [];
-        this.buildings_old = [];
         // default properties for each building
         this.buildingDefaults = {
             id: null,
@@ -169,7 +168,7 @@ class BuildingStore {
             if (building === undefined) {
                 return false;
             }
-
+            building.data = {};
             buildingData.forEach((entry) => {
                 switch (entry.p.value) {
                     case 'http://purl.org/dc/terms/identifier':
