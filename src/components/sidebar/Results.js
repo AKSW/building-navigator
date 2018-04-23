@@ -113,6 +113,8 @@ class Results extends React.Component {
         const visiblesLength = this.state.stores.buildingStore.getVisibles().length;
         const resultsStart = this.state.stores.uiStore.get('resultsStart');
         const resultsSteps = this.state.stores.uiStore.get('resultsSteps');
+        const searchVal = this.state.stores.filterStore.getFilter("search").value;
+        let showedFullMatchTitle, showedPartMatchTitle = false;
 
         // get pagination navigation
         const resultsPager = (
@@ -160,9 +162,36 @@ class Results extends React.Component {
                     </div>
                 }
                 {this.state.buildings.map((building, bid) => {
-                    return (
-                        <ResultsEntry key={bid} building={building} stores={this.state.stores} />
-                    );
+                    if (!showedFullMatchTitle && building.searchRank == 2) {
+                        showedFullMatchTitle = true;
+                        return (
+                            <div>
+                                <Row>
+                                    <Col xs={12} className="">
+                                        <h3>Treffer<br /><small>(Enthalten das Wort "{searchVal}")</small></h3>
+                                    </Col>
+                                </Row>
+                                <ResultsEntry key={bid} building={building} stores={this.state.stores} />
+                            </div>
+                        );
+                    }
+                    else if (!showedPartMatchTitle && building.searchRank == 1) {
+                        showedPartMatchTitle = true;
+                        return (
+                            <div>
+                                <Row>
+                                    <Col xs={12} className="">
+                                        <h3>Sonstige Treffer<br /><small>(Das Wort "{searchVal}" ist teilweise enthalten)</small></h3>
+                                    </Col>
+                                </Row>
+                                <ResultsEntry key={bid} building={building} stores={this.state.stores} />
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <ResultsEntry key={bid} building={building} stores={this.state.stores} />
+                        );
+                    }
                 })}
 
                 {visiblesLength > resultsSteps &&
