@@ -17,7 +17,8 @@ class Map extends React.Component {
         this.state = {
             stores: props.stores,
             markers: [],
-            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible')
+            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible'),
+            lazyPreloader: null
         }
 
         // local event handlers
@@ -195,6 +196,12 @@ class Map extends React.Component {
                 zoom: osmap.getZoom()
             }
         });
+
+        // preloading visible buildings, after 2,5 Sek timout, destroy on change map
+        clearTimeout(this.lazyPreloader);
+        this.lazyPreloader = setTimeout(() => {
+            this.preloadBuildings();
+        }, 2500);
     }
 
     /**
@@ -204,6 +211,26 @@ class Map extends React.Component {
         super.handleEvent({
             action: 'apply-bounds'
         });
+    }
+
+    /**
+     * Preload visible buildings
+     */
+    preloadBuildings() {
+        let buildings = this.state.stores.buildingStore.getVisibles();
+        buildings = buildings.slice(
+            this.state.stores.uiStore.get('resultsStart'),
+            this.state.stores.uiStore.get('resultsStart') + this.state.stores.uiStore.get('resultsSteps')
+        );
+
+        buildings.map(building => {
+            super.handleEvent({
+                action: 'may-load-building-data',
+                payload: {
+                    buildingId: building.id,
+                }
+            });
+        })
     }
 
     /**
