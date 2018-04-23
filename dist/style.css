@@ -150,7 +150,6 @@
     padding: 10px 20px;
     background-color: #fff;
     border-top: 1px solid #808080;
-    font-size: 0.8em;
 }
 
 
@@ -453,7 +452,7 @@ div.back-to-search-wrapper {
  sponsors-wrapper
 */
 .sponsors-wrapper {
-
+    font-size: 0.8em;
 }
 .sponsor-entry-wrapper {
     float: left;
