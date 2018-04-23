@@ -28,8 +28,10 @@ class BuildingStore {
             inBounds: true,
             // show details of building
             showDetails: false,
-            // accessibility rating
+            // accessibility rating, the better the accessibility, the higher the ranking
             a11yRating: 0.00,
+            // ranking on search by title, 0: does not match, 1: partial match, 2: match
+            searchRank: 0,
             // use selected marker on map
             selectOnMap: false,
             // object for loading data
@@ -42,7 +44,8 @@ class BuildingStore {
     }
 
     /**
-     * Init all buildings data
+     * Init all buildings with id, title, category, lift-avail ...
+     * Sort by accessibility
      *
      * @return Promise, length of added buildings
      * @throws Error
@@ -129,14 +132,12 @@ class BuildingStore {
                     "help-for-blind":               getAcc(building.supportForVisuallyImpairedAvailable.value),
                     "general-help":                 getAcc(building.generalHelp.value)
                 });
+                // get accessibility rating
                 tmp.a11yRating = self.getA11yRating(tmp);
                 self.buildings.push(tmp);
             });
-            self.buildings.sort((a, b) => {
-                if (a.a11yRating > b.a11yRating) return -1;
-                if (a.a11yRating < b.a11yRating) return 1;
-                return 0;
-            });
+            // sort buildings by accessibility rating
+            self.sortBuildingsBy('a11yRating');
             return self.buildings.length;
         };
 
@@ -404,15 +405,24 @@ class BuildingStore {
      * @param {Array} Array with all filters
      */
     applyFilters(filters) {
+        let searchFilter = null;
         this.getAll().forEach((building, id) => {
+            let searchRank = 0;
             let isVisible = true;
             filters.forEach((filter, fid) => {
 
                 if (filter.type == 'search') {
-                    const r = new RegExp(filter.value, "i");
-                    if (building.title.match(r) === null) {
+                    searchFilter = filter;
+                    const part = new RegExp(filter.value, "i");
+                    const full = new RegExp("\\b" + filter.value + "\\b", "i");
+                    if (building.title.match(part) === null) {
                         isVisible = false;
                         return;
+                    } else {
+                        searchRank = building.title.match(full) === null ? 1 : 2;
+                        if (filter.value == "") {
+                            searchRank = 0;
+                        }
                     }
                 }
                 else if (filter.type == 'select-one') {
@@ -430,8 +440,17 @@ class BuildingStore {
                 }
 
             });
+            building.searchRank = searchRank;
             building.visible = isVisible;
         });
+        if (searchFilter !== null && searchFilter.value !== "") {
+            // sort by searchRank and a11Rating
+            this.buildings.sort((a, b) => {
+                return b.searchRank - a.searchRank || b.a11yRating - a.a11yRating;
+            });
+        } else {
+            this.sortBuildingsBy('a11yRating');
+        }
     }
 
     /**
@@ -496,6 +515,16 @@ class BuildingStore {
                 isSelected = true;
             }
             building.selectOnMap = isSelected;
+        });
+    }
+
+    /**
+     * Sort builidings numerical DESC by a given key
+     * @param {String} key
+     */
+    sortBuildingsBy(key) {
+        this.buildings.sort((a, b) => {
+            return b[key] - a[key];
         });
     }
 }
