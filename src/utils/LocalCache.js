@@ -3,39 +3,73 @@
  */
 class LocalCache {
     constructor() {
+        // version, to verify cached data
+        // decreese if cached data changed
+        this.version = 1;
         // max age of data in seconds, eg. 1 week
         this.maxAge = 60 * 60 * 24 * 7;
-        // appendix for time
-        this.timeAppendix = "-createdAt";
     }
 
     /**
      * Save a value by its key and the current time
      * @param {String} key
      * @param {*} value
+     * @returns Void
      */
     set(key, value) {
         const now = Date.now();
-        localStorage.setItem(key, JSON.stringify(value));
-        localStorage.setItem(key + this.timeAppendix, now);
+        const obj = {
+            version: this.version,
+            data: value,
+            time: now
+        }
+        localStorage.setItem(key, JSON.stringify(obj));
     }
 
     /**
-     * Get a value from cache. If key not exists or is older then maxAge return null
+     * Get a value from cache.
+     * Returns null if key not exists, is older then maxAge or version does not match
      * @param {String} key
      * @return {Object|null}
      */
     get(key) {
         const value = localStorage.getItem(key);
-        const valTime = localStorage.getItem(key + this.timeAppendix);
-        if (value === null || valTime === null) {
+        if (value === null) {
             return null;
         }
+        // may json parse fails...
+        let obj;
+        try {
+            obj = JSON.parse(value);
+        }
+        catch(err) {
+            return null;
+        }
+        // test if obj is valid
+        if (!obj.hasOwnProperty("version") ||
+            !obj.hasOwnProperty("data") ||
+            !obj.hasOwnProperty("time")
+        ) {
+            this.remove(key);
+            return null;
+        }
+        // test if cached data-version is current and data is not too old (mayAge)
         const now = Date.now();
-        if (now > (parseInt(valTime) + (this.maxAge*1000))) {
+        if (obj.version != this.version ||
+            now > (parseInt(obj.time) + (this.maxAge*1000))
+        ) {
+            this.remove(key);
             return null;
         }
-        return JSON.parse(value);
+        return obj.data;
+    }
+
+    /**
+     * Remove data from cache
+     * @param {String} key
+     */
+    remove(key) {
+        localStorage.removeItem(key);
     }
 }
 
