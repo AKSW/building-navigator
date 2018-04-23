@@ -108,6 +108,10 @@ class EventHandler {
                     this.stores.uiStore.update('sidebarIsVisible', false);
                     resolve(true);
                     break;
+                case 'goto-results-page':
+                    this.stores.uiStore.update('resultsStart', payload.page);
+                    resolve(true);
+                    break;
                 case 'next-results':
                     this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') + this.stores.uiStore.get('resultsSteps'));
                     resolve(true);

@@ -51,6 +51,11 @@ class Results extends React.Component {
      * Click on back to search button
      */
     handleBackToSearch(e) {
+        // reset current page
+        super.handleEvent({
+            action: 'goto-results-page',
+            payload: {page: 0}
+        });
         super.handleEvent({
             action: 'set-current-route',
             payload: {path: 'search'}
@@ -165,26 +170,26 @@ class Results extends React.Component {
                     if (!showedFullMatchTitle && building.searchRank == 2) {
                         showedFullMatchTitle = true;
                         return (
-                            <div>
+                            <div key={bid}>
                                 <Row>
                                     <Col xs={12} className="">
-                                        <h3>Treffer<br /><small>(Enthalten das Wort "{searchVal}")</small></h3>
+                                        <h3>Treffer<br /><small>Enthalten das Wort "{searchVal}"</small></h3>
                                     </Col>
                                 </Row>
-                                <ResultsEntry key={bid} building={building} stores={this.state.stores} />
+                                <ResultsEntry building={building} stores={this.state.stores} />
                             </div>
                         );
                     }
                     else if (!showedPartMatchTitle && building.searchRank == 1) {
                         showedPartMatchTitle = true;
                         return (
-                            <div>
+                            <div key={bid}>
                                 <Row>
                                     <Col xs={12} className="">
-                                        <h3>Sonstige Treffer<br /><small>(Das Wort "{searchVal}" ist teilweise enthalten)</small></h3>
+                                        <h3>Sonstige Treffer<br /><small>Das Wort "{searchVal}" ist teilweise enthalten</small></h3>
                                     </Col>
                                 </Row>
-                                <ResultsEntry key={bid} building={building} stores={this.state.stores} />
+                                <ResultsEntry building={building} stores={this.state.stores} />
                             </div>
                         );
                     } else {
