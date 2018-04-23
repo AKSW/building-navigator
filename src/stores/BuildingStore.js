@@ -49,6 +49,7 @@ class BuildingStore {
      */
     initAll() {
         const self = this;
+        // sparql query to gel all buildings and some properties
         const query = `SELECT ?id ?category ?title ?latitude ?longitude
             ?entranceSuitableForWheelchairs
             ?elevatorDoorWidth ?elevatorSuitableForWheelchairs
@@ -90,6 +91,7 @@ class BuildingStore {
             )
         }`;
 
+        // get acc-value from sparql property
         const getAcc = (str) => {
             if (str === "fully") {
                 return 2;
@@ -102,6 +104,7 @@ class BuildingStore {
             }
         };
 
+        // private fct to add all buildings to this.buildings
         const addAll = (buildings) => {
             buildings.forEach((building) => {
                 const tmp = Object.assign({}, this.buildingDefaults, {
@@ -137,13 +140,18 @@ class BuildingStore {
             return self.buildings.length;
         };
 
+        // may get from cache (localStore)
         const cachedBuildings = this.localCache.get("buildings");
         if (cachedBuildings !== null && cachedBuildings.length > 0) {
-            this.buildings = cachedBuildings;
-            this.initiated = true;
+            const added = addAll(cachedBuildings);
+            if (added == 0) {
+                throw new Error('No buildings initiated');
+            }
+            self.initiated = true;
             return new Promise((resolve) => {resolve(cachedBuildings.length)});
         }
 
+        // new sparql http request to triple store
         return this.httpRequest.request(query)
             .then(function (response) {
                 const added = addAll(response.data.results.bindings);
@@ -151,7 +159,8 @@ class BuildingStore {
                     throw new Error('No buildings initiated');
                 }
                 self.initiated = true;
-                self.localCache.set("buildings", self.buildings);
+                // add to local cache
+                self.localCache.set("buildings", response.data.results.bindings);
                 return added;
             })
             .catch(function (error) {
@@ -168,6 +177,7 @@ class BuildingStore {
      */
     loadBuildingData(id) {
         const self = this;
+        // sparql query to get a building and all its properties
         const query = `SELECT ?p ?o
         FROM <${getGraphUri()}>
         WHERE {
@@ -175,6 +185,7 @@ class BuildingStore {
             ?p ?o
         }`;
 
+        // fct to load properties to the building.data
         const load = (buildingData) => {
             const building = this.getBuilding(id);
             if (building === undefined) {
@@ -229,12 +240,25 @@ class BuildingStore {
             return true;
         }
 
+        // may get from cache (localStore)
+        const cachedBuilding = this.localCache.get(id);
+        if (cachedBuilding !== null) {
+            const loaded = load(cachedBuilding);
+            if (loaded == false) {
+                throw new Error(`Couldnt find building data with id "${id}"`);
+            }
+            return new Promise((resolve) => {resolve(loaded)});
+        }
+
+        // new sparql http request to the triple store
         return this.httpRequest.request(query)
             .then(function (response) {
                 const loaded = load(response.data.results.bindings);
                 if (loaded == false) {
                     throw new Error(`Couldnt find building data with id "${id}"`);
                 }
+                // add to local cache
+                self.localCache.set(id, response.data.results.bindings);
                 return loaded;
             })
             .catch(function (error) {
