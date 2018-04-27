@@ -109,7 +109,7 @@ class Welcome extends React.Component {
                         <br />
                         <Form className="global-dissability-form">
                             <p><strong>Vorauswahl der Behinderung:</strong></p>
-                            <Col md={9} className="filterSelect">
+                            <Col md={12} className="filterSelect">
                                 <FormControl
                                     componentClass="select"
                                     aria-label=""

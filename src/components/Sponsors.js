@@ -34,7 +34,7 @@ class Sponsors extends React.Component {
                     </a>
                 </div>
                 <Clearfix />
-                <p>
+                <p class="made-with-refs">
                     Made with ♥ and <a href="https://nodejs.org/" target="_blank" aria-hidden={true}>NodeJS</a>,&nbsp;
                     <a href="https://reactjs.org/" target="_blank" aria-hidden={true}>React</a>,&nbsp;
                     <a href="http://leafletjs.com/" target="_blank" aria-hidden={true}>Leaflet</a>,&nbsp;

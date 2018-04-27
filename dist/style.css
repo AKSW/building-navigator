@@ -54,6 +54,9 @@
     max-height: 100%;
     overflow: auto;
 }
+.welcome-msg .filterSelect select {
+    width: 100%;
+}
 .welcome-msg .filterSelect option {
     font-family: FontAwesome;
     font-style: normal;
@@ -399,6 +402,11 @@ div.back-to-search-wrapper {
     position: absolute;
     font-size: 16px;
 }
+.leaflet-tooltip {
+    z-index: 999;
+    background-color: white;
+    padding: 2px 4px;
+}
 .popup {
     font-size: 16px;
 }
@@ -456,9 +464,13 @@ div.back-to-search-wrapper {
 }
 .sponsor-entry-wrapper {
     float: left;
-    width: 85px;
+    width: 25%;
     padding: 5px;
+    text-align: center;
 }
 .sponsor-entry-wrapper img {
-    width: 100%;
+    width: 85px;
+}
+.made-with-refs {
+    font-size: 0.9em;
 }
