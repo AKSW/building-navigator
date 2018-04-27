@@ -66,10 +66,14 @@ class RouterStore {
         // get route from path
         const route = this.getRoute(routePath);
 
-        // write deep copy of current store state into previous route
+        // copy required filter/config (avoid deepClonig of all because of performance issues, see #46)
         const prevRoute = this.getCurrentRoute();
         if (prevRoute !== undefined) {
-            prevRoute.stores = _.cloneDeep(currentStores);
+            prevRoute.config = {
+                filters: JSON.stringify(currentStores.filterStore.filters),
+                map: JSON.stringify(currentStores.mapStore.config),
+                ui: JSON.stringify(currentStores.uiStore.config)
+            }
         }
 
         // create browser title

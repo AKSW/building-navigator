@@ -62,9 +62,27 @@ class BuildingNavigator extends React.Component {
         // add popstate listener (if user presses browsers back/forward button, get new current route)
         window.addEventListener("popstate", () => {
             this.handleEvent({action: 'get-current-route'}).then((route) => {
-                if (route.stores !== null) {
-                    this.setState({stores: route.stores});
-                    this.eventHandler.stores = route.stores;
+                if (route.config !== null) {
+                    const newStores = this.state.stores;
+                    newStores.filterStore.filters = JSON.parse(route.config.filters);
+                    newStores.mapStore.config = JSON.parse(route.config.map);
+                    newStores.uiStore.config = JSON.parse(route.config.ui);
+
+                    console.log("New Stores", newStores);
+                    this.setState({stores: newStores});
+                    this.eventHandler.stores = newStores;
+
+                    // update map and buildings with filters
+                    super.handleEvent({
+                        action: 'update-map-config',
+                        payload: newStores.mapStore.config
+                    });
+                    super.handleEvent({
+                        action: 'apply-bounds'
+                    });
+                    super.handleEvent({
+                        action: 'apply-filters'
+                    });
                 }
                 // set browsers title
                 document.title = `${route.title} ${this.state.stores.routerStore.seperator} ${this.state.stores.routerStore.basetitle}`;
