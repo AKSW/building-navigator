@@ -47,6 +47,8 @@ class BuildingNavigator extends React.Component {
 
         // bind local handlers
         this.handleWindowResize = this.handleWindowResize.bind(this);
+        this.handlePopstate = this.handlePopstate.bind(this);
+        this.updateMapBounds = this.updateMapBounds.bind(this);
     }
 
     /**
@@ -54,40 +56,14 @@ class BuildingNavigator extends React.Component {
      * add event listeners, may set if is mobile browser, init buildings, may set route
      */
     componentDidMount() {
+        const self = this;
         this.compMounted = true;
 
         // add resize event listener
         window.addEventListener('resize', this.handleWindowResize);
 
         // add popstate listener (if user presses browsers back/forward button, get new current route)
-        window.addEventListener("popstate", () => {
-            this.handleEvent({action: 'get-current-route'}).then((route) => {
-                if (route.config !== null) {
-                    const newStores = this.state.stores;
-                    newStores.filterStore.filters = JSON.parse(route.config.filters);
-                    newStores.mapStore.config = JSON.parse(route.config.map);
-                    newStores.uiStore.config = JSON.parse(route.config.ui);
-
-                    console.log("New Stores", newStores);
-                    this.setState({stores: newStores});
-                    this.eventHandler.stores = newStores;
-
-                    // update map and buildings with filters
-                    super.handleEvent({
-                        action: 'update-map-config',
-                        payload: newStores.mapStore.config
-                    });
-                    super.handleEvent({
-                        action: 'apply-bounds'
-                    });
-                    super.handleEvent({
-                        action: 'apply-filters'
-                    });
-                }
-                // set browsers title
-                document.title = `${route.title} ${this.state.stores.routerStore.seperator} ${this.state.stores.routerStore.basetitle}`;
-            });
-        }, false);
+        window.addEventListener("popstate", this.handlePopstate, false);
 
         // may set if is small view
         if (isMobileBrowser()) {
@@ -99,26 +75,15 @@ class BuildingNavigator extends React.Component {
 
         // load initial buildind data, apply map bounds to the buildings and set initial route
         this.handleEvent({action: 'init-buildings'}).then(() => {
-            // get map bounds with padding
-            const mapNode = this.state.stores.mapStore.getNode();
-            if (mapNode !== null) {
-                const mapBounds = mapNode.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
-                // update map bounds config
-                super.handleEvent({action: 'update-map-bound',
-                    payload: {
-                        northEast: {
-                            latitude: mapBounds._northEast.lat,
-                            longitude: mapBounds._northEast.lng,
-                        },
-                        southWest: {
-                            latitude: mapBounds._southWest.lat,
-                            longitude: mapBounds._southWest.lng
-                        }
-                    }
-                });
-                // apply bounds to the buildings
-                super.handleEvent({action: 'apply-bounds'});
-            }
+            this.updateMapBounds();
+            // apply bounds to the buildings
+            super.handleEvent({action: 'apply-bounds'});
+        });
+
+        // hide global loader after this component is mounted
+        this.handleEvent({
+            action: 'update-ui-config',
+            payload: {key: 'loader', value: false}
         });
 
         // get current path and set as initial route
@@ -129,17 +94,11 @@ class BuildingNavigator extends React.Component {
             payload: {path: currentRoute.path}
         });
 
-        // hide global loader after this component is mounted
-        this.handleEvent({
-            action: 'update-ui-config',
-            payload: {key: 'loader', value: false}
-        });
-
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowResize);
-        window.removeEventListener('popstate');
+        window.removeEventListener('popstate', this.handlePopstate);
     }
 
     /**
@@ -189,6 +148,58 @@ class BuildingNavigator extends React.Component {
                     });
                 }
             }
+        }
+    }
+
+    /**
+     * Popstate listener. Handles browsers history back function
+     */
+    handlePopstate () {
+        const newStores = this.state.stores;
+        newStores.filterStore.filters = history.state.filters;
+        newStores.mapStore.config = history.state.map;
+        newStores.uiStore.config = history.state.ui;
+
+        this.setState({stores: newStores});
+        this.eventHandler.stores = newStores;
+
+        // update map config, bounds and apply filter and bounds to buildings
+        super.handleEvent({
+            action: 'update-map-config',
+            payload: newStores.mapStore.config
+        });
+        super.handleEvent({action: 'apply-filters'});
+        // apply bounds after map moved to new bounds
+        window.setTimeout(() => {
+            this.updateMapBounds();
+            super.handleEvent({action: 'apply-bounds'});
+        }, 500);
+
+
+        // set browsers title (required for FF)
+        document.title = history.state.title;
+    }
+
+    /**
+     * Update bounds on maps config
+     */
+    updateMapBounds() {
+        const mapNode = this.state.stores.mapStore.getNode();
+        if (mapNode !== null) {
+            const mapBounds = mapNode.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
+            // update map bounds config
+            super.handleEvent({action: 'update-map-bound',
+                payload: {
+                    northEast: {
+                        latitude: mapBounds._northEast.lat,
+                        longitude: mapBounds._northEast.lng,
+                    },
+                    southWest: {
+                        latitude: mapBounds._southWest.lat,
+                        longitude: mapBounds._southWest.lng
+                    }
+                }
+            });
         }
     }
 

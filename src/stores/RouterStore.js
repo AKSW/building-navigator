@@ -66,21 +66,21 @@ class RouterStore {
         // get route from path
         const route = this.getRoute(routePath);
 
+        const title = `${route.title} ${this.seperator} ${this.basetitle}`;
+
         // copy required filter/config (avoid deepClonig of all because of performance issues, see #46)
-        const prevRoute = this.getCurrentRoute();
-        if (prevRoute !== undefined) {
-            prevRoute.config = {
-                filters: JSON.stringify(currentStores.filterStore.filters),
-                map: JSON.stringify(currentStores.mapStore.config),
-                ui: JSON.stringify(currentStores.uiStore.config)
-            }
+        const config = {
+            title: title,
+            filters: currentStores.filterStore.filters,
+            map: currentStores.mapStore.config,
+            ui: currentStores.uiStore.config
         }
 
         // create browser title
-        document.title = `${route.title} ${this.seperator} ${this.basetitle}`;
+        document.title = title;
 
         // add route to browsers history
-        history.pushState(null, route.title, `${location.pathname}#/${route.path}`);
+        history.pushState(config, route.title, `${location.pathname}#/${route.path}`);
     }
 
     /**
