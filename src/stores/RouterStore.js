@@ -73,10 +73,7 @@ class RouterStore {
         }
 
         // create browser title
-        if (route.title != '') {
-            route.title = `${route.title} ${this.seperator} ${this.basetitle}`;
-        }
-        document.title = route.title;
+        document.title = `${route.title} ${this.seperator} ${this.basetitle}`;
 
         // add route to browsers history
         history.pushState(null, route.title, `${location.pathname}#/${route.path}`);

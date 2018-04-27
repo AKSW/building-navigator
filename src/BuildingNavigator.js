@@ -66,7 +66,8 @@ class BuildingNavigator extends React.Component {
                     this.setState({stores: route.stores});
                     this.eventHandler.stores = route.stores;
                 }
-                // @todo set browsers title
+                // set browsers title
+                document.title = `${route.title} ${this.state.stores.routerStore.seperator} ${this.state.stores.routerStore.basetitle}`;
             });
         }, false);
 
