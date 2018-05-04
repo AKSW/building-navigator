@@ -139,7 +139,7 @@ class A11yIcon extends React.Component {
                         onClick={this.handleClickIcon}
                         />),
             descr: (<span>{descr}</span>),
-            details: details ? (<div>{details.map(p => <span>{p}</span>)}</div>) : (null)
+            details: details ? (<div>{details.map((p, i) => <span key={i}>{p}</span>)}</div>) : (null)
         }
     }
 
