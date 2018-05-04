@@ -170,19 +170,17 @@ class Entry extends React.Component {
                                         <Col xs={3} aria-hidden={true}>{a11yIcons.icon(entry)}</Col>
                                         <Col xs={9} className="a11yIcons-descr">
                                             {a11yIcons.descr(entry)}
+                                            {(a11yIcons.details(entry) !== null && this.state.a11yIconShowDetails[entry] === false) &&
+                                                <Button className="btn-link btn-toogle-a11y-details" aria-label="Deails" aria-expanded={false} onClick={e => this.a11yIconToggleShowDetails(e, entry)}>
+                                                    <i className="fa fa-chevron-down" aria-hidden={true}></i> Details
+                                                </Button>
+                                            }
                                         </Col>
                                         <Col xs={9} xsOffset={3} className="a11yIcons-details">
                                             {a11yIcons.details(entry) !== null &&
                                                 <div>
                                                     {this.state.a11yIconShowDetails[entry] === true &&
                                                         <div>{a11yIcons.details(entry)}</div>
-                                                    }
-                                                    {this.state.a11yIconShowDetails[entry] === false &&
-                                                        <span>
-                                                            <Button className="btn-link btn-toogle-a11y-details" aria-label="Deails" aria-expanded={false} onClick={e => this.a11yIconToggleShowDetails(e, entry)}>
-                                                                <i className="fa fa-chevron-down" aria-hidden={true}></i> Details
-                                                            </Button>
-                                                        </span>
                                                     }
                                                 </div>
                                             }
