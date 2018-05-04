@@ -22,6 +22,21 @@ class BuildingStore {
         // default properties for each building
         this.buildingDefaults = {
             id: null,
+            title: '',
+            latitude: 0,
+            longitude: 0,
+            category:  '',
+            "entrance-suit-f-wheelchair": 0,
+            "lift-suit-f-wheelchair": 0,
+            "lift-avail": 0,
+            "toilet-avail": 0,
+            "toilet-suit-f-wheelchair": 0,
+            "parking-avail": 0,
+            "parking-f-disabled-avail": 0,
+            "help-for-hearing-imp": 0,
+            "help-for-blind": 0,
+            "general-help": 0,
+
             // is visible after apply filters
             visible: true,
             // is in bounds (northEast and southWest) of map
