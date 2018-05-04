@@ -19,14 +19,22 @@ class Entry extends React.Component {
         this.state = {
             stores: props.stores,
             building: props.building,
+            a11yIcons: new A11yIcon({building: props.building}),
+            a11yIconShowDetails: {},
             isLoading: false
         };
+
+        // dont show a11yicon details on start
+        this.state.a11yIcons.getAll().map((entry, id) => {
+            this.state.a11yIconShowDetails[entry] = false;
+        });
 
         this.handleShowDetails = this.handleShowDetails.bind(this);
         this.handleHideDetails = this.handleHideDetails.bind(this);
         this.handleMouseOver = this.handleMouseOver.bind(this);
         this.handleShowOnMap = this.handleShowOnMap.bind(this);
         this.handleMayHideSidebar = this.handleMayHideSidebar.bind(this);
+        this.a11yIconToggleShowDetails = this.a11yIconToggleShowDetails.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -121,20 +129,28 @@ class Entry extends React.Component {
     }
 
     /**
+     * Toggle details of an a11y icon
+     */
+    a11yIconToggleShowDetails(e, name) {
+        const a11yIconShowDetails = this.state.a11yIconShowDetails;
+        a11yIconShowDetails[name] = ! a11yIconShowDetails[name];
+        this.setState({ a11yIconShowDetails });
+        e.preventDefault();
+    }
+
+    /**
      * Render entry, with title, icons and may details (address, note, ...)
      */
     render() {
         const building = this.state.building;
+        const a11yIcons = this.state.a11yIcons;
         const entryClass = building.selectOnMap ? "entry current-entry" : "entry";
-
-        // get all a11y icons
-        const a11yIcons = new A11yIcon({building: building});
 
         return (
             <div id={`result-entry-${building.id}`} className={entryClass} onMouseOver={this.handleMouseOver} lang="de">
                 <h3><a href="#" onClick={e => {this.handleShowOnMap(e, building); this.handleShowDetails(e, building.id, false);}}>{building.title}</a></h3>
                 {!building.showDetails &&
-                    <ul className="a11yIcons-list">
+                    <ul className="a11yIcons-compact">
                         {a11yIcons.getAll().map((entry, id) => {
                             if (a11yIcons.icon(entry) == null) {
                                 return (null);
@@ -147,12 +163,30 @@ class Entry extends React.Component {
                 }
                 {building.showDetails &&
                     <div>
-                        <div className="a11yIcons-detailed">
+                        <div className="a11yIcons-extended">
                             {a11yIcons.getAll().map((entry, id) => {
                                 return (
                                     <Row key={id}>
                                         <Col xs={3} aria-hidden={true}>{a11yIcons.icon(entry)}</Col>
-                                        <Col xs={9} className="a11yIcons-descr">{a11yIcons.descr(entry)}</Col>
+                                        <Col xs={9} className="a11yIcons-descr">
+                                            {a11yIcons.descr(entry)}
+                                        </Col>
+                                        <Col xs={9} xsOffset={3} className="a11yIcons-details">
+                                            {a11yIcons.details(entry) !== null &&
+                                                <div>
+                                                    {this.state.a11yIconShowDetails[entry] === true &&
+                                                        <div>{a11yIcons.details(entry)}</div>
+                                                    }
+                                                    {this.state.a11yIconShowDetails[entry] === false &&
+                                                        <span>
+                                                            <Button className="btn-link btn-toogle-a11y-details" aria-label="Deails" aria-expanded={false} onClick={e => this.a11yIconToggleShowDetails(e, entry)}>
+                                                                <i className="fa fa-chevron-down" aria-hidden={true}></i> Details
+                                                            </Button>
+                                                        </span>
+                                                    }
+                                                </div>
+                                            }
+                                        </Col>
                                     </Row>
                                 );
                             })}

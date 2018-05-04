@@ -24,34 +24,42 @@ class A11yIcon extends React.Component {
         this.icons = {
             entrance: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             lift: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             toilet: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             parking: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             blindHelp: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             hearingHelp: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             },
             generalHelp: {
                 icon: (null),
-                descr: (null)
+                descr: (null),
+                details: (null)
             }
         };
 
+        this.handleClickIcon = this.handleClickIcon.bind(this);
         this.createIcons();
     }
 
@@ -66,7 +74,7 @@ class A11yIcon extends React.Component {
             return this.icons[name];
         } else {
             super.logger.log('a11y icon not found', name, 'error');;
-            return {icon: (null), descr: (null)};
+            return {icon: (null), descr: (null), details: (null)};
         }
     }
 
@@ -104,22 +112,39 @@ class A11yIcon extends React.Component {
     }
 
     /**
+     * Get specific details
+     *
+     * @param {String} Name of the icon
+     * @returns {Object}
+     */
+    details(name) {
+        return this.get(name).details;
+    }
+
+    /**
      * New icon, adds to local icons variable
      *
      * @param {String} Id of the icon
      * @param {String} Path to icon image
      * @param {String} Description of the icon
      */
-    add(name, src, descr) {
+    add(name, src, descr, details = null) {
         this.icons[name] = {
             icon: (<Image
                         src={`./images/bvl/${src}`}
                         className="a11yIcon"
                         title={descr}
                         alt={name}
-                        aria-label={descr} />),
-            descr: (<span>{descr}</span>)
+                        aria-label={descr}
+                        onClick={this.handleClickIcon}
+                        />),
+            descr: (<span>{descr}</span>),
+            details: details ? (<div>{details.map(p => <span>{p}</span>)}</div>) : (null)
         }
+    }
+
+    handleClickIcon(e) {
+        // @TODO may toggle tooltip
     }
 
     /**
@@ -132,13 +157,21 @@ class A11yIcon extends React.Component {
         if (building['entrance-suit-f-wheelchair'] === 2) {
             this.add('entrance',
                 'entrance-wheelchair.svg',
-                'Eingang ist vollständig rollstuhlgerecht'
+                'Eingang ist vollständig rollstuhlgerecht',
+                [
+                    'Türbreite mehr als 90cm',
+                    'Eingang ohne Treppe (max 3cm) oder mit Rampe (max 6% Steigung)'
+                ]
             );
         }
         else if (building['entrance-suit-f-wheelchair'] === 1) {
             this.add('entrance',
                 'entrance-wheelchair-restr.svg',
-                'Eingang ist teilweise rollstuhlgerecht'
+                'Eingang ist teilweise rollstuhlgerecht',
+                [
+                    'Türbreite mehr als 70cm',
+                    'Maximal eine Stufe oder Rampe mit max 12% Steigung'
+                ]
             );
         }
 
@@ -160,13 +193,23 @@ class A11yIcon extends React.Component {
         if (building['toilet-suit-f-wheelchair'] === 2) {
             this.add('toilet',
                 'toilet-wheelchair.svg',
-                'Toilette ist vorhanden und rollstuhlgerecht'
+                'Toilette ist vorhanden und rollstuhlgerecht',
+                [
+                    'Türbreite mehr als 90cm',
+                    'Platz vor (150cm) und neben (90cm) der Toilette',
+                    'Handlauf links und rechts vorhanden'
+                ]
             );
         }
         else if (building['toilet-suit-f-wheelchair'] === 1) {
             this.add('toilet',
                 'toilet-wheelchair-restr.svg',
-                'Toilette ist vorhanden und teilweise rollstuhlgerecht'
+                'Toilette ist vorhanden und teilweise rollstuhlgerecht',
+                [
+                    'Türbreite mehr als 70cm',
+                    'Platz vor (100cm) und neben (70cm) der Toilette',
+                    'Handlauf links oder rechts vorhanden'
+                ]
             );
         }
         else if (building['toilet-avail'] === 1) {

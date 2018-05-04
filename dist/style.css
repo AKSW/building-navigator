@@ -292,22 +292,22 @@ div.back-to-search-wrapper {
     display: table-cell;
     vertical-align: middle;
 }
-.a11yIcons-list {
+.a11yIcons-compact {
     list-style-type: none;
     padding: 0px;
     margin: 0px 0px 5px 0px;
 }
-.a11yIcons-list li {
+.a11yIcons-compact li {
     display: inline-block;
     padding: 5px;
     width: 14%;
     min-width: 50px;
 }
-.a11yIcons-detailed {
+.a11yIcons-extended {
     text-align: right;
     margin: 10px 0px;
 }
-.a11yIcons-detailed > div {
+.a11yIcons-extended > div {
     margin-bottom: 7px;
 }
 .a11yIcon {
@@ -317,11 +317,22 @@ div.back-to-search-wrapper {
 }
 .a11yIcons-descr {
     text-align: left;
+    padding-top: 15px;
 }
 .a11yIcons-descr span {
     height: 65px;
-    display: table-cell;
-    vertical-align: middle;
+}
+.btn-toogle-a11y-details {
+    padding: 0px 12px;
+}
+.a11yIcons-details {
+    color: #5a5a5a;
+    text-align: left;
+    font-size: 0.9em;
+    margin-top: -23px;
+}
+.a11yIcons-details span {
+    display: inline-block;
 }
 .entry-details-prop {
     margin-bottom: 10px;
@@ -341,7 +352,7 @@ div.back-to-search-wrapper {
     width: 50%;
 }
 @media (max-width: 768px) {
-    .a11yIcons-detailed .a11yIcon {
+    .a11yIcons-extended .a11yIcon {
         width: 52px;
     }
     .a11yIcons-descr span {
@@ -349,7 +360,7 @@ div.back-to-search-wrapper {
     }
 }
 @media (max-width: 420px) {
-    .a11yIcons-list li {
+    .a11yIcons-compact li {
         width: 25%;
     }
     .result-bottom-buttons button:first-child {

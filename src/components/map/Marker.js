@@ -234,7 +234,7 @@ class Marker extends React.Component {
                             <div id={`popup-${currentBuilding.id}`} className="popup">
                                 <h3>{currentBuilding.title}</h3>
 
-                                <ul className="a11yIcons-list">
+                                <ul className="a11yIcons-compact">
                                     {a11yIcons.getAll().map((entry, id) => {
                                         if (a11yIcons.icon(entry) == null) {
                                             return (null);
