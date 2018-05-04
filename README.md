@@ -102,4 +102,4 @@ We use Jest and Enzyme for React GUI tests, and Sinon for asynchronous tests. Al
 
 To create the production files in `./dist/` exec into the Docker container and run:
 
-    npm run build-dist
+    npm run build
