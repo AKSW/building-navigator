@@ -133,6 +133,9 @@
     .btn-hide-sidebar {
         left: 445px;
     }
+    .sidebar h3 {
+        font-size: 32px;
+    }
 }
 @media (max-width: 768px) {
     .sidebar {
@@ -256,6 +259,23 @@ div.back-to-search-wrapper {
 **/
 .results {
     min-height: 80%;
+}
+.results-header-filter {
+    padding-top: 15px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid lightGray;
+}
+.results-header-filter h3 {
+    margin-top: 10px;
+    font-size: 28px;
+}
+.results-header-filter .a11yIcons-compact li {
+    padding: 0px;
+    width: 11%;
+    min-width: 40px;
+}
+.results-search-header h3 {
+    font-size: 28px;
 }
 .results .pager a {
     padding: 10px 15px;

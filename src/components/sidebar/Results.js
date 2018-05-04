@@ -3,6 +3,7 @@ import {Grid, Row, Col, Button, Pager} from 'react-bootstrap';
 
 import ResultsEntry from './ResultsEntry';
 import {getElement} from '../../utils/GuiUtils'
+import A11yIcon from '../A11yIcon';
 
 /**
  * Result component, renders results list with result entries
@@ -13,7 +14,8 @@ class Results extends React.Component {
 
         this.state = {
             stores: props.stores,
-            buildings: this.getBuildingsSlice(props.stores)
+            buildings: this.getBuildingsSlice(props.stores),
+            a11yBuilding: {}
         }
 
         this.handleBackToSearch = this.handleBackToSearch.bind(this);
@@ -23,7 +25,8 @@ class Results extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             stores: nextProps.stores,
-            buildings: this.getBuildingsSlice(nextProps.stores)
+            buildings: this.getBuildingsSlice(nextProps.stores),
+            a11yBuilding: Object.assign({}, nextProps.stores.buildingStore.buildingDefaults)
         });
     }
 
@@ -118,8 +121,8 @@ class Results extends React.Component {
         const visiblesLength = this.state.stores.buildingStore.getVisibles().length;
         const resultsStart = this.state.stores.uiStore.get('resultsStart');
         const resultsSteps = this.state.stores.uiStore.get('resultsSteps');
-        const searchVal = this.state.stores.filterStore.getFilter("search").value;
         let showedFullMatchTitle, showedPartMatchTitle = false;
+        const allFilter = this.state.stores.filterStore.getAll();
 
         // get pagination navigation
         const resultsPager = (
@@ -148,6 +151,23 @@ class Results extends React.Component {
             </Button>
         );
 
+        // search filter
+        const searchFilter = allFilter.find((filter) => {
+            return filter.type === 'search';
+        });
+
+        // set a11y building properties from selected filter for a11y icons
+        allFilter.forEach(filter => {
+            if (filter.type === 'select-one') {
+                const filterSet = filter.valueSet[filter.value];
+                this.state.a11yBuilding[filterSet.key] = filterSet.value;
+            }
+            if (filter.type === 'checkbox') {
+                this.state.a11yBuilding[filter.key] = filter.value;
+            }
+        });
+        const a11yIcons =  new A11yIcon({building: this.state.a11yBuilding});
+
         return (
             <div className="results" lang="de">
                 <Row>
@@ -158,6 +178,41 @@ class Results extends React.Component {
                 {initiated == false &&
                     <div>
                         <br /><i className='fa fa-circle-o-notch fa-spin' /> Lade Ergebnisse
+                    </div>
+                }
+                {initiated &&
+                    <div>
+                        {/* TODO may show input field with onChange handler
+                          searchFilter.value != "" &&
+                            <Row className="results-header-search">
+                                <Col xs={3} className="">
+                                    <h3>Suche:</h3>
+                                </Col>
+                                <Col xs={9} className="">
+                                    "{searchFilter.value}"
+                                </Col>
+                            </Row>
+                        */}
+                        {(allFilter.some(filter => { return filter.type !== 'search' && filter.value > 0 })) &&
+                            <Row className="results-header-filter">
+                                <Col xs={4} md={3} className="">
+                                    <h3>Filter:</h3>
+                                </Col>
+                                <Col xs={8} md={9} className="">
+                                    <ul className="a11yIcons-compact">
+                                        {a11yIcons.getAll().map((entry, id) => {
+                                            if (a11yIcons.icon(entry) == null) {
+                                                return (null);
+                                            }
+                                            return (<li key={id}>
+                                                {a11yIcons.icon(entry)}
+                                            </li>);
+                                        })}
+                                    </ul>
+
+                                </Col>
+                            </Row>
+                        }
                     </div>
                 }
                 {(initiated && this.state.buildings.length == 0) &&
@@ -171,9 +226,9 @@ class Results extends React.Component {
                         showedFullMatchTitle = true;
                         return (
                             <div key={bid}>
-                                <Row>
+                                <Row className="results-search-header">
                                     <Col xs={12} className="">
-                                        <h3>Treffer<br /><small>Enthalten das Wort "{searchVal}"</small></h3>
+                                        <h3>Suche "{searchFilter.value}"<br /><small>Treffer enthalten das Wort vollständig</small></h3>
                                     </Col>
                                 </Row>
                                 <ResultsEntry building={building} stores={this.state.stores} />
@@ -184,9 +239,9 @@ class Results extends React.Component {
                         showedPartMatchTitle = true;
                         return (
                             <div key={bid}>
-                                <Row>
+                                <Row className="results-search-header">
                                     <Col xs={12} className="">
-                                        <h3>Sonstige Treffer<br /><small>Das Wort "{searchVal}" ist teilweise enthalten</small></h3>
+                                        <h3>Suche "{searchFilter.value}"<br /><small>Treffer enthalten das Wort teilweise</small></h3>
                                     </Col>
                                 </Row>
                                 <ResultsEntry building={building} stores={this.state.stores} />
