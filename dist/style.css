@@ -322,7 +322,7 @@ div.back-to-search-wrapper {
 .a11yIcons-descr span {
     height: 65px;
 }
-.btn-toogle-a11y-details {
+button.btn-toogle-a11y-details {
     padding: 0px 12px;
 }
 .a11yIcons-details {
