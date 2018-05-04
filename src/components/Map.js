@@ -198,6 +198,7 @@ class Map extends React.Component {
         });
 
         // preloading visible buildings, after 2,5 Sek timout, destroy on change map
+        // TODO doenst work on paginate results
         clearTimeout(this.lazyPreloader);
         this.lazyPreloader = setTimeout(() => {
             this.preloadBuildings();
@@ -223,14 +224,12 @@ class Map extends React.Component {
             this.state.stores.uiStore.get('resultsStart') + this.state.stores.uiStore.get('resultsSteps')
         );
 
-        buildings.map(building => {
-            super.handleEvent({
-                action: 'may-load-building-data',
-                payload: {
-                    buildingId: building.id,
-                }
-            });
-        })
+        super.handleEvent({
+            action: 'may-load-multiple-buildings-data',
+            payload: {
+                buildings: buildings,
+            }
+        });
     }
 
     /**

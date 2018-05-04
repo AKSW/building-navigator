@@ -46,6 +46,14 @@ class EventHandler {
                         error => reject(error)
                     );
                     break;
+                case 'may-load-multiple-buildings-data':
+                    payload.buildings.map(building => {
+                        this.stores.buildingStore.mayLoadBuildingData(building.id).then(
+                            response => resolve(response),
+                            error => reject(error)
+                        );
+                    })
+                    break;
                 case 'load-building-data':
                     this.stores.buildingStore.loadBuildingData(payload.buildingId).then(
                         response => resolve(response),
