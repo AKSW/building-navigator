@@ -1,10 +1,12 @@
 import Promise from 'promise-polyfill';
-import axios from 'axios';
-import qs from 'qs';
 import rdfstore from 'rdfstore';
 
 var env = process.env.NODE_ENV || 'production';
 var config = require('../config')[env];
+
+import buildingsIndex from '../buildings-index';
+//import buildings from '../buildings.n3';
+import buildings from '../buildings.js';
 
 /**
  * Sparql Request to triple store
@@ -21,17 +23,28 @@ class HttpRequest {
      */
     request(query) {
         const self = this;
+
         if (this.store === null) {
             return new Promise((resolve, reject) => {
                 rdfstore.create((err, store) => {
+                    if (err) {
+                        throw new Error(err);
+                    }
                     self.store = store;
-                    self.execute(query)
-                    .then(result => {
-                        resolve(result);
-                    })
-                    .catch(error => {
-                        throw new Error(error);
-                    })
+
+                    self.store.load('text/turtle', buildings, 'https://behindertenverband-leipzig.de/', (errLoad, result) => {
+                        if (errLoad) {
+                            reject(errLoad);
+                        } else {
+                            self.execute(query)
+                            .then(result => {
+                                resolve(result);
+                            })
+                            .catch(error => {
+                                reject(error);
+                            })
+                        }
+                    });
                 });
             });
         } else {
@@ -39,10 +52,31 @@ class HttpRequest {
         }
     }
 
-
+    /**
+     * Get data from rdfstore
+     */
     execute(query) {
+        const self = this;
+        if (this.store === null) {
+            return new Promise((resolve, reject) => {
+                reject("Store is null");
+            });
+        }
+
         return new Promise((resolve, reject) => {
-            resolve(true);
+            if (query.search(/SELECT \?id \?category \?title \?latitude \?longitude/) >= 0) {
+                resolve({ data: buildingsIndex });
+            } else {
+                self.store.execute(query, function(err, result) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve({ data: { results: { bindings: result } } });
+                    }
+                });
+
+            }
+
         });
     }
 }

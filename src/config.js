@@ -2,7 +2,7 @@
 var config = {
     development: {
         local_cache: {
-            enabled: true
+            enabled: false
         },
         store: {
             host: 'http://localhost',
