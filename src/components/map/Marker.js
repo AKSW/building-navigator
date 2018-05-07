@@ -1,6 +1,6 @@
 import React from 'react';
-import L from 'leaflet';
-import {Marker as OSMarker, Icon, Popup} from 'react-leaflet';
+import L, { Point } from 'leaflet';
+import {Marker as OSMarker, Icon, Popup, Tooltip} from 'react-leaflet';
 import {Button} from 'react-bootstrap'
 
 import A11yIcon from '../A11yIcon';
@@ -228,6 +228,16 @@ class Marker extends React.Component {
                 icon={icon}
                 onClick={e => this.handleClickMarker(e, currentBuilding)}
                 >
+                {!currentBuilding.selectOnMap &&
+                    <Tooltip offset={[0, 12]}>
+                        <span>
+                            {currentBuilding.title}
+                            {marker.buildings.length > 1 &&
+                                <span> u.a.</span>
+                            }
+                        </span>
+                    </Tooltip>
+                }
                 <Popup id={`popup-wrapper-${currentBuilding.id}`}>
                     <span>
                         {!isSmallView &&
