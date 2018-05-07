@@ -160,7 +160,7 @@ class A11yIcon extends React.Component {
                 'Eingang ist vollständig rollstuhlgerecht',
                 [
                     'Türbreite mehr als 90cm',
-                    'Eingang ohne Treppe (max 3cm) oder mit Rampe (max 6% Steigung)'
+                    'Eingang ohne Treppe (max. 3cm) oder mit Rampe (max. 6% Steigung)'
                 ]
             );
         }
@@ -170,7 +170,7 @@ class A11yIcon extends React.Component {
                 'Eingang ist teilweise rollstuhlgerecht',
                 [
                     'Türbreite mehr als 70cm',
-                    'Maximal eine Stufe oder Rampe mit max 12% Steigung'
+                    'Maximal eine Stufe oder Rampe mit max. 12% Steigung'
                 ]
             );
         }
@@ -179,7 +179,12 @@ class A11yIcon extends React.Component {
         if (building['lift-suit-f-wheelchair'] === 1) {
             this.add('lift',
                 'elevator-wheelchair.svg',
-                'Aufzug ist vorhanden und rollstuhlgerecht'
+                'Aufzug ist vorhanden und rollstuhlgerecht',
+                [
+                    'Türbreite mehr als 90cm',
+                    'Liftkorb Maße mind. 140 x 110cm',
+                    'Höhe der Tableaus max. 115cm'
+                ]
             );
         }
         else if (building['lift-avail'] === 1) {
