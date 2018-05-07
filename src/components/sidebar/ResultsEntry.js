@@ -175,14 +175,12 @@ class Entry extends React.Component {
                                                     <i className="fa fa-chevron-down" aria-hidden={true}></i> Details
                                                 </Button>
                                             }
-                                        </Col>
-                                        <Col xs={9} xsOffset={3} className="a11yIcons-details">
                                             {a11yIcons.details(entry) !== null &&
-                                                <div>
+                                                <Col className="a11yIcons-details">
                                                     {this.state.a11yIconShowDetails[entry] === true &&
                                                         <div>{a11yIcons.details(entry)}</div>
                                                     }
-                                                </div>
+                                                </Col>
                                             }
                                         </Col>
                                     </Row>

@@ -339,9 +339,6 @@ div.back-to-search-wrapper {
     text-align: left;
     padding-top: 15px;
 }
-.a11yIcons-descr span {
-    height: 65px;
-}
 button.btn-toogle-a11y-details {
     padding: 0px 12px;
 }
@@ -349,7 +346,7 @@ button.btn-toogle-a11y-details {
     color: #5a5a5a;
     text-align: left;
     font-size: 0.9em;
-    margin-top: -23px;
+    margin-top: 5px;
 }
 .a11yIcons-details span {
     display: inline-block;
@@ -374,9 +371,6 @@ button.btn-toogle-a11y-details {
 @media (max-width: 768px) {
     .a11yIcons-extended .a11yIcon {
         width: 52px;
-    }
-    .a11yIcons-descr span {
-        height: 52px;
     }
 }
 @media (max-width: 420px) {
