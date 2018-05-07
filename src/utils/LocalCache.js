@@ -1,5 +1,8 @@
+var env = process.env.NODE_ENV || 'production';
+var config = require('../config')[env];
+
 /**
- *
+ * Implemention class of the local cache
  */
 class LocalCache {
     constructor() {
@@ -8,6 +11,9 @@ class LocalCache {
         this.version = 1;
         // max age of data in seconds, eg. 1 week
         this.maxAge = 60 * 60 * 24 * 7;
+
+        // if cache is enabled
+        this.enabled = config.local_cache.enabled;
     }
 
     /**
@@ -17,6 +23,8 @@ class LocalCache {
      * @returns Void
      */
     set(key, value) {
+        if (!this.enabled) return;
+
         const now = Date.now();
         const obj = {
             version: this.version,
@@ -33,6 +41,8 @@ class LocalCache {
      * @return {Object|null}
      */
     get(key) {
+        if (!this.enabled) return null;
+
         const value = localStorage.getItem(key);
         if (value === null) {
             return null;
@@ -69,6 +79,8 @@ class LocalCache {
      * @param {String} key
      */
     remove(key) {
+        if (!this.enabled) return;
+
         localStorage.removeItem(key);
     }
 }

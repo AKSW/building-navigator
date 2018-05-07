@@ -1,6 +1,9 @@
 
 var config = {
     development: {
+        local_cache: {
+            enabled: true
+        },
         store: {
             host: 'http://localhost',
             port: 8890,
@@ -8,6 +11,9 @@ var config = {
         },
     },
     production: {
+        local_cache: {
+            enabled: true
+        },
         store: {
             host: 'http://localhost',
             port: 8890,
