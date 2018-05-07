@@ -164,7 +164,7 @@
 **/
 .filter-icon {
     display: inline-block;
-    margin: -10px 0px -5px 0px;
+    margin: 0px 5px;
     width: 70px;
     height: 70px;
 }
@@ -192,9 +192,6 @@
 .filterSelect select:focus {
     box-shadow: 0 0 8px #f0544c;
 }
-.filterSelect option {
-
-}
 .filterSelect option:checked {
     background-color: #f0544c;
 }
@@ -215,12 +212,15 @@
 .filter.checkbox:hover {
     box-shadow: 0 0 8px #f0544c;
 }
+.filter.checkbox label {
+    padding-left: 0px;
+}
 .filter.checkbox .filter-icon {
     width: 55px;
     height: 55px;
 }
 .filter.checkbox input[type=checkbox] {
-    margin: 10px 0px 0px 10px;
+    margin: 20px 0px 0px 10px;
 }
 div.back-to-search-wrapper {
     padding-left: 0px;
@@ -230,7 +230,6 @@ div.back-to-search-wrapper {
     .filter-icon {
         width: 35px;
         height: 35px;
-        margin: 0px 5px 0px 0px;
     }
     .filter.checkbox {
         text-align: center;
@@ -254,6 +253,12 @@ div.back-to-search-wrapper {
         text-align: center;
     }
 }
+@media (min-width: 992px) {
+    .filter.checkbox {
+        margin-left: 20px;
+    }
+}
+
 /**
     Results list
 **/
@@ -270,7 +275,7 @@ div.back-to-search-wrapper {
     font-size: 28px;
 }
 .results-header-filter .a11yIcons-compact li {
-    padding: 0px;
+    padding: 3px;
     width: 11%;
     min-width: 40px;
 }

@@ -42,7 +42,7 @@ class FilterStore {
             id: 'entrance',
             type: 'select-one',
             title: 'Eingang',
-            icon: 'home',
+            icon: 'bvl/entrance',
             aria: 'Filter, Anforderungen an den Eingangsbereich',
             valueSet: [
                 {key: 'entrance-suit-f-wheelchair', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Eingangsbereich'},
@@ -59,7 +59,7 @@ class FilterStore {
             id: 'lift',
             type: 'select-one',
             title: 'Aufzug',
-            icon: 'elevator',
+            icon: 'bvl/elevator',
             aria: 'Filter, Anforderungen an den Aufzug',
             valueSet: [
                 {key: 'lift-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Aufzug'},
@@ -76,7 +76,7 @@ class FilterStore {
             id: 'toilet',
             type: 'select-one',
             title: 'Toilette',
-            icon: 'toilet',
+            icon: 'bvl/toilet',
             aria: 'Filter, Anforderungen an die Toilette',
             valueSet: [
                 {key: 'toilet-avail', value: 0, title: 'keine Einschränkung', arai: 'Keine Anforderungen an die Toilette'},
@@ -94,7 +94,7 @@ class FilterStore {
             id: 'parking',
             type: 'select-one',
             title: 'Parkplatz',
-            icon: 'car',
+            icon: 'bvl/parking',
             aria: 'Filter, Anforderungen an den Parkplatz',
             valueSet: [
                 {key: 'parking-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Parkplatz'},
@@ -110,7 +110,7 @@ class FilterStore {
         this.add({
             id: 'blind',
             type: 'checkbox',
-            icon: 'low-vision',
+            icon: 'bvl/blind-help',
             title: 'Hilfestellung für Sehgeschädigte',
             aria: 'Filter, Hilfestellung für Sehgeschädigte',
             key: 'help-for-blind',
@@ -122,7 +122,7 @@ class FilterStore {
         this.add({
             id: 'hearing',
             type: 'checkbox',
-            icon: 'hard-of-hearing',
+            icon: 'bvl/hearing-help',
             title: 'Hilfestellung für Hörgeschädigte',
             aria: 'Filter, Hilfestellung für Hörgeschädigte',
             key: 'help-for-hearing-imp',
@@ -134,7 +134,7 @@ class FilterStore {
         this.add({
             id: 'general',
             type: 'checkbox',
-            icon: 'question',
+            icon: 'bvl/general-help',
             title: 'Allgemeine Hilfestellung',
             aria: 'Filter, Allgemeine Hilfestellung',
             key: 'general-help',
