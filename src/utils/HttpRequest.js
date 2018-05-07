@@ -1,6 +1,7 @@
 import Promise from 'promise-polyfill';
 import axios from 'axios';
 import qs from 'qs';
+import rdfstore from 'rdfstore';
 
 var env = process.env.NODE_ENV || 'production';
 var config = require('../config')[env];
@@ -10,6 +11,7 @@ var config = require('../config')[env];
  */
 class HttpRequest {
     constructor() {
+        this.store = null;
     }
 
     /**
@@ -18,18 +20,29 @@ class HttpRequest {
      * @return Promise with result or throw error
      */
     request(query) {
-        const url = `${config.store.host}:${config.store.port}${config.store.path}`;
+        const self = this;
+        if (this.store === null) {
+            return new Promise((resolve, reject) => {
+                rdfstore.create((err, store) => {
+                    self.store = store;
+                    self.execute(query)
+                    .then(result => {
+                        resolve(result);
+                    })
+                    .catch(error => {
+                        throw new Error(error);
+                    })
+                });
+            });
+        } else {
+            return this.execute(query);
+        }
+    }
 
-        return axios({
-            method: 'POST',
-            url: url,
-            data: qs.stringify({query}),
-            headers: {
-                Accept: "application/sparql-results+json"
-            }
-        })
-        .catch(function (error) {
-            throw new Error(error);
+
+    execute(query) {
+        return new Promise((resolve, reject) => {
+            resolve(true);
         });
     }
 }

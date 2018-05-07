@@ -15,6 +15,9 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx']
   },
+  node: {
+    fs: 'empty'
+  },
   output: {
     library: 'BuildingNavigator',
     path: __dirname + '/dist',
