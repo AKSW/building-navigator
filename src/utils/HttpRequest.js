@@ -4,9 +4,9 @@ import rdfstore from 'rdfstore';
 var env = process.env.NODE_ENV || 'production';
 var config = require('../config')[env];
 
-import buildingsIndex from '../buildings-index';
+import buildingsIndex from '../100-buildings-index';
 //import buildings from '../buildings.n3';
-import buildings from '../buildings.js';
+import buildings from '../100-buildings.js';
 
 /**
  * Sparql Request to triple store
@@ -74,9 +74,7 @@ class HttpRequest {
                         resolve({ data: { results: { bindings: result } } });
                     }
                 });
-
             }
-
         });
     }
 }
