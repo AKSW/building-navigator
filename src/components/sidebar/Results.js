@@ -129,16 +129,21 @@ class Results extends React.Component {
             <ul className="pager">
                 {resultsStart > 0 &&
                     <li className="previous">
-                        <a role="button" href="#" onClick={this.handlePrevResults} aria-label="Vorherige Ergebnisse">
-                            <i className="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; vorherige
+                        <a role="button" href="#" onClick={this.handlePrevResults} aria-label="Vorherige Seite">
+                            <i className="fa fa-chevron-left" aria-hidden="true"></i>&nbsp; vorherige Seite
                         </a>
                     </li>
                 }
-                <li><span>{(resultsStart+resultsSteps)/resultsSteps} von {Math.ceil(visiblesLength/resultsSteps)}</span></li>
+                <li>
+                    <span>
+                        Seite {(resultsStart+resultsSteps)/resultsSteps} von&nbsp;
+                        {Math.ceil(visiblesLength/resultsSteps)}
+                    </span>
+                </li>
                 {(resultsStart + resultsSteps) < visiblesLength &&
                     <li className="next">
-                        <a role="button" href="#" onClick={this.handleNextResults} aria-label="Nächste Ergebnisse">
-                            nächste <i className="fa fa-chevron-right" aria-hidden="true"></i>
+                        <a role="button" href="#" onClick={this.handleNextResults} aria-label="Nächste Seite">
+                            nächste Seite <i className="fa fa-chevron-right" aria-hidden="true"></i>
                         </a>
                     </li>
                 }
@@ -195,10 +200,13 @@ class Results extends React.Component {
                         */}
                         {(allFilter.some(filter => { return filter.type !== 'search' && filter.value > 0 })) &&
                             <Row className="results-header-filter">
-                                <Col xs={4} md={3} className="">
-                                    <h3>Filter:</h3>
+                                <Col xs={12}>
+                                    <h3>Gefundene Einträge</h3>
                                 </Col>
-                                <Col xs={8} md={9} className="">
+                                <Col xs={6} md={6} className="">
+                                    <strong>Gewählte Filter:</strong>
+                                </Col>
+                                <Col xs={6} md={6} className="">
                                     <ul className="a11yIcons-compact">
                                         {a11yIcons.getAll().map((entry, id) => {
                                             if (a11yIcons.icon(entry) == null) {
@@ -209,7 +217,6 @@ class Results extends React.Component {
                                             </li>);
                                         })}
                                     </ul>
-
                                 </Col>
                             </Row>
                         }
