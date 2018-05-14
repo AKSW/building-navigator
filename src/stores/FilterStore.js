@@ -42,7 +42,7 @@ class FilterStore {
             id: 'entrance',
             type: 'select-one',
             title: 'Eingang',
-            icon: 'bvl/entrance',
+            icon: 'home',
             aria: 'Filter, Anforderungen an den Eingangsbereich',
             valueSet: [
                 {key: 'entrance-suit-f-wheelchair', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Eingangsbereich'},
@@ -59,7 +59,7 @@ class FilterStore {
             id: 'lift',
             type: 'select-one',
             title: 'Aufzug',
-            icon: 'bvl/elevator',
+            icon: 'elevator',
             aria: 'Filter, Anforderungen an den Aufzug',
             valueSet: [
                 {key: 'lift-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Aufzug'},
@@ -76,7 +76,7 @@ class FilterStore {
             id: 'toilet',
             type: 'select-one',
             title: 'Toilette',
-            icon: 'bvl/toilet',
+            icon: 'toilet',
             aria: 'Filter, Anforderungen an die Toilette',
             valueSet: [
                 {key: 'toilet-avail', value: 0, title: 'keine Einschränkung', arai: 'Keine Anforderungen an die Toilette'},
@@ -94,7 +94,7 @@ class FilterStore {
             id: 'parking',
             type: 'select-one',
             title: 'Parkplatz',
-            icon: 'bvl/parking',
+            icon: 'car',
             aria: 'Filter, Anforderungen an den Parkplatz',
             valueSet: [
                 {key: 'parking-avail', value: 0, title: 'keine Einschränkung', aria: 'Keine Anforderungen an den Parkplatz'},
