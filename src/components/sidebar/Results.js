@@ -187,6 +187,11 @@ class Results extends React.Component {
                 }
                 {initiated &&
                     <div>
+                        <Row>
+                            <Col xs={12}>
+                                <h3>Gefundene Einträge</h3>
+                            </Col>
+                        </Row>
                         {/* TODO may show input field with onChange handler
                           searchFilter.value != "" &&
                             <Row className="results-header-search">
@@ -200,13 +205,10 @@ class Results extends React.Component {
                         */}
                         {(allFilter.some(filter => { return filter.type !== 'search' && filter.value > 0 })) &&
                             <Row className="results-header-filter">
-                                <Col xs={12}>
-                                    <h3>Gefundene Einträge</h3>
-                                </Col>
-                                <Col xs={6} md={6} className="">
+                                <Col xs={6} md={6}>
                                     <strong>Gewählte Filter:</strong>
                                 </Col>
-                                <Col xs={6} md={6} className="">
+                                <Col xs={6} md={6}>
                                     <ul className="a11yIcons-compact">
                                         {a11yIcons.getAll().map((entry, id) => {
                                             if (a11yIcons.icon(entry) == null) {
