@@ -1,5 +1,15 @@
 
 var config = {
+    production: {
+        local_cache: {
+            enabled: true
+        },
+        store: {
+            host: 'http://localhost',
+            port: 8890,
+            path: '/sparql/'
+        },
+    },
     development: {
         local_cache: {
             enabled: true
@@ -10,7 +20,7 @@ var config = {
             path: '/sparql/'
         },
     },
-    production: {
+    test: {
         local_cache: {
             enabled: true
         },
