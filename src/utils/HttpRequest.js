@@ -5,7 +5,6 @@ var env = process.env.NODE_ENV || 'production';
 var config = require('../config')[env];
 
 import buildingsIndex from '../100-buildings-index';
-//import buildings from '../buildings.n3';
 import buildings from '../100-buildings.js';
 
 /**
