@@ -12,7 +12,7 @@ var config = {
     },
     development: {
         local_cache: {
-            enabled: true
+            enabled: false
         },
         store: {
             host: 'http://localhost',
@@ -22,10 +22,10 @@ var config = {
     },
     test: {
         local_cache: {
-            enabled: true
+            enabled: false
         },
         store: {
-            host: 'http://localhost',
+            host: 'http://db',
             port: 8890,
             path: '/sparql/'
         },
