@@ -460,6 +460,29 @@ button.btn-toogle-a11y-details {
 .leaflet-bottom .leaflet-control.btn-map-geolocate {
     margin-bottom: 50px;
 }
+.leaflet-marker-icon {
+    background: url("./images/marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+    padding-top: 5px;
+}
+.leaflet-marker-icon.small-marker {
+    background: url("./images/small-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+    padding-top: 0px;
+}
+.leaflet-marker-icon.selected {
+    background: url("./images/selected-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+}
+.leaflet-marker-icon.hovered {
+    background: url("./images/selected-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+}
+
 @media (max-width: 992px) {
     .map-wrapper {
         /*margin-left: 225px;*/
