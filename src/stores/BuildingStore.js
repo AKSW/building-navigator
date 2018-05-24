@@ -528,11 +528,18 @@ class BuildingStore {
      */
     setSelectedOnMap(id) {
         this.getAll().forEach((building) => {
-            let isSelected = false;
-            if (building.id == id) {
-                isSelected = true;
-            }
-            building.selectOnMap = isSelected;
+            building.selectOnMap = building.id == id;
+        });
+    }
+
+    /**
+     * Sets flag for a building to use selected marker on map, only one building will be selected
+     *
+     * @param {String} Building id
+     */
+    setHoveredOnMap(id) {
+        this.getAll().forEach((building) => {
+            building.hoveredOnMap = building.id == id;
         });
     }
 

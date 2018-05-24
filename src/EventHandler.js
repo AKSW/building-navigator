@@ -85,6 +85,10 @@ class EventHandler {
                     this.stores.buildingStore.setSelectedOnMap(payload.buildingId);
                     resolve(true);
                     break;
+                case 'set-hovered-on-map':
+                    this.stores.buildingStore.setHoveredOnMap(payload.buildingId);
+                    resolve(true);
+                    break;
                 /*
                 FilterStore() events
                 */

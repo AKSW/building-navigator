@@ -41,6 +41,12 @@ class Marker extends React.Component {
             iconAnchor: [15, 51],
             popupAnchor:  [0, -45]
         });
+        this.icons.selectedIconSmall = L.icon({
+            iconUrl: './images/small-marker-icon-selected.png',
+            iconSize: [22, 22],
+            iconAnchor: [11, 22],
+            popupAnchor:  [0, -45]
+        });
 
         this.handleClickShowDetails = this.handleClickShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
@@ -190,6 +196,9 @@ class Marker extends React.Component {
         // marker icon is normal, small or selected
         let icon = this.icons.normalIcon;
         if (currentBuilding.selectOnMap === true) {
+            icon = this.icons.selectedIcon;
+        }
+        else if (currentBuilding.hoveredOnMap === true) {
             icon = this.icons.selectedIcon;
         }
         else if (this.state.zoom < 15) {
