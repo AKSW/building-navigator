@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {Image} from 'react-bootstrap';
 
 /**
@@ -12,13 +12,10 @@ import {Image} from 'react-bootstrap';
  *      );
  *  }
  */
-class A11yIcon extends React.Component {
+class A11yIcon {
     constructor(props) {
-        super();
 
-        this.state = {
-            building: props.building
-        };
+        this.building = props.building;
 
         // init all icons with null values
         this.icons = {
@@ -151,7 +148,7 @@ class A11yIcon extends React.Component {
      * Create all icons
      */
     createIcons() {
-        const building = this.state.building;
+        const building = this.building;
 
         // entrance
         if (building['entrance-suit-f-wheelchair'] === 2) {
@@ -261,11 +258,6 @@ class A11yIcon extends React.Component {
                 'Allgemeine Hilfestellung ist vorhanden'
             );
         }
-    }
-
-    // Required for React.Component
-    render() {
-        return (null);
     }
 }
 

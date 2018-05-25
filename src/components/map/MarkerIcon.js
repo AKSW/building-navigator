@@ -1,9 +1,7 @@
-import React from 'react';
 import L, { Point } from 'leaflet';
 
-class MarkerIcon extends React.Component {
-    constructor(props) {
-        super();
+class MarkerIcon  {
+    constructor() {
     }
 
     getIcon(params) {
@@ -66,10 +64,6 @@ class MarkerIcon extends React.Component {
         });
 
         return icon;
-    }
-
-    render() {
-        return (null);
     }
 }
 
