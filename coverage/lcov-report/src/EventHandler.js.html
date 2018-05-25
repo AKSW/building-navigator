@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">41.49% </span>
+        <span class="strong">40.21% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>39/94</span>
+        <span class='fraction'>39/97</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">37.04% </span>
+        <span class="strong">35.71% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>10/27</span>
+        <span class='fraction'>10/28</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">41.67% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>5/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">41.49% </span>
+        <span class="strong">40.21% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>39/94</span>
+        <span class='fraction'>39/97</span>
       </div>
     </div>
     <p class="quiet">
@@ -222,7 +222,11 @@
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -297,6 +301,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -485,6 +493,10 @@ class EventHandler {
 <span class="cstat-no" title="statement not covered" >                    this.stores.buildingStore.setSelectedOnMap(payload.buildingId);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
+<span class="branch-10 cbranch-no" title="branch not covered" >                case 'set-hovered-on-map':</span>
+<span class="cstat-no" title="statement not covered" >                    this.stores.buildingStore.setHoveredOnMap(payload.buildingId);</span>
+<span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
                 /*
                 FilterStore() events
                 */
@@ -508,42 +520,42 @@ class EventHandler {
                     this.stores.uiStore.update('sidebarIsVisible', !currSidebState);
                     resolve(true);
                     break;
-<span class="branch-14 cbranch-no" title="branch not covered" >                case 'show-sidebar':</span>
+<span class="branch-15 cbranch-no" title="branch not covered" >                case 'show-sidebar':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.uiStore.update('sidebarIsVisible', true);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-15 cbranch-no" title="branch not covered" >                case 'hide-sidebar':</span>
+<span class="branch-16 cbranch-no" title="branch not covered" >                case 'hide-sidebar':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.uiStore.update('sidebarIsVisible', false);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-16 cbranch-no" title="branch not covered" >                case 'goto-results-page':</span>
+<span class="branch-17 cbranch-no" title="branch not covered" >                case 'goto-results-page':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.uiStore.update('resultsStart', payload.page);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-17 cbranch-no" title="branch not covered" >                case 'next-results':</span>
+<span class="branch-18 cbranch-no" title="branch not covered" >                case 'next-results':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') + this.stores.uiStore.get('resultsSteps'));</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-18 cbranch-no" title="branch not covered" >                case 'prev-results':</span>
+<span class="branch-19 cbranch-no" title="branch not covered" >                case 'prev-results':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') - this.stores.uiStore.get('resultsSteps'));</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
                 /*
                 MapStore() events
                 */
-<span class="branch-19 cbranch-no" title="branch not covered" >                case 'update-map-config':</span>
+<span class="branch-20 cbranch-no" title="branch not covered" >                case 'update-map-config':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.mapStore.updateMapConfig(payload.bounds, payload.center, payload.zoom);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-20 cbranch-no" title="branch not covered" >                case 'update-map-bound':</span>
+<span class="branch-21 cbranch-no" title="branch not covered" >                case 'update-map-bound':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.mapStore.updateBounds(payload.northEast, payload.southWest);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-21 cbranch-no" title="branch not covered" >                case 'update-map-center':</span>
+<span class="branch-22 cbranch-no" title="branch not covered" >                case 'update-map-center':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.mapStore.updateCenter(payload.latitude, payload.longitude);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
-<span class="branch-22 cbranch-no" title="branch not covered" >                case 'update-map-zoom':</span>
+<span class="branch-23 cbranch-no" title="branch not covered" >                case 'update-map-zoom':</span>
 <span class="cstat-no" title="statement not covered" >                    this.stores.mapStore.updateZoom(payload.zoom);</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(true);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
@@ -558,12 +570,12 @@ class EventHandler {
                     this.stores.routerStore.setCurrentRoute(this.stores, payload.path);
                     resolve(true);
                     break;
-<span class="branch-25 cbranch-no" title="branch not covered" >                case 'get-current-route':</span>
+<span class="branch-26 cbranch-no" title="branch not covered" >                case 'get-current-route':</span>
                     const currRoute = <span class="cstat-no" title="statement not covered" >this.stores.routerStore.getCurrentRoute();</span>
 <span class="cstat-no" title="statement not covered" >                    resolve(currRoute);</span>
 <span class="cstat-no" title="statement not covered" >                    break;</span>
 &nbsp;
-<span class="branch-26 cbranch-no" title="branch not covered" >                default:</span>
+<span class="branch-27 cbranch-no" title="branch not covered" >                default:</span>
                     // reject promise if unkwon action was given
 <span class="cstat-no" title="statement not covered" >                    reject(`Unkown action to ${this.constructor.name} given: ` + action);</span>
             }
@@ -580,7 +592,7 @@ export default EventHandler;
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed May 23 2018 19:26:24 GMT+0000 (UTC)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri May 25 2018 08:03:02 GMT+0000 (UTC)
 </div>
 </div>
 <script src="../prettify.js"></script>
