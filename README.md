@@ -56,8 +56,10 @@ After changing data in a store the `BuildingNavigator` re-renders all components
 ### Folder and file structure
 
 ```
+* __mocks__                 // mocked methods for testing
 * assets/                   // repository files
 * dist/                     // ready to run software
+    - coverage              // code coverage
     - data/                 // buildings data as json
     - fonts/
     - images/
@@ -96,6 +98,10 @@ Code documentation is done in JSDoc style.
 We use Jest and Enzyme for React GUI tests, and Sinon for asynchronous tests. All current tests are in `./tests` and could started in the Docker container with:
 
     npm test
+
+#### Code Coverage
+
+Code coverage is generated on run test. The report is stored under `./coverage/lcov-report/index.html`
 
 
 ### Create Production
