@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 /**
  * Store for routes and update the browser history
  * All available routes needs to created here.
