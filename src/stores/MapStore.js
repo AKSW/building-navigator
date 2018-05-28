@@ -38,12 +38,18 @@ class MapStore {
         }
     }
 
+    /**
+     * Set LeafLet map node
+     * @param {Object} node
+     */
     setNode(node) {
         this.node = node;
     }
 
+    /**
+     * Get leaflet map node
+     */
     getNode() {
-        // document.getElementById('map')
         return this.node;
     }
 
