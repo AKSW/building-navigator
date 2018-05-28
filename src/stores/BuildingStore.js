@@ -49,6 +49,8 @@ class BuildingStore {
             searchRank: 0,
             // use selected marker on map
             selectOnMap: false,
+            // use hover marker on map
+            hoveredOnMap: false,
             // object for loading data
             data: {}
         }
