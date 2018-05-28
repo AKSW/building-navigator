@@ -469,7 +469,7 @@ button.btn-toogle-a11y-details {
     background: url("./images/small-marker-icon.png") no-repeat;
     color: white;
     text-align: center;
-    padding-top: 0px;
+    padding-top: 2px;
 }
 .leaflet-marker-icon.selected {
     background: url("./images/selected-marker-icon.png") no-repeat;
