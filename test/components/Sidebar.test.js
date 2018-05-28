@@ -93,31 +93,4 @@ describe('<Sidebar />', () => {
         expect(sidebar.find(Results).length).toBe(1);
     });
 
-    it.skip('renders <Results /> after submit search', () => {
-        // I wasnt able to test this, because the set-current-route event after submit the form
-        // calls the browser history object, which seems not available in jest test environment
-
-        const logger = getLogger();
-        const stores = getStores(logger);
-        const eventHandler = getEventHandler(stores, logger);
-
-        const sidebar = mount(
-            <Sidebar stores={stores} />
-        );
-
-        expect(sidebar.find(Search).length).toBe(1);
-
-        expect(sidebar.find('button[type="submit"]').length).toBe(1);
-        expect(sidebar.find('form').length).toBe(1);
-
-        sidebar.find(Search).find('form').simulate('submit' );
-
-        console.log("Search state", sidebar.find(Search).instance().state.isLoading );
-
-        sidebar.setProps({stores});
-
-        expect(sidebar.find(Search).length).toBe(0);
-        expect(sidebar.find(Results).length).toBe(1);
-    });
-
 });

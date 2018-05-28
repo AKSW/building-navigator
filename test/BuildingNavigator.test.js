@@ -23,10 +23,6 @@ describe('<BuildingNavigator />', () => {
         expect(buildingNavigator.find(Main).length).toBe(1);
     });
 
-    it.skip('browser history', () => {
-        // pushState
-    });
-
     it('expects inital no buildings in state.stores.buildingStore', () => {
         const buildingNavigator = wrapBuildingNavigator();
         expect(buildingNavigator.state().stores.buildingStore.getAll().length).toBe(0);
