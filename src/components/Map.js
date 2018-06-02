@@ -141,7 +141,7 @@ class Map extends React.Component {
 
         const doClickFx = () => {
             if (!this.doClickFx) return;
-          
+
             const selected = this.state.stores.buildingStore.getSelected();
             // if a building is selected -> unselect
             if (typeof selected !== 'undefined') {
@@ -392,6 +392,7 @@ class Map extends React.Component {
                     })}
                     {geouseLocation.latitude !== 0 && geouseLocation.longitude !== 0 &&
                         <GeoLocationMarker position={[geouseLocation.latitude, geouseLocation.longitude]} />
+                    }
                     {userMarker && userMarker.latitude !== 0 &&
                         <UserMarker
                             stores={this.state.stores}
