@@ -8,6 +8,7 @@ import {
 } from 'react-leaflet';
 
 import Marker from './map/Marker';
+import GeoLocationMarker from './map/GeoLocationMarker';
 import UserMarker from './map/UserMarker';
 import Navigation from './map/Navigation';
 
@@ -140,13 +141,18 @@ class Map extends React.Component {
 
         const doClickFx = () => {
             if (!this.doClickFx) return;
-
-            super.handleEvent({
-                action: 'set-selected-on-map',
-                payload: {
-                    buildingId: null,
-                }
-            });
+          
+            const selected = this.state.stores.buildingStore.getSelected();
+            // if a building is selected -> unselect
+            if (typeof selected !== 'undefined') {
+                super.handleEvent({
+                    action: 'set-selected-on-map',
+                    payload: {
+                        buildingId: null,
+                    }
+                });
+            }
+            // hide sidebar on small screens
             if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
                 super.handleEvent({
                     action: 'hide-sidebar'
@@ -210,6 +216,15 @@ class Map extends React.Component {
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
+
+            super.handleEvent({
+                action: 'update-geouser-location',
+                payload: {
+                    latitude: e.latlng.lat,
+                    longitude: e.latlng.lng
+                }
+            });
+
         }, 2000 * panToDuration); // after 2 x panTo in ms
         // set users current pos
     }
@@ -322,6 +337,8 @@ class Map extends React.Component {
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
 
+        // geouser location config
+        const geouseLocation = this.state.stores.mapStore.get('geouserLocation');
         // current user marker position
         const userMarker = this.state.stores.mapStore.get('userMarker');
 
@@ -373,6 +390,8 @@ class Map extends React.Component {
                             />
                         );
                     })}
+                    {geouseLocation.latitude !== 0 && geouseLocation.longitude !== 0 &&
+                        <GeoLocationMarker position={[geouseLocation.latitude, geouseLocation.longitude]} />
                     {userMarker && userMarker.latitude !== 0 &&
                         <UserMarker
                             stores={this.state.stores}

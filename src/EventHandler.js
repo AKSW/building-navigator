@@ -155,6 +155,11 @@ class EventHandler {
                     this.stores.mapStore.closePopup();
                     resolve(true);
                     break;
+                case 'update-geouser-location':
+                    this.stores.mapStore.update('geouserLocation', {
+                        latitude: payload.latitude,
+                        longitude: payload.longitude
+                    });
                 case 'update-user-marker':
                     this.stores.mapStore.updateUserMarker(
                         payload.latitude,

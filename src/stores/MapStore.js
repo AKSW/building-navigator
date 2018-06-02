@@ -38,6 +38,12 @@ class MapStore {
             // map bounds decreasing factor in (negative!) percent, avoids buildings too close to the border
             mapPadding: -0.1,
 
+            // users location
+            geouserLocation: {
+                latitude: 0,
+                longitude: 0
+            },
+
             userMarker: {
                 latitude: 0,
                 longitude: 0,

@@ -21,6 +21,13 @@ class MarkerIcon  {
             });
         }
 
+        if (params.geouserMarker) {
+            return L.divIcon({
+                iconSize: [22, 22],
+                className: "geouser-marker-icon"
+            });
+        }
+
         switch (params.category) {
             case 'Bildung':
                 category = 'graduation-cap';
