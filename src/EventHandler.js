@@ -155,6 +155,30 @@ class EventHandler {
                     this.stores.mapStore.closePopup();
                     resolve(true);
                     break;
+                case 'update-user-marker':
+                    this.stores.mapStore.updateUserMarker(
+                        payload.latitude,
+                        payload.longitude,
+                        payload.title ? payload.title : ''
+                    );
+                    resolve(true);
+                    break;
+                case 'new-navigation-route':
+                    this.stores.mapStore.newNavigationRoute(payload.building);
+                    resolve(true);
+                    break;
+                case 'remove-navigation-route':
+                    this.stores.mapStore.removeNavigationRoute();
+                    resolve(true);
+                    break;
+                case 'set-route-object':
+                    this.stores.mapStore.setRouteObject(payload.routeObject);
+                    resolve(true);
+                    break;
+                case 'update-navigation-route-profile':
+                    this.stores.mapStore.updateNavigationRouteProfile(payload.profile);
+                    resolve(true);
+                    break;
                 /*
                 RouterStore() events
                 */
