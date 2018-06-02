@@ -484,6 +484,30 @@ button.btn-toogle-a11y-details {
 .leaflet-marker-icon.geouser-marker-icon {
     background: url("./images/geouser-location-marker.png") no-repeat;
 }
+.leaflet-marker-icon.user-marker-icon {
+    background: url("./images/current-place-marker-icon.png") no-repeat;
+}
+.leaflet-routing-container {
+    display: none;
+}
+.navroute-description {
+    height: 100%;
+    width: 100%;
+}
+.navigation-summary-wrapper {
+    margin: 10px 0px;
+    border-bottom: 1px solid lightGray;
+}
+.navigation-via-wrapper {
+    margin: 10px 0px;
+}
+.navigation-via-wrapper button {
+    margin: 0px 2px;
+    font-size: 1em;
+}
+.navigation-instruction-entry {
+    margin: 10px 0px;
+}
 
 @media (max-width: 992px) {
     .map-wrapper {
