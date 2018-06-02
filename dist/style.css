@@ -481,6 +481,9 @@ button.btn-toogle-a11y-details {
     color: white;
     text-align: center;
 }
+.leaflet-marker-icon.geouser-marker-icon {
+    background: url("./images/geouser-location-marker.png") no-repeat;
+}
 
 @media (max-width: 992px) {
     .map-wrapper {

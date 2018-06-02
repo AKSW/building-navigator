@@ -1,7 +1,8 @@
 import React from 'react';
 import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
-
 import Marker from './map/Marker';
+import GeoLocationMarker from './map/GeoLocationMarker';
+
 
 /**
  * Map component, renders Leaflet map with buildings as markers
@@ -153,6 +154,15 @@ class Map extends React.Component {
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
+
+            super.handleEvent({
+                action: 'update-geouser-location',
+                payload: {
+                    latitude: e.latlng.lat,
+                    longitude: e.latlng.lng
+                }
+            });
+
         }, 2000 * panToDuration); // after 2 x panTo in ms
     }
 
@@ -264,6 +274,9 @@ class Map extends React.Component {
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
 
+        // geouser location config
+        const geouseLocation = this.state.stores.mapStore.get('geouserLocation');
+
         return (
             <div className={mapClass}>
                 <div className="leaflet-control-container">
@@ -308,6 +321,9 @@ class Map extends React.Component {
                             />
                         );
                     })}
+                    {geouseLocation.latitude !== 0 && geouseLocation.longitude !== 0 &&
+                        <GeoLocationMarker position={[geouseLocation.latitude, geouseLocation.longitude]} />
+                    }
                 </OSMap>
             </div>
         );

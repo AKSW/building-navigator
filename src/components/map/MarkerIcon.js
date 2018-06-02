@@ -10,6 +10,13 @@ class MarkerIcon  {
         let iconSize = [25, 41];
         let iconAnchor = [12, 41];
 
+        if (params.geouserMarker) {
+            return L.divIcon({
+                iconSize: [22, 22],
+                className: "geouser-marker-icon"
+            });
+        }
+
         switch (params.category) {
             case 'Bildung':
                 category = 'graduation-cap';
