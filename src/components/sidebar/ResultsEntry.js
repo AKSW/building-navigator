@@ -9,8 +9,9 @@ import A11yIcon from '../A11yIcon';
 
 import {getElement} from '../../utils/GuiUtils'
 
-var handleMouseOutTimeout = null;
-var mouseOverBuilding = null;
+let handleMouseOutTimeout = null;
+let handleMouseOverTimeout = null;
+let mouseOverBuilding = null;
 
 /**
  * Results entry component, renders a result with title, a11y icons and details
@@ -110,17 +111,20 @@ class Entry extends React.Component {
 
         if (mouseOverBuilding == building.id) return;
 
-        mouseOverBuilding = building.id;
-        super.handleEvent({
-            action: 'set-hovered-on-map',
-            payload: { buildingId: building.id }
-        });
-        if (building.selectOnMap !== true) {
+        handleMouseOverTimeout = setTimeout(() => {
+            mouseOverBuilding = building.id;
             super.handleEvent({
-                action: 'set-selected-on-map',
-                payload: { buildingId: null }
+                action: 'set-hovered-on-map',
+                payload: { buildingId: building.id }
             });
-        }
+            if (building.selectOnMap !== true) {
+                super.handleEvent({
+                    action: 'set-selected-on-map',
+                    payload: { buildingId: null }
+                });
+            }
+        }, 200);
+
         e.preventDefault();
     }
 
@@ -131,6 +135,7 @@ class Entry extends React.Component {
      */
     handleMouseOut(e, building) {
         const self = this;
+        clearTimeout(handleMouseOverTimeout);
 
         handleMouseOutTimeout = setTimeout(() => {
             mouseOverBuilding = null;
