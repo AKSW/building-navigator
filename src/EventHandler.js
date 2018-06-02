@@ -160,28 +160,6 @@ class EventHandler {
                         latitude: payload.latitude,
                         longitude: payload.longitude
                     });
-                case 'update-user-marker':
-                    this.stores.mapStore.updateUserMarker(
-                        payload.latitude,
-                        payload.longitude,
-                        payload.title ? payload.title : ''
-                    );
-                    resolve(true);
-                    break;
-                case 'new-navigation-route':
-                    this.stores.mapStore.newNavigationRoute(payload.building);
-                    resolve(true);
-                    break;
-                case 'remove-navigation-route':
-                    this.stores.mapStore.removeNavigationRoute();
-                    resolve(true);
-                    break;
-                case 'set-route-object':
-                    this.stores.mapStore.setRouteObject(payload.routeObject);
-                    resolve(true);
-                    break;
-                case 'update-navigation-route-profile':
-                    this.stores.mapStore.updateNavigationRouteProfile(payload.profile);
                     resolve(true);
                     break;
                 /*

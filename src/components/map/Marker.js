@@ -1,6 +1,6 @@
 import React from 'react';
 import {Marker as OSMarker, Icon, Popup, Tooltip} from 'react-leaflet';
-import {Button, Grid, Row, Col} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 import MarkerIcon from './MarkerIcon'
 
 import A11yIcon from '../A11yIcon';
@@ -25,7 +25,6 @@ class Marker extends React.Component {
         this.handleClickMarker = this.handleClickMarker.bind(this);
         this.handleClickNextEntry = this.handleClickNextEntry.bind(this);
         this.handleClickPrevEntry = this.handleClickPrevEntry.bind(this);
-        this.handleClickRoute = this.handleClickRoute.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -166,24 +165,6 @@ class Marker extends React.Component {
     }
 
     /**
-     * Handle if user click on 'route' button
-     * @param {Event} e
-     * @param {Object} building
-     */
-    handleClickRoute(e, building) {
-        super.handleEvent({
-            action: 'new-navigation-route',
-            payload: {
-                building: building,
-            }
-        }).then(() => {
-            super.handleEvent({
-                action: 'close-map-popup'
-            })
-        });
-    }
-
-    /**
      * Render marker on specific position with icon, and popup content
      */
     render() {
@@ -259,21 +240,12 @@ class Marker extends React.Component {
                                     })}
                                 </ul>
 
-                                <Row>
-                                    <Col xs={6}>
-                                        <Button className="btn-lg" onClick={e => this.handleClickShowDetails(e, currentBuilding)}>
-                                            <i className="fa fa-th-list"></i> Details&nbsp;
-                                            {this.state.isLoading &&
-                                                <i className='fa fa-circle-o-notch fa-spin' />
-                                            }
-                                        </Button>
-                                    </Col>
-                                    <Col xs={6}>
-                                        <Button className="btn-lg" onClick={e => this.handleClickRoute(e, currentBuilding)}>
-                                            <i className="fa fa-map"></i> Route&nbsp;
-                                        </Button>
-                                    </Col>
-                                </Row>
+                                <Button className="btn-lg" onClick={e => this.handleClickShowDetails(e, currentBuilding)}>
+                                    <i className="fa fa-th-list"></i> Details&nbsp;
+                                    {this.state.isLoading &&
+                                        <i className='fa fa-circle-o-notch fa-spin' />
+                                    }
+                                </Button>
 
                                 {marker.buildings.length > 1 &&
                                     <div className="multi-marker-nav">{multiMarkerNav}</div>

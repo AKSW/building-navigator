@@ -5,21 +5,10 @@ class MarkerIcon  {
     }
 
     getIcon(params) {
-
         let category = 'building';
         let className = 'marker-icon';
         let iconSize = [25, 41];
         let iconAnchor = [12, 41];
-        const popupAnchor = [0, -45];
-
-        if (params.userMarker) {
-            return L.divIcon({
-                iconSize,
-                iconAnchor,
-                popupAnchor,
-                className: 'user-marker-icon',
-            });
-        }
 
         if (params.geouserMarker) {
             return L.divIcon({

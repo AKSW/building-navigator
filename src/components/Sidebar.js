@@ -5,7 +5,6 @@ import {Button, Clearfix} from 'react-bootstrap';
 import Sponsors from './Sponsors'
 import Search from './sidebar/Search';
 import Results from './sidebar/Results';
-import NavigationInstructions from './sidebar/NavigationInstructions';
 
 /**
  * Sidebar components, render the search form or results list (depends on current route)
@@ -42,19 +41,13 @@ class Sidebar extends React.Component {
         // get current route (search or results) for the sidebar
         const currentRoute = this.state.stores.routerStore.getCurrentRoute();
 
-        const navigation = this.state.stores.mapStore.get('navigation');
-        const showNaviInstruction = navigation.show && this.state.stores.mapStore.getRouteObject() !== null;
-
         const sidebarHtml = this.state.stores.uiStore.get('sidebarIsVisible')
             ? (<Swipeable onSwipedLeft={this.handleToggleSidebar}>
                     <div className="sidebar">
-                        {showNaviInstruction &&
-                            <NavigationInstructions stores={this.state.stores} />
-                        }
-                        {!showNaviInstruction && currentRoute.component === 'Search' &&
+                        {currentRoute.component === 'Search' &&
                             <Search stores={this.state.stores} />
                         }
-                        {!showNaviInstruction && currentRoute.component === 'Results' &&
+                        {currentRoute.component === 'Results' &&
                             <Results stores={this.state.stores} />
                         }
                         <Clearfix />

@@ -2,15 +2,13 @@ import Cookies from 'js-cookie';
 
 /**
  * Stores settings for the map like current zoom state, the center
- * Also contains the leaflet node (this.node) to retrieve leaflet functions
+ * Also contains the leaflet node (this.noe) to retrieve leaflet functions
  */
 class MapStore {
     constructor(logger) {
         this.logger = logger;
 
         this.node = null;
-
-        this.navigationNode = null;
 
         this.config = {
             // center of the map, get from cookie or use center of leipzig (51.3412, 12.3747)
@@ -43,28 +41,6 @@ class MapStore {
                 latitude: 0,
                 longitude: 0
             },
-
-            userMarker: {
-                latitude: 0,
-                longitude: 0,
-                title: ''
-            },
-
-            navigation: {
-                show: false,
-                //routeObject: null,
-                profile: 'driving',
-                from: {
-                    latitude: 0,
-                    longitude: 0,
-                    title: ''
-                },
-                to: {
-                    latitude: 0,
-                    longitude: 0,
-                    title: ''
-                },
-            }
         }
     }
 
@@ -162,80 +138,6 @@ class MapStore {
 
         this.node.closePopup();
     }
-
-    /**
-     * Set the leaflElement node for the navigation routing
-     * @param {Object} object
-     */
-    setRouteObject(object) {
-        //this.config.navigation.routeObject = object;
-        this.navigationNode = object;
-    }
-
-    /**
-     * Get leafletElement node for the navigation routing
-     */
-    getRouteObject() {
-        return this.navigationNode;
-    }
-
-    /**
-     * Update the user marker positinio and title on the map
-     * @param {Integer} latitude
-     * @param {Integer} longitude
-     * @param {String} title
-     */
-    updateUserMarker(latitude = 0, longitude = 0, title = '') {
-        this.update('userMarker', {
-            latitude: latitude,
-            longitude: longitude,
-            title: title
-        });
-        this.config.navigation.from = this.config.userMarker;
-    }
-
-    /**
-     * Add new navigation route to building
-     * @param {Object} building
-     */
-    newNavigationRoute(building) {
-
-        if (!this.config.userMarker || this.config.userMarker.latitude === 0) {
-            this.config.userMarker = this.config.center;
-            this.config.userMarker.title = '';
-        }
-
-        this.config.navigation.from = this.config.userMarker;
-        this.config.navigation.to = building;
-
-        this.config.navigation.show = true;
-    }
-
-    /**
-     * Remove current navigation route setting
-     */
-    removeNavigationRoute() {
-        this.config.navigation.from = {
-            latitude: 0,
-            longitude: 0,
-            title: ''
-        };
-        this.config.navigation.to = {
-            latitude: 0,
-            longitude: 0,
-            title: ''
-        };
-        this.config.navigation.show = false;
-    }
-
-    /**
-     * Update the navigation route profile (driving/cycling/walking)
-     * @param {String} profile
-     */
-    updateNavigationRouteProfile(profile) {
-        this.config.navigation.profile = profile;
-    }
-
 }
 
 export default MapStore;
