@@ -123,12 +123,17 @@ class Map extends React.Component {
      * Click somewhere on the map
      */
     handleClick(e) {
-        super.handleEvent({
-            action: 'set-selected-on-map',
-            payload: {
-                buildingId: null,
-            }
-        });
+        const selected = this.state.stores.buildingStore.getSelected();
+        // if a building is selected -> unselect
+        if (typeof selected !== 'undefined') {
+            super.handleEvent({
+                action: 'set-selected-on-map',
+                payload: {
+                    buildingId: null,
+                }
+            });
+        }
+        // hide sidebar on small screens
         if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
             super.handleEvent({
                 action: 'hide-sidebar'
