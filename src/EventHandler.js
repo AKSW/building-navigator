@@ -160,6 +160,7 @@ class EventHandler {
                         latitude: payload.latitude,
                         longitude: payload.longitude
                     });
+                    break;
                 case 'update-user-marker':
                     this.stores.mapStore.updateUserMarker(
                         payload.latitude,
