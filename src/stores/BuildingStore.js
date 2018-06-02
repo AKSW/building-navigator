@@ -354,18 +354,6 @@ class BuildingStore {
     }
 
     /**
-     * Get specific building with given id
-     *
-     * @param {String} Id of building
-     * @return {Object} Building or undefined if not found
-     */
-    getBuilding(id) {
-        return this.buildings.find((building) => {
-            return building.id == id;
-        });
-    }
-
-    /**
      * Get all buildings
      *
      * @return {Array}
@@ -375,13 +363,34 @@ class BuildingStore {
     }
 
     /**
+     * Get specific building with given id
+     *
+     * @param {String} Id of building
+     * @return {Object} Building or undefined if not found
+     */
+    getBuilding(id) {
+        return this.getAll().find((building) => {
+            return building.id == id;
+        });
+    }
+
+    /**
      * Get all visible buildings
      *
      * @return {Array}
      */
     getVisibles() {
-        return this.buildings.filter((building) => {
+        return this.getAll().filter((building) => {
             return building.visible == true && building.inBounds == true;
+        });
+    }
+
+    /**
+     * Get selected building on map
+     */
+    getSelected() {
+        return this.getAll().find(building => {
+            return building.selectOnMap;
         });
     }
 
