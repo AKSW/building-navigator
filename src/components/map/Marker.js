@@ -33,6 +33,9 @@ class Marker extends React.Component {
             if (building.selectOnMap) {
                 currentBuildingId = bid;
             }
+            else if (building.hoveredOnMap) {
+                currentBuildingId = bid;
+            }
         })
 
         this.setState({
