@@ -177,9 +177,11 @@ class Map extends React.Component {
                         longitude: 0
                     }
                 });
-                super.handleEvent({
-                    action: 'remove-navigation-route'
-                });
+                if (this.state.stores.mapStore.get('navigation').show) {
+                    super.handleEvent({
+                        action: 'remove-navigation-route'
+                    });
+                }
             }
         }
 
