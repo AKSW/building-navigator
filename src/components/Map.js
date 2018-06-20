@@ -330,9 +330,9 @@ class Map extends React.Component {
             && this.state.stores.uiStore.get('sidebarIsVisible');
 
         // tiles url (http or https)
-        const tilesUrl = document.location.protocol === 'https'
-            ? 'https://api.mapbox.com/styles/v1/donsi/cjhss2ynybxxa2so0d5q6opzg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZG9uc2kiLCJhIjoiY2pocThsMmNpNGMwdjNjbXczbGFhbnBtcSJ9.J8tzeRDqrFA1t_uWXz0AOA'
-            : 'http://api.mapbox.com/styles/v1/donsi/cjhss2ynybxxa2so0d5q6opzg/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZG9uc2kiLCJhIjoiY2pocThsMmNpNGMwdjNjbXczbGFhbnBtcSJ9.J8tzeRDqrFA1t_uWXz0AOA';
+        const tilesUrl = document.location.protocol === 'https:'
+            ? 'https://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ'
+            : 'http://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ';
 
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
