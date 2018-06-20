@@ -5,9 +5,9 @@ var config = {
             enabled: true
         },
         store: {
-            host: 'http://localhost',
-            port: 8890,
-            path: '/sparql/'
+            host: 'https://opendata.leipzig.de',
+            port: 443,
+            path: '/virt-sparql/'
         },
     },
     development: {
