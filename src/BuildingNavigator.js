@@ -1,5 +1,6 @@
 import React from 'react';
 import Promise from 'promise-polyfill';
+import PropTypes from 'prop-types';
 
 import Logger from './utils/Logger';
 import {isMobileBrowser} from './utils/DetectMobile';
@@ -46,6 +47,8 @@ class BuildingNavigator extends React.Component {
 
         // bind local handlers
         this.handleWindowResize = this.handleWindowResize.bind(this);
+        this.handlePopstate = this.handlePopstate.bind(this);
+        this.updateMapBounds = this.updateMapBounds.bind(this);
     }
 
     /**
@@ -53,21 +56,14 @@ class BuildingNavigator extends React.Component {
      * add event listeners, may set if is mobile browser, init buildings, may set route
      */
     componentDidMount() {
+        const self = this;
         this.compMounted = true;
 
         // add resize event listener
         window.addEventListener('resize', this.handleWindowResize);
 
         // add popstate listener (if user presses browsers back/forward button, get new current route)
-        window.addEventListener("popstate", () => {
-            this.handleEvent({action: 'get-current-route'}).then((route) => {
-                if (route.stores !== null) {
-                    this.setState({stores: route.stores});
-                    this.eventHandler.stores = route.stores;
-                }
-                // @todo set browsers title
-            });
-        }, false);
+        window.addEventListener("popstate", this.handlePopstate, false);
 
         // may set if is small view
         if (isMobileBrowser()) {
@@ -79,26 +75,15 @@ class BuildingNavigator extends React.Component {
 
         // load initial buildind data, apply map bounds to the buildings and set initial route
         this.handleEvent({action: 'init-buildings'}).then(() => {
-            // get map bounds with padding
-            const mapNode = this.state.stores.mapStore.getNode();
-            if (mapNode !== null) {
-                const mapBounds = mapNode.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
-                // update map bounds config
-                super.handleEvent({action: 'update-map-bound',
-                    payload: {
-                        northEast: {
-                            latitude: mapBounds._northEast.lat,
-                            longitude: mapBounds._northEast.lng,
-                        },
-                        southWest: {
-                            latitude: mapBounds._southWest.lat,
-                            longitude: mapBounds._southWest.lng
-                        }
-                    }
-                });
-                // apply bounds to the buildings
-                super.handleEvent({action: 'apply-bounds'});
-            }
+            this.updateMapBounds();
+            // apply bounds to the buildings
+            super.handleEvent({action: 'apply-bounds'});
+        }).catch(error => {});
+
+        // hide global loader after this component is mounted
+        this.handleEvent({
+            action: 'update-ui-config',
+            payload: {key: 'loader', value: false}
         });
 
         // get current path and set as initial route
@@ -109,16 +94,11 @@ class BuildingNavigator extends React.Component {
             payload: {path: currentRoute.path}
         });
 
-        // hide global loader after this component is mounted
-        this.handleEvent({
-            action: 'update-ui-config',
-            payload: {key: 'loader', value: false}
-        });
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.handleWindowResize);
-        window.removeEventListener('popstate');
+        window.removeEventListener('popstate', this.handlePopstate);
     }
 
     /**
@@ -171,15 +151,67 @@ class BuildingNavigator extends React.Component {
         }
     }
 
+    /**
+     * Popstate listener. Handles browsers history back function
+     */
+    handlePopstate () {
+        const newStores = this.state.stores;
+        newStores.filterStore.filters = history.state.filters;
+        newStores.mapStore.config = history.state.map;
+        newStores.uiStore.config = history.state.ui;
+
+        this.setState({stores: newStores});
+        this.eventHandler.stores = newStores;
+
+        // update map config, bounds and apply filter and bounds to buildings
+        super.handleEvent({
+            action: 'update-map-config',
+            payload: newStores.mapStore.config
+        });
+        super.handleEvent({action: 'apply-filters'});
+        // apply bounds after map moved to new bounds
+        window.setTimeout(() => {
+            this.updateMapBounds();
+            super.handleEvent({action: 'apply-bounds'});
+        }, 500);
+
+
+        // set browsers title (required for FF)
+        document.title = history.state.title;
+    }
+
+    /**
+     * Update bounds on maps config
+     */
+    updateMapBounds() {
+        const mapNode = this.state.stores.mapStore.getNode();
+        if (mapNode !== null) {
+            const mapBounds = mapNode.getBounds().pad(this.state.stores.mapStore.get('mapPadding'));
+            // update map bounds config
+            super.handleEvent({action: 'update-map-bound',
+                payload: {
+                    northEast: {
+                        latitude: mapBounds._northEast.lat,
+                        longitude: mapBounds._northEast.lng,
+                    },
+                    southWest: {
+                        latitude: mapBounds._southWest.lat,
+                        longitude: mapBounds._southWest.lng
+                    }
+                }
+            });
+        }
+    }
+
     render() {
         return <Main stores={this.state.stores} />;
     }
 }
 
 BuildingNavigator.propTypes = {
-    stores: React.PropTypes.object.isRequired,
-    logger: React.PropTypes.instanceOf(Logger).isRequired,
-    eventHandler: React.PropTypes.instanceOf(EventHandler).isRequired,
+    stores: PropTypes.object.isRequired,
+    logger: PropTypes.instanceOf(Logger).isRequired,
+    eventHandler: PropTypes.instanceOf(EventHandler).isRequired,
 };
 
 export default BuildingNavigator;

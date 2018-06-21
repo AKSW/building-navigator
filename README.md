@@ -2,6 +2,8 @@
 
 This tool provides an interactive map with accessible information about places in Leipzig. You can move on the map or search buildings with certain filters. The filters provide restrictions such as accessibility requirements for the entrances, the lift or the toilet.
 
+Its data source is based on an RDF triple store like Virtuoso.
+
 **Important:** This tool is under heavy development with focus on refinement and UI improvements. Furthermore supporting screenreaders and text-to-speech software is also one of the primary objectives.
 
 **Screenshot:**
@@ -56,8 +58,10 @@ After changing data in a store the `BuildingNavigator` re-renders all components
 ### Folder and file structure
 
 ```
+* __mocks__                 // mocked methods for testing
 * assets/                   // repository files
 * dist/                     // ready to run software
+    - coverage              // code coverage
     - data/                 // buildings data as json
     - fonts/
     - images/
@@ -85,11 +89,9 @@ After changing data in a store the `BuildingNavigator` re-renders all components
 
 ### Developing environment
 
-As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/k00ni/Docker-Nodejs-environment
+As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/AKSW/building-navigator-docker
 
-Mount this project into the container and access http://localhost:8080.
-
-Code documentation is done in JSDoc style.
+To setup the development environment follow the instructions in the Readme.
 
 #### Test
 
@@ -97,9 +99,13 @@ We use Jest and Enzyme for React GUI tests, and Sinon for asynchronous tests. Al
 
     npm test
 
+#### Code Coverage
+
+Code coverage is generated on run test. The report is stored under `./coverage/lcov-report/index.html`
+
 
 ### Create Production
 
 To create the production files in `./dist/` exec into the Docker container and run:
 
-    npm run build-dist
+    npm run build

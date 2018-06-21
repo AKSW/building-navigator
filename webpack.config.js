@@ -1,47 +1,31 @@
-var path = require('path');
-var webpack = require('webpack');
-
-const PATHS = {
-  dist: path.join(__dirname, 'dist')
-};
-
 module.exports = {
-    devtool: 'eval',
-    debug: true,
-    context: path.resolve(__dirname),
-    entry: './src/main.js',
-    output: {
-        library: 'BuildingNavigator',
-        path: PATHS.dist,
-        publicPath: '/',
-        filename: 'main.min.js',
-        libraryTarget: 'var'
-    },
-    resolve: {
-        root: path.resolve(__dirname),
-    },
-    module: {
-        loaders: [
-         {
-           test: /\.js?$/,
-           loader: 'babel-loader',
-           exclude: /node_modules/,
-           query: {
-             presets: ['es2015', 'react']
-           }
-         },
-         {
-            test: /\.css/,
-            loader: 'style!css?modules',
-            include: __dirname + '/src'
-          }
-       ]
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify('development')
-        }
-      })
-    ],
+  devtool: 'eval',
+  entry: [
+    './src/main.js'
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
+  output: {
+    library: 'BuildingNavigator',
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'main.min.js',
+    libraryTarget: 'var'
+  },
+  devServer: {
+    contentBase: './dist',
+    host: '0.0.0.0',
+    port: 8080
+  }
 };
+

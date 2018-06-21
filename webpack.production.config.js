@@ -1,54 +1,42 @@
-var path = require('path');
 var webpack = require('webpack');
-
-const PATHS = {
-  dist: path.join(__dirname, 'dist')
-};
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-    devtool: 'cheap-module-source-map',
-    context: path.resolve(__dirname),
-    entry: './src/main.js',
-    output: {
-        library: 'BuildingNavigator',
-        path: PATHS.dist,
-        publicPath: '/',
-        filename: 'main.min.js',
-        libraryTarget: 'var'
-    },
-    resolve: {
-        root: path.resolve(__dirname),
-    },
-    module: {
-        loaders: [
-         {
-           test: /\.js?$/,
-           loader: 'babel-loader',
-           exclude: /node_modules/,
-           query: {
-             presets: ['es2015', 'react']
-           }
-         },
-         {
-            test: /\.css/,
-            loader: 'style!css?modules',
-            include: __dirname + '/src'
-          }
-       ]
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env': {
-          'NODE_ENV': JSON.stringify('production')
-        }
-      }),
-      new webpack.optimize.AggressiveMergingPlugin(),
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false
-        },
-      }),
-    ],
+  devtool: 'source-map',
+  entry: [
+    './src/main.js'
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
+  output: {
+    library: 'BuildingNavigator',
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'main.min.js',
+    libraryTarget: 'var'
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new UglifyJSPlugin({
+      sourceMap: true
+    }),
+  ],
+  devServer: {
+    contentBase: './dist',
+    host: '0.0.0.0',
+    port: 8080
+  }
 };
+

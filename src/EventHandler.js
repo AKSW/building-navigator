@@ -46,6 +46,14 @@ class EventHandler {
                         error => reject(error)
                     );
                     break;
+                case 'may-load-multiple-buildings-data':
+                    payload.buildings.map(building => {
+                        this.stores.buildingStore.mayLoadBuildingData(building.id).then(
+                            response => resolve(response),
+                            error => reject(error)
+                        );
+                    })
+                    break;
                 case 'load-building-data':
                     this.stores.buildingStore.loadBuildingData(payload.buildingId).then(
                         response => resolve(response),
@@ -75,6 +83,10 @@ class EventHandler {
                     break;
                 case 'set-selected-on-map':
                     this.stores.buildingStore.setSelectedOnMap(payload.buildingId);
+                    resolve(true);
+                    break;
+                case 'set-hovered-on-map':
+                    this.stores.buildingStore.setHoveredOnMap(payload.buildingId);
                     resolve(true);
                     break;
                 /*
@@ -108,6 +120,10 @@ class EventHandler {
                     this.stores.uiStore.update('sidebarIsVisible', false);
                     resolve(true);
                     break;
+                case 'goto-results-page':
+                    this.stores.uiStore.update('resultsStart', payload.page);
+                    resolve(true);
+                    break;
                 case 'next-results':
                     this.stores.uiStore.update('resultsStart', this.stores.uiStore.get('resultsStart') + this.stores.uiStore.get('resultsSteps'));
                     resolve(true);
@@ -137,6 +153,36 @@ class EventHandler {
                     break;
                 case 'close-map-popup':
                     this.stores.mapStore.closePopup();
+                    resolve(true);
+                    break;
+                case 'update-geouser-location':
+                    this.stores.mapStore.update('geouserLocation', {
+                        latitude: payload.latitude,
+                        longitude: payload.longitude
+                    });
+                    break;
+                case 'update-user-marker':
+                    this.stores.mapStore.updateUserMarker(
+                        payload.latitude,
+                        payload.longitude,
+                        payload.title ? payload.title : ''
+                    );
+                    resolve(true);
+                    break;
+                case 'new-navigation-route':
+                    this.stores.mapStore.newNavigationRoute(payload.building);
+                    resolve(true);
+                    break;
+                case 'remove-navigation-route':
+                    this.stores.mapStore.removeNavigationRoute();
+                    resolve(true);
+                    break;
+                case 'set-route-object':
+                    this.stores.mapStore.setRouteObject(payload.routeObject);
+                    resolve(true);
+                    break;
+                case 'update-navigation-route-profile':
+                    this.stores.mapStore.updateNavigationRouteProfile(payload.profile);
                     resolve(true);
                     break;
                 /*

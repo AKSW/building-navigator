@@ -22,14 +22,23 @@ describe('<Main />', () => {
     })
 
     it('closes <Welcome /> after clicking ok', () => {
-        // we need to mock the hole BuildingNavigator app, to realize close-welcome event
-        const buildingNavigator = wrapBuildingNavigator('mount');
+        const logger = getLogger();
+        const stores = getStores(logger);
+        const eventHandler = getEventHandler(stores, logger);
 
-        buildingNavigator.find(Welcome).find('button').simulate('click');
+        // create handleEvent() method in React component  is required, because Welcome calls it as super.handleEvent()
+        React.Component.prototype.handleEvent = (event) => {
+            return eventHandler.handleEvent(event);
+        };
 
-        // wait for states update
-        buildingNavigator.update();
-        expect(buildingNavigator.find(Welcome).length).toBe(0);
+        const main = mount(<Main stores={stores} />);
+
+        expect(main.find(Welcome).find('button').length).toBe(1);
+
+        main.find(Welcome).find('button').simulate('click');
+
+        main.setProps({stores});
+        expect(main.find(Welcome).length).toBe(0);
     });
 
     it('renders <Sidebar /> and <Map /> components', () => {
@@ -45,7 +54,7 @@ describe('<Main />', () => {
     it('prints an error message if any exists', () => {
         const logger = getLogger();
         // create dummy error log message
-        const error = new Error('This is a test error message');
+        const error = new Error('This is a TEST error message');
         logger.log(error, {}, 'error');
 
         const stores = getStores(logger);

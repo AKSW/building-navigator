@@ -1,7 +1,8 @@
 import React from 'react';
 import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
-
 import Marker from './map/Marker';
+import GeoLocationMarker from './map/GeoLocationMarker';
+
 
 /**
  * Map component, renders Leaflet map with buildings as markers
@@ -17,7 +18,8 @@ class Map extends React.Component {
         this.state = {
             stores: props.stores,
             markers: [],
-            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible')
+            sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible'),
+            lazyPreloader: null
         }
 
         // local event handlers
@@ -122,16 +124,51 @@ class Map extends React.Component {
      * Click somewhere on the map
      */
     handleClick(e) {
-        super.handleEvent({
-            action: 'set-selected-on-map',
-            payload: {
-                buildingId: null,
+
+        const doClickFx = () => {
+            if (!this.doClickFx) return;
+
+            const selected = this.state.stores.buildingStore.getSelected();
+            // if a building is selected -> unselect
+            if (typeof selected !== 'undefined') {
+                super.handleEvent({
+                    action: 'set-selected-on-map',
+                    payload: {
+                        buildingId: null,
+                    }
+                });
             }
-        });
-        if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
-            super.handleEvent({
-                action: 'hide-sidebar'
-            });
+            // hide sidebar on small screens
+            if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
+                super.handleEvent({
+                    action: 'hide-sidebar'
+                });
+            }
+
+            const userMarker = this.state.stores.mapStore.config.userMarker;
+            if (e.latlng && userMarker.latitude === 0) {
+                super.handleEvent({
+                    action: 'update-user-marker',
+                    payload: {
+                        latitude: e.latlng.lat,
+                        longitude: e.latlng.lng,
+                        title: ''
+                    }
+                });
+            } else {
+                super.handleEvent({
+                    action: 'update-user-marker',
+                    payload: {
+                        latitude: 0,
+                        longitude: 0
+                    }
+                });
+                if (this.state.stores.mapStore.get('navigation').show) {
+                    super.handleEvent({
+                        action: 'remove-navigation-route'
+                    });
+                }
+            }
         }
     }
 
@@ -147,6 +184,15 @@ class Map extends React.Component {
         window.setTimeout(() => {
             this.updateMapConfig();
             this.applyBounds();
+
+            super.handleEvent({
+                action: 'update-geouser-location',
+                payload: {
+                    latitude: e.latlng.lat,
+                    longitude: e.latlng.lng
+                }
+            });
+
         }, 2000 * panToDuration); // after 2 x panTo in ms
     }
 
@@ -195,6 +241,13 @@ class Map extends React.Component {
                 zoom: osmap.getZoom()
             }
         });
+
+        // preloading visible buildings, after 2,5 Sek timout, destroy on change map
+        // TODO doenst work on paginate results
+        clearTimeout(this.lazyPreloader);
+        this.lazyPreloader = setTimeout(() => {
+            this.preloadBuildings();
+        }, 2500);
     }
 
     /**
@@ -203,6 +256,24 @@ class Map extends React.Component {
     applyBounds() {
         super.handleEvent({
             action: 'apply-bounds'
+        });
+    }
+
+    /**
+     * Preload visible buildings
+     */
+    preloadBuildings() {
+        let buildings = this.state.stores.buildingStore.getVisibles();
+        buildings = buildings.slice(
+            this.state.stores.uiStore.get('resultsStart'),
+            this.state.stores.uiStore.get('resultsStart') + this.state.stores.uiStore.get('resultsSteps')
+        );
+
+        super.handleEvent({
+            action: 'may-load-multiple-buildings-data',
+            payload: {
+                buildings: buildings,
+            }
         });
     }
 
@@ -226,12 +297,15 @@ class Map extends React.Component {
             && this.state.stores.uiStore.get('sidebarIsVisible');
 
         // tiles url (http or https)
-        const tilesUrl = document.location.protocol === 'https'
-            ? 'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'
-            : 'http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png';
+        const tilesUrl = document.location.protocol === 'https:'
+            ? 'https://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ'
+            : 'http://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ';
 
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
+
+        // geouser location config
+        const geouseLocation = this.state.stores.mapStore.get('geouserLocation');
 
         return (
             <div className={mapClass}>
@@ -277,6 +351,20 @@ class Map extends React.Component {
                             />
                         );
                     })}
+                    {geouseLocation.latitude !== 0 && geouseLocation.longitude !== 0 &&
+                        <GeoLocationMarker position={[geouseLocation.latitude, geouseLocation.longitude]} />
+                    }
+                    {userMarker && userMarker.latitude !== 0 &&
+                        <UserMarker
+                            stores={this.state.stores}
+                            position={[userMarker.latitude, userMarker.longitude]}
+                        />
+                    }
+                    {navigation.show && navigation.from.latitude !== 0 &&
+                        <Navigation
+                            stores={this.state.stores}
+                        />
+                    }
                 </OSMap>
             </div>
         );

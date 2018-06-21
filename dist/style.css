@@ -19,15 +19,14 @@
 }
 .global-loader-wrapper {
     position: absolute;
-    z-index: 99999;
+    z-index: 99993;
     top: 0px;
     left: 0px;
     right: 0px;
     bottom: 0px;
     background-color: white;
     font-size: 30px;
-    padding-top: 10%;
-    text-align: center;
+    padding: 20px;
     opacity: 0.7;
 }
 
@@ -55,10 +54,12 @@
     max-height: 100%;
     overflow: auto;
 }
+.welcome-msg .filterSelect select {
+    width: 100%;
+}
 .welcome-msg .filterSelect option {
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 600;
     text-decoration: inherit;
 }
 .welcome-msg .filterSelect option::before {
@@ -131,6 +132,9 @@
     .btn-hide-sidebar {
         left: 445px;
     }
+    .sidebar h3 {
+        font-size: 32px;
+    }
 }
 @media (max-width: 768px) {
     .sidebar {
@@ -148,7 +152,7 @@
     width: 100%;
     left: 0px;
     margin-top: 20px;
-    padding: 20px;
+    padding: 10px 20px;
     background-color: #fff;
     border-top: 1px solid #808080;
 }
@@ -159,7 +163,7 @@
 **/
 .filter-icon {
     display: inline-block;
-    margin: -10px 0px -5px 0px;
+    margin: 0px 5px;
     width: 70px;
     height: 70px;
 }
@@ -187,9 +191,6 @@
 .filterSelect select:focus {
     box-shadow: 0 0 8px #f0544c;
 }
-.filterSelect option {
-
-}
 .filterSelect option:checked {
     background-color: #f0544c;
 }
@@ -210,12 +211,15 @@
 .filter.checkbox:hover {
     box-shadow: 0 0 8px #f0544c;
 }
+.filter.checkbox label {
+    padding-left: 0px;
+}
 .filter.checkbox .filter-icon {
     width: 55px;
     height: 55px;
 }
 .filter.checkbox input[type=checkbox] {
-    margin: 10px 0px 0px 10px;
+    margin: 20px 0px 0px 10px;
 }
 div.back-to-search-wrapper {
     padding-left: 0px;
@@ -225,7 +229,6 @@ div.back-to-search-wrapper {
     .filter-icon {
         width: 35px;
         height: 35px;
-        margin: 0px 5px 0px 0px;
     }
     .filter.checkbox {
         text-align: center;
@@ -249,11 +252,34 @@ div.back-to-search-wrapper {
         text-align: center;
     }
 }
+@media (min-width: 992px) {
+    .filter.checkbox {
+        margin-left: 20px;
+    }
+}
+
 /**
     Results list
 **/
 .results {
     min-height: 80%;
+}
+.results-header-filter {
+    padding-top: 15px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid lightGray;
+}
+.results-header-filter h3 {
+    margin-top: 10px;
+    font-size: 28px;
+}
+.results-header-filter .a11yIcons-compact li {
+    padding: 3px;
+    width: 11%;
+    min-width: 40px;
+}
+.results-search-header h3 {
+    font-size: 28px;
 }
 .results .pager a {
     padding: 10px 15px;
@@ -290,22 +316,22 @@ div.back-to-search-wrapper {
     display: table-cell;
     vertical-align: middle;
 }
-.a11yIcons-list {
+.a11yIcons-compact {
     list-style-type: none;
     padding: 0px;
     margin: 0px 0px 5px 0px;
 }
-.a11yIcons-list li {
+.a11yIcons-compact li {
     display: inline-block;
     padding: 5px;
     width: 14%;
     min-width: 50px;
 }
-.a11yIcons-detailed {
+.a11yIcons-extended {
     text-align: right;
     margin: 10px 0px;
 }
-.a11yIcons-detailed > div {
+.a11yIcons-extended > div {
     margin-bottom: 7px;
 }
 .a11yIcon {
@@ -315,11 +341,19 @@ div.back-to-search-wrapper {
 }
 .a11yIcons-descr {
     text-align: left;
+    padding-top: 15px;
 }
-.a11yIcons-descr span {
-    height: 65px;
-    display: table-cell;
-    vertical-align: middle;
+button.btn-toogle-a11y-details {
+    padding: 0px 12px;
+}
+.a11yIcons-details {
+    color: #5a5a5a;
+    text-align: left;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.a11yIcons-details span {
+    display: inline-block;
 }
 .entry-details-prop {
     margin-bottom: 10px;
@@ -339,15 +373,12 @@ div.back-to-search-wrapper {
     width: 50%;
 }
 @media (max-width: 768px) {
-    .a11yIcons-detailed .a11yIcon {
+    .a11yIcons-extended .a11yIcon {
         width: 52px;
-    }
-    .a11yIcons-descr span {
-        height: 52px;
     }
 }
 @media (max-width: 420px) {
-    .a11yIcons-list li {
+    .a11yIcons-compact li {
         width: 25%;
     }
     .result-bottom-buttons button:first-child {
@@ -400,6 +431,11 @@ div.back-to-search-wrapper {
     position: absolute;
     font-size: 16px;
 }
+.leaflet-tooltip {
+    z-index: 999;
+    background-color: white;
+    padding: 2px 4px;
+}
 .popup {
     font-size: 16px;
 }
@@ -423,6 +459,32 @@ div.back-to-search-wrapper {
 .leaflet-bottom .leaflet-control.btn-map-geolocate {
     margin-bottom: 50px;
 }
+.leaflet-marker-icon {
+    background: url("./images/marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+    padding-top: 5px;
+}
+.leaflet-marker-icon.small-marker {
+    background: url("./images/small-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+    padding-top: 2px;
+}
+.leaflet-marker-icon.selected {
+    background: url("./images/selected-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+}
+.leaflet-marker-icon.hovered {
+    background: url("./images/selected-marker-icon.png") no-repeat;
+    color: white;
+    text-align: center;
+}
+.leaflet-marker-icon.geouser-marker-icon {
+    background: url("./images/geouser-location-marker.png") no-repeat;
+}
+
 @media (max-width: 992px) {
     .map-wrapper {
         /*margin-left: 225px;*/
@@ -441,7 +503,7 @@ div.back-to-search-wrapper {
         left: 0px;
         width: 100%;
     }
-    /*.leaflet-control-container {
+    /*.leaflet-contrgetFilterol-container {
         right: 140px;
     }*/
     .leaflet-popup {
@@ -453,14 +515,17 @@ div.back-to-search-wrapper {
  sponsors-wrapper
 */
 .sponsors-wrapper {
-
+    font-size: 0.8em;
 }
 .sponsor-entry-wrapper {
     float: left;
-    width: 130px;
-    height: 70px;
+    width: 25%;
     padding: 5px;
+    text-align: center;
 }
 .sponsor-entry-wrapper img {
-    width: 100%;
+    width: 85px;
+}
+.made-with-refs {
+    font-size: 0.9em;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import L from 'leaflet';
-import {Marker as OSMarker, Icon, Popup} from 'react-leaflet';
+import {Marker as OSMarker, Icon, Popup, Tooltip} from 'react-leaflet';
 import {Button} from 'react-bootstrap'
+import MarkerIcon from './MarkerIcon'
 
 import A11yIcon from '../A11yIcon';
 import {getElement} from '../../utils/GuiUtils'
@@ -21,27 +21,6 @@ class Marker extends React.Component {
             isLoading: false
         };
 
-        // init marker icons
-        this.icons = {};
-        this.icons.normalIcon = L.icon({
-            iconUrl: './images/marker-icon.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-            popupAnchor:  [0, -45]
-        });
-        this.icons.smallIcon = L.icon({
-            iconUrl: './images/small-marker-icon.png',
-            iconSize: [22, 22],
-            iconAnchor: [11, 22],
-            popupAnchor:  [0, -45]
-        });
-        this.icons.selectedIcon = L.icon({
-            iconUrl: './images/selected-marker-icon.png',
-            iconSize: [31, 51],
-            iconAnchor: [15, 51],
-            popupAnchor:  [0, -45]
-        });
-
         this.handleClickShowDetails = this.handleClickShowDetails.bind(this);
         this.handleClickMarker = this.handleClickMarker.bind(this);
         this.handleClickNextEntry = this.handleClickNextEntry.bind(this);
@@ -52,6 +31,9 @@ class Marker extends React.Component {
         let currentBuildingId = 0;
         nextProps.marker.buildings.forEach((building, bid) => {
             if (building.selectOnMap) {
+                currentBuildingId = bid;
+            }
+            else if (building.hoveredOnMap) {
                 currentBuildingId = bid;
             }
         })
@@ -160,7 +142,11 @@ class Marker extends React.Component {
                     action: 'update-ui-config',
                     payload: {key: 'loader', value: false}
                 });
+            }).catch(() => {
+                console.log(`Entry "${building.id}" not found.`);
             });
+        }).catch(() => {
+            console.log("Sidebar not found.");
         });
     }
 
@@ -187,14 +173,13 @@ class Marker extends React.Component {
         const currentBuilding = marker.buildings[this.state.currentBuildingId];
         const position = [currentBuilding.latitude, currentBuilding.longitude];
 
-        // marker icon is normal, small or selected
-        let icon = this.icons.normalIcon;
-        if (currentBuilding.selectOnMap === true) {
-            icon = this.icons.selectedIcon;
-        }
-        else if (this.state.zoom < 15) {
-            icon = this.icons.smallIcon;
-        }
+        const markerIcon = new MarkerIcon();
+        const icon = markerIcon.getIcon({
+            size: this.state.zoom < 15 ? 'small' : 'normal',
+            selected: currentBuilding.selectOnMap,
+            hovered: currentBuilding.hoveredOnMap,
+            category: marker.buildings.length > 1 ? '' : currentBuilding.category
+        });
 
         // create accessibility icons class
         const a11yIcons = new A11yIcon({building: currentBuilding});
@@ -228,13 +213,23 @@ class Marker extends React.Component {
                 icon={icon}
                 onClick={e => this.handleClickMarker(e, currentBuilding)}
                 >
+                {!currentBuilding.selectOnMap &&
+                    <Tooltip offset={[0, 12]}>
+                        <span>
+                            {currentBuilding.title}
+                            {marker.buildings.length > 1 &&
+                                <span> u.a.</span>
+                            }
+                        </span>
+                    </Tooltip>
+                }
                 <Popup id={`popup-wrapper-${currentBuilding.id}`}>
                     <span>
                         {!isSmallView &&
                             <div id={`popup-${currentBuilding.id}`} className="popup">
                                 <h3>{currentBuilding.title}</h3>
 
-                                <ul className="a11yIcons-list">
+                                <ul className="a11yIcons-compact">
                                     {a11yIcons.getAll().map((entry, id) => {
                                         if (a11yIcons.icon(entry) == null) {
                                             return (null);

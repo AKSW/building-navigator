@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 /**
  * Store for routes and update the browser history
  * All available routes needs to created here.
@@ -66,20 +64,21 @@ class RouterStore {
         // get route from path
         const route = this.getRoute(routePath);
 
-        // write deep copy of current store state into previous route
-        const prevRoute = this.getCurrentRoute();
-        if (prevRoute !== undefined) {
-            prevRoute.stores = _.cloneDeep(currentStores);
+        const title = `${route.title} ${this.seperator} ${this.basetitle}`;
+
+        // copy required filter/config (avoid deepClonig of all because of performance issues, see #46)
+        const config = {
+            title: title,
+            filters: currentStores.filterStore.filters,
+            map: currentStores.mapStore.config,
+            ui: currentStores.uiStore.config
         }
 
         // create browser title
-        if (route.title != '') {
-            route.title = `${route.title} ${this.seperator} ${this.basetitle}`;
-        }
-        document.title = route.title;
+        document.title = title;
 
         // add route to browsers history
-        history.pushState(null, route.title, `${location.pathname}#/${route.path}`);
+        history.pushState(config, route.title, `${location.pathname}#/${route.path}`);
     }
 
     /**

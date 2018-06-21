@@ -35,15 +35,27 @@ class MapStore {
             },
             // map bounds decreasing factor in (negative!) percent, avoids buildings too close to the border
             mapPadding: -0.1,
+
+            // users location
+            geouserLocation: {
+                latitude: 0,
+                longitude: 0
+            },
         }
     }
 
+    /**
+     * Set LeafLet map node
+     * @param {Object} node
+     */
     setNode(node) {
         this.node = node;
     }
 
+    /**
+     * Get leaflet map node
+     */
     getNode() {
-        // document.getElementById('map')
         return this.node;
     }
 
