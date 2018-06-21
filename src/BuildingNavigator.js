@@ -78,7 +78,7 @@ class BuildingNavigator extends React.Component {
             this.updateMapBounds();
             // apply bounds to the buildings
             super.handleEvent({action: 'apply-bounds'});
-        });
+        }).catch(error => {});
 
         // hide global loader after this component is mounted
         this.handleEvent({

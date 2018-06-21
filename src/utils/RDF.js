@@ -3,7 +3,7 @@ Several RDF helper
 */
 
 export const getGraphUri = () => {
-    return 'https://behindertenverband-leipzig.de/';
+    return 'https://opendata.leipzig.de/bvlplaces/';
 }
 
 export const getPrefixes = () => {

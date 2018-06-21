@@ -124,21 +124,51 @@ class Map extends React.Component {
      * Click somewhere on the map
      */
     handleClick(e) {
-        const selected = this.state.stores.buildingStore.getSelected();
-        // if a building is selected -> unselect
-        if (typeof selected !== 'undefined') {
-            super.handleEvent({
-                action: 'set-selected-on-map',
-                payload: {
-                    buildingId: null,
+
+        const doClickFx = () => {
+            if (!this.doClickFx) return;
+
+            const selected = this.state.stores.buildingStore.getSelected();
+            // if a building is selected -> unselect
+            if (typeof selected !== 'undefined') {
+                super.handleEvent({
+                    action: 'set-selected-on-map',
+                    payload: {
+                        buildingId: null,
+                    }
+                });
+            }
+            // hide sidebar on small screens
+            if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
+                super.handleEvent({
+                    action: 'hide-sidebar'
+                });
+            }
+
+            const userMarker = this.state.stores.mapStore.config.userMarker;
+            if (e.latlng && userMarker.latitude === 0) {
+                super.handleEvent({
+                    action: 'update-user-marker',
+                    payload: {
+                        latitude: e.latlng.lat,
+                        longitude: e.latlng.lng,
+                        title: ''
+                    }
+                });
+            } else {
+                super.handleEvent({
+                    action: 'update-user-marker',
+                    payload: {
+                        latitude: 0,
+                        longitude: 0
+                    }
+                });
+                if (this.state.stores.mapStore.get('navigation').show) {
+                    super.handleEvent({
+                        action: 'remove-navigation-route'
+                    });
                 }
-            });
-        }
-        // hide sidebar on small screens
-        if (this.state.stores.uiStore.get('isSmallView') && this.state.stores.uiStore.get('sidebarIsVisible')) {
-            super.handleEvent({
-                action: 'hide-sidebar'
-            });
+            }
         }
     }
 
@@ -267,9 +297,9 @@ class Map extends React.Component {
             && this.state.stores.uiStore.get('sidebarIsVisible');
 
         // tiles url (http or https)
-        const tilesUrl = document.location.protocol === 'https'
-            ? 'https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png'
-            : 'http://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png';
+        const tilesUrl = document.location.protocol === 'https:'
+            ? 'https://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ'
+            : 'http://api.mapbox.com/styles/v1/building-navigator/cjik0gfhk00zr2rnpjff39ese/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYnVpbGRpbmctbmF2aWdhdG9yIiwiYSI6ImNqaWswOWVyMzA0cHYzcW15NmxpeTVxdGEifQ.ToC8tbCTMv6t6YeF1MtWiQ';
 
         // maps current zoom state
         const zoom = this.state.stores.mapStore.get('zoom');
@@ -323,6 +353,17 @@ class Map extends React.Component {
                     })}
                     {geouseLocation.latitude !== 0 && geouseLocation.longitude !== 0 &&
                         <GeoLocationMarker position={[geouseLocation.latitude, geouseLocation.longitude]} />
+                    }
+                    {userMarker && userMarker.latitude !== 0 &&
+                        <UserMarker
+                            stores={this.state.stores}
+                            position={[userMarker.latitude, userMarker.longitude]}
+                        />
+                    }
+                    {navigation.show && navigation.from.latitude !== 0 &&
+                        <Navigation
+                            stores={this.state.stores}
+                        />
                     }
                 </OSMap>
             </div>
