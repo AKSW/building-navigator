@@ -2,7 +2,7 @@
 
 This tool provides an interactive map with accessible information about places in Leipzig. You can move on the map or search buildings with certain filters. The filters provide restrictions such as accessibility requirements for the entrances, the lift or the toilet.
 
-Its data source is based on an RDF triple store like Virtuoso.
+This branch uses [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js) as data endpoint and runs without any other triple store.
 
 **Important:** This tool is under heavy development with focus on refinement and UI improvements. Furthermore supporting screenreaders and text-to-speech software is also one of the primary objectives.
 
