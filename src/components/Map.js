@@ -1,8 +1,16 @@
 import React from 'react';
-import {Map as OSMap, TileLayer, ZoomControl, ScaleControl} from 'react-leaflet';
+import {
+    Map as OSMap,
+    Marker as OSMarker,
+    TileLayer,
+    ZoomControl,
+    ScaleControl
+} from 'react-leaflet';
+
 import Marker from './map/Marker';
 import GeoLocationMarker from './map/GeoLocationMarker';
-
+import UserMarker from './map/UserMarker';
+import Navigation from './map/Navigation';
 
 /**
  * Map component, renders Leaflet map with buildings as markers
@@ -22,12 +30,18 @@ class Map extends React.Component {
             lazyPreloader: null
         }
 
+        // bugfix vars, to dont handle click on double-click
+        this.clickDelay = 200;
+        this.clickTimeout = null;
+        this.doClickFx = true;
+
         // local event handlers
         this.handleZoomstart = this.handleZoomstart.bind(this);
         this.handleZoomend = this.handleZoomend.bind(this);
         this.handleDragstart= this.handleDragstart.bind(this);
         this.handleDragend = this.handleDragend.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleDoubleClick = this.handleDoubleClick.bind(this);
         this.handleClickGeolocate = this.handleClickGeolocate.bind(this);
         this.handleLocationFound = this.handleLocationFound.bind(this);
     }
@@ -170,6 +184,26 @@ class Map extends React.Component {
                 }
             }
         }
+
+        // wait if this is maybe a double click
+        this.clickTimeout = setTimeout(() => {
+            doClickFx();
+        }, this.clickDelay);
+
+    }
+
+    /**
+     * Handle double click on the map
+     * @param {Event} e
+     */
+    handleDoubleClick(e) {
+        // click single clicks
+        clearTimeout(this.clickTimeout);
+        this.doClickFx = false;
+
+        setTimeout(() => {
+            this.doClickFx = true;
+        }, (this.clickDelay+100));
     }
 
     /**
@@ -194,6 +228,7 @@ class Map extends React.Component {
             });
 
         }, 2000 * panToDuration); // after 2 x panTo in ms
+        // set users current pos
     }
 
     /**
@@ -306,6 +341,11 @@ class Map extends React.Component {
 
         // geouser location config
         const geouseLocation = this.state.stores.mapStore.get('geouserLocation');
+        // current user marker position
+        const userMarker = this.state.stores.mapStore.get('userMarker');
+
+        //navigation route config
+        const navigation = this.state.stores.mapStore.get('navigation');
 
         return (
             <div className={mapClass}>
@@ -329,6 +369,7 @@ class Map extends React.Component {
                     zoom={zoom}
                     zoomControl={false}
                     onClick={this.handleClick}
+                    onDblClick={this.handleDoubleClick}
                     onLocationfound={this.handleLocationFound}
                     onZoomstart={this.handleZoomstart}
                     onZoomend={this.handleZoomend}
