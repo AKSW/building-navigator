@@ -6,6 +6,12 @@
 
 ![](./assets/screenshot-1.png)
 
+### Current version
+
+The latestion version of the software runs at:
+
+https://behindertenverband-leipzig.de/gebaeude-navigator
+
 ## About us
 
 This tool is being developed by [Simeon Ackermann](https://github.com/simeonackermann) and [Konrad Abicht](https://github.com/k00ni) as part of the [LEDS-project](http://www.leds-projekt.de/de/linked-enterprise-data-services.html). We work close together with the [Behindertenverband Leipzig e.V.](http://www.le-online.de/), a non-profit organization located in Leipzig, which cares about issue of disabled people. Since January 2018 City of Leipzig joined us.
