@@ -1,45 +1,51 @@
-# Der Gebäudenavigator (Location Navigator)
+# Gebäude-Navigator
 
-This tool provides an interactive map with accessible information about places in Leipzig. You can move on the map or search buildings with certain filters. The filters provide restrictions such as accessibility requirements for the entrances, the lift or the toilet.
-
-Its data source is based on an RDF triple store like Virtuoso.
-
-**Important:** This tool is under heavy development with focus on refinement and UI improvements. Furthermore supporting screenreaders and text-to-speech software is also one of the primary objectives.
+**The Gebäude-Navigator helps you to find accessible places in Leipzig.** You can define restrictions such as accessibility requirements for the entrance, the lift or the toilet. Your selection may lead to a result list. Results can be displayed on a map. Besides restrictions you can also use a keyword search.
 
 **Screenshot:**
 
-![](https://github.com/AKSW/building-navigator/raw/master/assets/screenshot-1.png)
+![](./assets/screenshot-1.png)
 
-**Mobile:**
+## About us
 
-![](https://github.com/AKSW/building-navigator/raw/master/assets/screenshot-3.png)
+This tool is being developed by [Simeon Ackermann](https://github.com/simeonackermann) and [Konrad Abicht](https://github.com/k00ni) as part of the [LEDS-project](http://www.leds-projekt.de/de/linked-enterprise-data-services.html). We work close together with the [Behindertenverband Leipzig e.V.](http://www.le-online.de/), a non-profit organization located in Leipzig, which cares about issue of disabled people. Since January 2018 City of Leipzig joined us.
 
-## Experiences with screenreaders
 
-- **TalkBack** for Android with ChromeMobile
-    + Tab-Control with swipe left/right for next element
-    + Change tab-filigranity with swipe up or down
-    + Apply selected element with double-tab (somewhere on the screen)
-- **ChromeVox** Extension for Chrome
-    + Control with Tabulator (next sibling element) and Str+Arrow-Keys (next child element)
-    + Change select-filter with arrow keys, checkboxes with space
-    + Select Links Enter, Buttons Space or Enter
-    + Scroll with two fingers (a quite sound gives the position by a pitch level)
-- **COBRA** (Windows), **NVDA** (Windows), **Orca** (Linux with eSpeak)
-    + Control with Tabulator to select links or headings
-    + Selecgt links or buttons with Space or Enter
-    + Use Arrow-Keys to read content
-- **TODO:** iOS Screenreader
+## Accessibility icons
 
-## The team behind the scene
+We use accessibility from this source:
 
-This tool is being developed by [Simeon Ackermann](https://github.com/simeonackermann) and [Konrad Abicht](https://github.com/k00ni) as part of the [LEDS-project](http://www.leds-projekt.de/de/linked-enterprise-data-services.html). We work together with the [Behindertenverband Leipzig e.V.](http://www.le-online.de/), a non-profit organization located in Leipzig, which cares about issue of disabled people.
+https://teilhabeplan.behindertenverband-leipzig.de/piktogramme.php
+
+Its licensed on the terms of CC BY 4.0.
+
+## How to control the tool, when using one of these screenreaders
+
+**TalkBack** for Android with ChromeMobile
++ Tab-Control with swipe left/right for next element
++ Change tab-filigranity with swipe up or down
++ Apply selected element with double-tab (somewhere on the screen)
+
+**ChromeVox** Extension for Chrome
++ Control with Tabulator (next sibling element) and Str+Arrow-Keys (next child element)
++ Change select-filter with arrow keys, checkboxes with space
++ Select Links Enter, Buttons Space or Enter
++ Scroll with two fingers (a quite sound gives the position by a pitch level)
+
+**COBRA** (Windows), **NVDA** (Windows), **Orca** (Linux with eSpeak)
++ Control with Tabulator to select links or headings
++ Select links or buttons with Space or Enter
++ Use Arrow-Keys to read content
 
 ## For developers
+
+This section is for people who want to dive into the code.
 
 ### HowTo Run
 
 Checkout this repository and open the `dist/index.html` file into your browser.
+
+If you want to adapt the code and see your changes, you can use our Docker container setup (link below).
 
 ### Architecture and software details
 
@@ -58,40 +64,42 @@ After changing data in a store the `BuildingNavigator` re-renders all components
 ### Folder and file structure
 
 ```
-* __mocks__                 // mocked methods for testing
-* assets/                   // repository files
-* dist/                     // ready to run software
-    - coverage              // code coverage
-    - data/                 // buildings data as json
-    - fonts/
+* __mocks__                     // mocked methods for testing
+* assets/                       // repository files
+* dist/                         // ready to run software
+    - webfonts/
     - images/
-    - libraries/            // external css libraries
+    - libraries/                // external css libraries
+    - favicon.ico
     - index.html
-    - app.min.js
+    - main.min.js
+    - main.min.js.map
     - style.css
 * src/
-    - components/           // view components, seperated into subfolders
+    - components/               // view components, seperated into subfolders
         + map/
         + sidebar/
         + Map.js
         + Sidebar.js
-    - stores/               // BuildingStore, FilterStore etc.
-    - utils/                // additional utilities
-    - BuildingNavigator.js  // main controler class
-    - EventHandler.js       // event handler class
-    - main.js               // entry point
-* test/                     // tests
+    - stores/                   // BuildingStore, FilterStore etc.
+    - utils/                    // additional utilities
+    - BuildingNavigator.js      // main controler class
+    - EventHandler.js           // event handler class
+    - main.js                   // entry point
+    - config.js            
+* test/                         // test environment
 * README.md
-* package.json              // npm configuration
-* webpack.config.js         // webpack configuration
+* package.json                  // npm configuration
+* webpack.config.js             // webpack configuration for development
+* webpack.production.config.js  // webpack configuration for production
 ```
 
 
-### Developing environment
+### Develop environment
 
-As developing environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/AKSW/building-navigator-docker
+As develop environment we use a Docker container with Node.js, NPM, Webpack etl. al. from: https://github.com/AKSW/building-navigator-docker
 
-To setup the development environment follow the instructions in the Readme.
+To setup the development environment follow the instructions in its `README.md`.
 
 #### Test
 
@@ -101,7 +109,7 @@ We use Jest and Enzyme for React GUI tests, and Sinon for asynchronous tests. Al
 
 #### Code Coverage
 
-Code coverage is generated on run test. The report is stored under `./coverage/lcov-report/index.html`
+Code coverage is generated when running the test suite. The report is stored under `./coverage/lcov-report/index.html`
 
 
 ### Create Production
