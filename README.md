@@ -8,7 +8,7 @@
 
 ### Current version
 
-The latestion version of the software runs at:
+The latest version of the software runs at:
 
 https://behindertenverband-leipzig.de/gebaeude-navigator
 
@@ -19,11 +19,15 @@ This tool is being developed by [Simeon Ackermann](https://github.com/simeonacke
 
 ## Accessibility icons
 
-We use accessibility from this source:
+We use accessibility icons from this source:
 
 https://teilhabeplan.behindertenverband-leipzig.de/piktogramme.php
 
-Its licensed on the terms of CC BY 4.0.
+A compact and English version can be found here:
+
+https://github.com/Behindertenverband-Leipzig/accessibility-icons
+
+Icons and related work are licensed under the terms of CC BY 4.0.
 
 ## How to control the tool, when using one of these screenreaders
 
