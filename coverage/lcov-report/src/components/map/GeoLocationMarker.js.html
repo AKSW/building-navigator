@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for src/components/NotFound.js</title>
+    <title>Code coverage report for src/components/map/GeoLocationMarker.js</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">All files</a> / <a href="index.html">src/components</a> NotFound.js
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/map</a> GeoLocationMarker.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>0/7</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>0/7</span>
       </div>
     </div>
   </div>
@@ -73,7 +73,22 @@
 28
 29
 30
-31</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -82,6 +97,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -98,41 +133,51 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
-&nbsp;
-import Sponsors from './Sponsors'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import {Marker as OSMarker, Tooltip} from 'react-leaflet';
+import MarkerIcon from './MarkerIcon'
 &nbsp;
 /**
- * Renders a message if a ressource wasnt found
+ * Marker component for the map
  */
-class NotFound extends React.Component {
+class GeoLocationMarker extends React.Component {
 <span class="fstat-no" title="function not covered" >    co</span>nstructor(props) {
 <span class="cstat-no" title="statement not covered" >        super();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.state = {</span>
+            position: props.position
+        };
     }
 &nbsp;
+<span class="fstat-no" title="function not covered" >    co</span>mponentWillReceiveProps(nextProps) {
+<span class="cstat-no" title="statement not covered" >        this.setState({</span>
+            position: nextProps.position
+        });
+    }
+&nbsp;
+    /**
+     * Render marker on specific position with icon, and popup content
+     */
 <span class="fstat-no" title="function not covered" >    re</span>nder() {
+        const position = <span class="cstat-no" title="statement not covered" >this.state.position;</span>
+&nbsp;
+        const markerIcon = <span class="cstat-no" title="statement not covered" >new MarkerIcon();</span>
+        const icon = <span class="cstat-no" title="statement not covered" >markerIcon.getIcon({</span>
+            geouserMarker: true
+        });
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        return (</span>
-            &lt;div&gt;
-                &lt;h1&gt;Gebäude Navigator&lt;/h1&gt;
-                &lt;h2&gt;&lt;i className="fa fa-meh-o" aria-hidden="true"&gt;&lt;/i&gt; Adresse nicht gefunden&lt;/h2&gt;
-                &lt;p&gt;Dies bedeutet entweder, dass Sie einen veralteten Link aufgerufen haben
-                oder sich bei Eingabe der Adresse vertippt haben.&lt;/p&gt;
-                &lt;p&gt;Bitte prüfen Sie die Adresse oder gehen Sie &lt;a href="./"&gt;zur Startseite&lt;/a&gt;.&lt;/p&gt;
-                &lt;br /&gt;
-                &lt;hr /&gt;
-                &lt;br /&gt;
-                &lt;Sponsors /&gt;
-            &lt;/div&gt;
+            &lt;OSMarker
+                position={position}
+                icon={icon}
+            &gt;
+                &lt;Tooltip offset={[0, 12]}&gt;&lt;span&gt;Dein Standort&lt;/span&gt;&lt;/Tooltip&gt;
+            &lt;/OSMarker&gt;
         );
     }
 }
 &nbsp;
-export default NotFound;
+export default GeoLocationMarker;
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
@@ -142,7 +187,7 @@ export default NotFound;
   generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 28 2018 09:45:59 GMT+0000 (UTC)
 </div>
 </div>
-<script src="../../prettify.js"></script>
+<script src="../../../prettify.js"></script>
 <script>
 window.onload = function () {
         if (typeof prettyPrint === 'function') {
@@ -150,6 +195,6 @@ window.onload = function () {
         }
 };
 </script>
-<script src="../../sorter.js"></script>
+<script src="../../../sorter.js"></script>
 </body>
 </html>

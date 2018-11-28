@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/components/map/Navigation.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">All files</a> / <a href="index.html">src/components/map</a> Navigation.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/36</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
+import {MapLayer} from 'react-leaflet'
+import L from 'leaflet'
+import 'leaflet-routing-machine'
+import 'leaflet-control-geocoder'
+&nbsp;
+/**
+ * The Route Navigation component.
+ * Renders a navigation route from userMarker to selected building
+ */
+class Navigation extends React.Component {
+&nbsp;
+<span class="fstat-no" title="function not covered" >    co</span>nstructor(props) {
+<span class="cstat-no" title="statement not covered" >        super();</span>
+&nbsp;
+        const navigation = <span class="cstat-no" title="statement not covered" >props.stores.mapStore.get('navigation');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.state = {</span>
+            stores: props.stores,
+&nbsp;
+            // slice duplicates the arrays, required for check if it changed
+            from: Object.assign({}, navigation.from),
+            to: Object.assign({}, navigation.to),
+            profile: navigation.profile,
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.initializeRouting = this.updateRoute.bind(this);</span>
+<span class="cstat-no" title="statement not covered" >        this.destroyRouting = this.destroyRoute.bind(this);</span>
+    }
+&nbsp;
+    /**
+     * Set state. Update route if userMarker position or profile changed
+     * @param {Object} nextProps
+     */
+<span class="fstat-no" title="function not covered" >    co</span>mponentWillReceiveProps(nextProps) {
+        const nextNavigation = <span class="cstat-no" title="statement not covered" >nextProps.stores.mapStore.get('navigation');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (this.state.from.latitude !== nextNavigation.from.latitude ||</span>
+            this.state.from.longitude !== nextNavigation.from.longitude ||
+            this.state.profile !== nextNavigation.profile
+        ) {
+<span class="cstat-no" title="statement not covered" >            this.destroyRoute();</span>
+<span class="cstat-no" title="statement not covered" >            this.updateRoute();</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        this.setState({</span>
+            stores: nextProps.stores,
+&nbsp;
+            from: Object.assign({}, nextNavigation.from),
+            to: Object.assign({}, nextNavigation.to),
+            profile: nextNavigation.profile,
+        });
+    }
+&nbsp;
+    /**
+     * Initial add route
+     */
+<span class="fstat-no" title="function not covered" >    co</span>mponentDidMount() {
+<span class="cstat-no" title="statement not covered" >        this.updateRoute();</span>
+    }
+&nbsp;
+    /**
+     * Remove route on unmount
+     */
+<span class="fstat-no" title="function not covered" >    co</span>mponentWillUnmount() {
+<span class="cstat-no" title="statement not covered" >        this.destroyRoute();</span>
+&nbsp;
+    }
+&nbsp;
+    /**
+     * Update current navigation route
+     */
+<span class="fstat-no" title="function not covered" >    up</span>dateRoute() {
+        const {from, to} = <span class="cstat-no" title="statement not covered" >this.state.stores.mapStore.get('navigation');</span>
+        const map = <span class="cstat-no" title="statement not covered" >this.state.stores.mapStore.getNode();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!map) {</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+        let navProfile = <span class="cstat-no" title="statement not covered" >'mapbox/driving';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        switch (this.state.stores.mapStore.config.navigation.profile) {</span>
+            case 'driving':
+<span class="cstat-no" title="statement not covered" >                navProfile = 'mapbox/driving';</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            case 'cycling':
+<span class="cstat-no" title="statement not covered" >                navProfile = 'mapbox/cycling';</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+            case 'walking':
+<span class="cstat-no" title="statement not covered" >                navProfile = 'mapbox/walking';</span>
+<span class="cstat-no" title="statement not covered" >                break;</span>
+        }
+&nbsp;
+        // create waypoints
+        const plan = <span class="cstat-no" title="statement not covered" >new L.Routing.Plan([</span>
+            L.latLng(from.latitude, from.longitude),
+            L.latLng(to.latitude, to.longitude)
+          ], {
+            routeWhileDragging: false,
+            addWaypoints: false,
+            // dont show marker
+            createMarker: <span class="fstat-no" title="function not covered" >()</span> =&gt; { <span class="cstat-no" title="statement not covered" >return null; </span>},
+            geocoder: L.Control.Geocoder.nominatim(),
+        }).on('waypointgeocoded', <span class="fstat-no" title="function not covered" >(w</span>aypoint) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (waypoint.waypointIndex === 0) {</span>
+<span class="cstat-no" title="statement not covered" >                super.handleEvent({</span>
+                    action: 'update-user-marker',
+                    payload: {
+                        latitude: waypoint.waypoint.latLng.lat,
+                        longitude: waypoint.waypoint.latLng.lng,
+                        title: waypoint.waypoint.name
+                    }
+                });
+            }
+        });
+&nbsp;
+        // add navigation router
+<span class="cstat-no" title="statement not covered" >        this.route = L.Routing.control({</span>
+            plan,
+&nbsp;
+            router: L.Routing.mapbox('pk.eyJ1IjoiZG9uc2kiLCJhIjoiY2pocThsMmNpNGMwdjNjbXczbGFhbnBtcSJ9.J8tzeRDqrFA1t_uWXz0AOA', {
+                profile: navProfile, // mapbox/driving-traffic , mapbox/driving , mapbox/walking , or mapbox/cycling
+                language: 'de'
+            }),
+&nbsp;
+            lineOptions: {
+                styles: [{color: '#1874c7', opacity: 0.75, weight: 6.5}]
+            },
+        })
+        .on('routesfound', <span class="fstat-no" title="function not covered" >(o</span>bject) =&gt; {
+<span class="cstat-no" title="statement not covered" >            super.handleEvent({</span>
+                action: 'set-route-object',
+                payload: {
+                    routeObject: object,
+                }
+            });
+        })
+        .on('routingerror', <span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
+            // TODO show error to user (alert)
+<span class="cstat-no" title="statement not covered" >            console.log("Error on route", error);</span>
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        map.addControl(this.route);</span>
+    }
+&nbsp;
+    /**
+     * Remove route from map
+     */
+<span class="fstat-no" title="function not covered" >    de</span>stroyRoute() {
+        const map = <span class="cstat-no" title="statement not covered" >this.state.stores.mapStore.getNode();</span>
+<span class="cstat-no" title="statement not covered" >        if (map) {</span>
+<span class="cstat-no" title="statement not covered" >          map.removeControl(this.route);</span>
+        }
+      }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    re</span>nder() {
+<span class="cstat-no" title="statement not covered" >        return null;</span>
+    }
+}
+&nbsp;
+export default Navigation;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Nov 28 2018 09:45:59 GMT+0000 (UTC)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
