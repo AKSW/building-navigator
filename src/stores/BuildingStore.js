@@ -84,7 +84,8 @@ class BuildingStore {
         WHERE {
             ?uri <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <${getPrefix('place')}Place> ;
                 # match only public availables
-                <${getPrefix('place')}publicly-available> "true" ;
+
+                <${getPrefix('place')}publiclyAvailable> "true" ;
                 # properties
                 <http://purl.org/dc/terms/identifier> ?id ;
                 <http://dbpedia.org/ontology/category> ?category ;
