@@ -23,7 +23,7 @@
   "jest": {
     "verbose": true,
     "testURL": "http://localhost/"
-    },
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.5",
@@ -34,6 +34,7 @@
     "jest": "^22.4.3",
     "jsdom": "^11.10.0",
     "sinon": "^5.0.6",
+    "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.1"
