@@ -20,6 +20,10 @@
       "react"
     ]
   },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/"
+    },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.5",
