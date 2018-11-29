@@ -25,13 +25,17 @@ module.exports = {
     filename: 'main.min.js',
     libraryTarget: 'var'
   },
+  optimization: {
+    minimizer: [
+      new UglifyJSPlugin({
+        sourceMap: true
+      })
+    ]
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
-    }),
-    new UglifyJSPlugin({
-      sourceMap: true
-    }),
+    })
   ],
   devServer: {
     contentBase: './dist',
