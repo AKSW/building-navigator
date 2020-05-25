@@ -12,13 +12,19 @@ class MapStore {
 
         this.navigationNode = null;
 
+        const defaultCenter = {
+            latitude: 51.340556,
+            longitude: 12.374714
+        }
+
         this.config = {
+            defaultCenter: defaultCenter,
             // center of the map, get from cookie or use center of leipzig (51.3412, 12.3747)
             center: Cookies.get('mapCenter') !== undefined
                 ? JSON.parse(Cookies.get('mapCenter'))
                 : {
-                    latitude: 51.3412,
-                    longitude: 12.3747
+                    latitude: defaultCenter.latitude,
+                    longitude: defaultCenter.longitude
                 },
             // zoom value, the greater the value, the closer the zoom
             zoom: 14,

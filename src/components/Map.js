@@ -11,6 +11,7 @@ import Marker from './map/Marker';
 import GeoLocationMarker from './map/GeoLocationMarker';
 import UserMarker from './map/UserMarker';
 import Navigation from './map/Navigation';
+import {getDistance} from '../utils/GeoUtils';
 
 /**
  * Map component, renders Leaflet map with buildings as markers
@@ -27,7 +28,8 @@ class Map extends React.Component {
             stores: props.stores,
             markers: [],
             sidebarIsVisible: props.stores.uiStore.get('sidebarIsVisible'),
-            lazyPreloader: null
+            lazyPreloader: null,
+            initialGeoloc: false
         }
 
         // bugfix vars, to dont handle click on double-click
@@ -211,6 +213,20 @@ class Map extends React.Component {
      */
     handleLocationFound(e) {
         if (this.mapNode == null) return;
+
+        // on first run: may do not center users geolocation if its too far away from leipzig center
+        if (this.state.initialGeoloc === false) {
+            this.setState({initialGeoloc: true})
+            const mapCenter = this.state.stores.mapStore.get('defaultCenter')
+            const distance = getDistance({
+                lat1: e.latlng.lat,
+                lng1: e.latlng.lng,
+                lat2: mapCenter.latitude,
+                lng2: mapCenter.longitude
+            })
+            if (distance > 1000) return;
+        }
+
         const panToDuration = 0.25; // panTo duration in seconds
         // pan to users location if found
         this.mapNode.leafletElement.panTo(e.latlng, {duration: panToDuration});
